@@ -41,8 +41,6 @@ return (
   justifyContent: "space-between",
   marginLeft: "2em",
   marginRight: "2em",
-  marginTop: "0.5em",
-  marginBottom: "0.5em",
   padding: "0.2em"
 
 }}>
