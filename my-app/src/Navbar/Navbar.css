@@ -1,0 +1,12 @@
+
+.navbar {
+  background-color: rgb(50, 28, 216);  
+}
+
+.navbar-cont {
+  display: 'flex';
+  justifyContent: "space-between";
+  marginLeft: "2em";
+  marginRight: "2em";
+  padding: "0.4em";
+  }
