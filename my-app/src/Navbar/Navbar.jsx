@@ -1,24 +1,22 @@
 // import { useState } from 'react'
 import './Navbar.css'
+import frelloLogo from './Frello.png';
 
 function Navbar() {
 
 return (
-  <div className="Navbar" style={{
-    backgroundColor: 'blue',
-  }}>
-
-<nav className="Navbar-cont" style={{
-    display: 'flex',
-    justifyContent: "space-between",
-    marginLeft: "2em",
-    marginRight: "2em",
-    padding: "0.4em",
-}}>
-  <div>Logo</div>
-  <div>Board Name</div>
-  <div>Profile</div>
-</nav>
+  <div className="navbar">
+    <div className='img-logo'>
+      <img className='logo' src={frelloLogo} alt="logo" /> </div>
+    <nav className="navbar-cont">
+      <ul className='left-panel'>
+        <li><a href="#">Dashboard</a></li>
+        <li><a href="#">About</a></li>
+      </ul>
+    </nav>
+      <ul className='right-panel'>
+        <a className="profile" href="#"><button>Profile</button></a>
+      </ul>
   </div>
 )}
 
