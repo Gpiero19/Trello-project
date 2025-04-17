@@ -8,9 +8,8 @@ function Navbar() {
 // const router = 
 return (
   <div className="navbar">
-    <NavLink to={"/"}> 
+    <NavLink className='img-logo' to={"/"}> 
     <div className='img-logo'>
-
       <img className='logo' src={frelloLogo} alt="logo" /> </div>
     </NavLink>
     <nav className="navbar-cont">
