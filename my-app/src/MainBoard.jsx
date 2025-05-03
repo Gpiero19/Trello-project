@@ -6,6 +6,7 @@ function Mainboard () {
             padding: "1em",
             justifyContent: "space-between",
         }}>
+            {/* drag n drop model needs to be added, to create new tasks */}
             <div>New Categories</div>
             <div>New Categories</div>
             <div>New Categories</div>
