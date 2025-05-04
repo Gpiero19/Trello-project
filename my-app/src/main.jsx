@@ -9,12 +9,6 @@ import { Dashboard } from "./dashboard.jsx";
 
 // npx vite
 
-// const router = createBrowserRouter([
-//   {path: "/", Component: Mainboard},
-//   {path: "/dashboard", Component: Dashboard},
-//   // {path: "/about", element: <About/>},
-//   {path: "*", element: <NotFoundPage/>},
-// ])
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
