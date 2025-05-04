@@ -18,3 +18,6 @@ app.listen(PORT, () => {
 });
 
 // connect to Postgres npx nodemon index.js
+// to create a new attribute, first add in models a nd then run npx sequelize-cli db:migrate OR
+// run in in terminal npx sequelize-cli migration:generate --name add-description-to-board
+
