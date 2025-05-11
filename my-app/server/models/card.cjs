@@ -24,3 +24,8 @@ module.exports = (sequelize, DataTypes) => {
   });
   return Card;
 };
+
+Card.associate = function (models) {
+  Card.belongsTo(models.List, { foreignKey: 'listId'});
+  Card.belongsTo(models.User, { foreignKey: 'userId'});
+};

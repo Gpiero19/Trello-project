@@ -22,3 +22,8 @@ module.exports = (sequelize, DataTypes) => {
   });
   return List;
 };
+
+List.associate = function (models) {
+  List.belongsTo(models.Board, { foreignKey: 'boardId'});
+  List.hasMany(models.Card, { foreignKey: 'listId'});
+};

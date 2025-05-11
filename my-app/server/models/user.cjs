@@ -23,3 +23,8 @@ module.exports = (sequelize, DataTypes) => {
   });
   return User;
 };
+
+User.associate = function (models) {
+  User.hasMany(models.Board, { foreignKey: 'user_id'});
+  User.hasMany(models.Card, { foreignKey: 'user_id'});
+};
