@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
+const boardsRoutes = require('/routes/BoardRoutes')
 require('dotenv').config();
 
 const app = express();
@@ -55,3 +56,5 @@ app.post('/users', async (req, res) => {
     res.status(500).send('Error creating user');
   }
 });
+
+app.use('/boards', boardsRoutes) //Route
