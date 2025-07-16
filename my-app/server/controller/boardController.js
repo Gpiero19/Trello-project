@@ -20,5 +20,45 @@ exports.getAllBoards = async (req, res) => {
     } catch (err) {
         console.error('Error fetching boards', err)
         res.status(500).json({error: 'Internal server error'})
-    }
+    } 
 };
+
+exports.getBoardById = async (req, res) => {
+  const {id} = req.params;
+  try {
+    const board = await Board.findByPK(id);
+    if (!board) return res.status(404).json({ error: 'Board not found'});
+    res.status(200).json(board)
+  } catch (err) {
+    res.status(500).json({ error: 'Board not found'})
+  }
+}
+
+exports.updateBoard = async (req, res) => {
+  const {id} = req.params;
+  const {title} = req.body
+  try {
+    const board = await Board.findByPK(id)
+    if (!board) return res.status(404).json({ error: 'Board not found'})
+    
+    board.title = title
+    await board.save();
+
+    res.status(200).json(board)
+  } catch (err) {
+    res.status(500).json({ error: 'Error updating board'})
+  }
+}
+
+exports.deleteBoard = async (req, res) => {
+  const {id} = req.params
+  try {
+    const board = await Board.findByPK(id)
+    if (!board) return res.status(404).json({ error: 'Board not found'})
+
+    await board.destroy()
+    res.status(204).send()
+  } catch (err) {
+    res.status(500).json({error: 'Error deleting board'})
+  }
+}; 
