@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
 const boardsRoutes = require('/routes/boardRoutes')
+const listsRoutes = require('./routes/listRoutes')
 require('dotenv').config();
 
 const app = express();
@@ -58,3 +59,5 @@ app.post('/users', async (req, res) => {
 });
 
 app.use('/boards', boardsRoutes) //Route
+app.use('/api/lists', listsRoutes);
+
