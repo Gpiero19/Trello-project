@@ -26,7 +26,7 @@ exports.getAllBoards = async (req, res) => {
 exports.getBoardById = async (req, res) => {
   const {id} = req.params;
   try {
-    const board = await Board.findByPK(id);
+    const board = await Board.findByPk(id);
     if (!board) return res.status(404).json({ error: 'Board not found'});
     res.status(200).json(board)
   } catch (err) {
@@ -38,7 +38,7 @@ exports.updateBoard = async (req, res) => {
   const {id} = req.params;
   const {title} = req.body
   try {
-    const board = await Board.findByPK(id)
+    const board = await Board.findByPk(id)
     if (!board) return res.status(404).json({ error: 'Board not found'})
     
     board.title = title
@@ -53,7 +53,7 @@ exports.updateBoard = async (req, res) => {
 exports.deleteBoard = async (req, res) => {
   const {id} = req.params
   try {
-    const board = await Board.findByPK(id)
+    const board = await Board.findByPk(id)
     if (!board) return res.status(404).json({ error: 'Board not found'})
 
     await board.destroy()
