@@ -2,7 +2,7 @@ const { List } = require('../models');
 
 exports.createList = async (req, res) => {
   try {
-    const { title, userId } = req.body;
+    const { title, boardId } = req.body;
     const list = await List.create({ title, boardId }); //creation of list
 
     res.status(201).json(list);
