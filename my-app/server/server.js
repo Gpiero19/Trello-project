@@ -7,6 +7,7 @@ const { Pool } = require('pg');
 const boardsRoutes = require('./routes/boardRoutes');
 const listsRoutes = require('./routes/listRoutes');
 const cardsRoutes = require('./routes/cardRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -59,6 +60,7 @@ app.post('/users', async (req, res) => {
 app.use('/api/boards', boardsRoutes);
 app.use('/api/lists', listsRoutes);
 app.use('/api/cards', cardsRoutes);
+app.use('/api/users', userRoutes);
 
 // Start the server
 app.listen(PORT, () => {

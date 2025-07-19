@@ -36,12 +36,14 @@ exports.getBoardById = async (req, res) => {
 
 exports.updateBoard = async (req, res) => {
   const {id} = req.params;
-  const {title} = req.body
+  const {title, userId} = req.body
   try {
     const board = await Board.findByPk(id)
     if (!board) return res.status(404).json({ error: 'Board not found'})
     
-    board.title = title
+    if (title !== undefined) board.title = title;
+    if (userId !== undefined) board.userId = userId;
+
     await board.save();
 
     res.status(200).json(board)
