@@ -1,20 +1,21 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
-const boardsRoutes = require('/routes/boardRoutes')
-const listsRoutes = require('./routes/listRoutes')
-require('dotenv').config();
+
+const boardsRoutes = require('./routes/boardRoutes');
+const listsRoutes = require('./routes/listRoutes');
+const cardsRoutes = require('./routes/cardRoutes');
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-app.use(express.json()); // so you can send JSON bodies
-
-const PORT = 3000;
-
+// Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json());  // Parse JSON bodies
 
-// PostgreSQL pool
+// PostgreSQL pool setup
 const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
@@ -23,12 +24,12 @@ const pool = new Pool({
   port: process.env.DB_PORT,
 });
 
-// Basic route
+// Basic root route
 app.get('/', (req, res) => {
   res.send('Express server is running!');
 });
 
-// Test database route
+// Test database connection route
 app.get('/test-db', async (req, res) => {
   try {
     const result = await pool.query('SELECT NOW()');
@@ -39,11 +40,7 @@ app.get('/test-db', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`✅ Server is running at http://localhost:${PORT}`);
-});
-
-// Route to create a user
+// Route to create a user (you might want to move this to a controller later)
 app.post('/users', async (req, res) => {
   const { name, email } = req.body;
   try {
@@ -51,13 +48,19 @@ app.post('/users', async (req, res) => {
       'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *',
       [name, email]
     );
-    res.json(result.rows[0]); // return the new user
+    res.json(result.rows[0]);
   } catch (err) {
     console.error(err);
     res.status(500).send('Error creating user');
   }
 });
 
-app.use('/boards', boardsRoutes) //Route
+// Use your routes with base paths
+app.use('/api/boards', boardsRoutes);
 app.use('/api/lists', listsRoutes);
+app.use('/api/cards', cardsRoutes);
 
+// Start the server
+app.listen(PORT, () => {
+  console.log(`✅ Server is running at http://localhost:${PORT}`);
+});
