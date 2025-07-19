@@ -37,6 +37,7 @@ exports.getListById = async (req, res) => {
 exports.updateList = async (req, res) => {
   const {id} = req.params;
   const {title} = req.body
+  
   try {
     const list = await List.findByPk(id)
     if (!list) return res.status(404).json({ error: 'List not found'})
