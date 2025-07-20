@@ -1,18 +1,17 @@
 function Mainboard () {
+
     return (
-        <div className="Maincontainer" style={{
+    <div className="Maincontainer" style={{
             display:"flex",
             flexDirection: "row",
             padding: "1em",
-            justifyContent: "space-between",
-        }}>
-            {/* drag n drop model needs to be added, to create new tasks */}
-            <div>New Categories</div>
-            <div>New Categories</div>
-            <div>New Categories</div>
-        </div>
-        
-    )
+            justifyContent: "start",
+    }}>
+
+        <h3>Mainboard in Progress</h3>
+
+    </div>
+  );
 }
 
 export default Mainboard
