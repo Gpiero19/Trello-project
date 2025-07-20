@@ -45,7 +45,6 @@ exports.updateBoard = async (req, res) => {
     if (userId !== undefined) board.userId = userId;
 
     await board.save();
-
     res.status(200).json(board)
   } catch (err) {
     res.status(500).json({ error: 'Error updating board'})
