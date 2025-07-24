@@ -2,7 +2,7 @@ const { User } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 
-const SECRET_KEY = 'environment' // Needs to be updated
+const SECRET_KEY = process.env.SECRET_KEY // Needs to be updated
 
 exports.login = async(req, res) => {
     const {email, password} = req.body;

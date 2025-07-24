@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
+const authRoutes = require('./routes/auth.js')
 
 const boardsRoutes = require('./routes/boardRoutes');
 const listsRoutes = require('./routes/listRoutes');
@@ -13,6 +14,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
+app.use('/api/auth', authRoutes)
 app.use(cors());
 app.use(express.json());  // Parse JSON bodies
 
