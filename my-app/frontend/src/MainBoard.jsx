@@ -8,7 +8,7 @@ function Mainboard () {
             justifyContent: "start",
     }}>
 
-        <h3>Mainboard in Progress</h3>
+        <h3>Overview in Progress</h3>
 
     </div>
   );

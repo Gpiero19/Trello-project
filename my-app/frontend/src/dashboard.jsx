@@ -35,7 +35,8 @@ function Dashboard () {
               border: "1px solid gray",
               borderRadius: "8px",
               padding: "1em",   
-              minWidth: "150px",
+              minWidth: "clamp(200px, 300px, 100%)",
+              backgroundColor: "white"
             }}
           >
             <h3>{board.title}</h3>
