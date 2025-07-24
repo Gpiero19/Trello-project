@@ -1,12 +1,15 @@
-const { Board } = require('../models');
+const { Board, User } = require('../models');
 
 exports.createBoard = async (req, res) => {
   try {
     const { title, userId } = req.body;
+    const user = await User.findByPk(userId)
+    if (!user) {                                        //validate Id
+      return res.status(400).json({error: "Invalid user ID"})
+    }
     const board = await Board.create({ title, userId }); //creation of board name
 
     res.status(201).json(board);
-
   } catch (err) {
     console.error('Error creating board:', err);
     res.status(500).json({ error: 'Internal server error' });
