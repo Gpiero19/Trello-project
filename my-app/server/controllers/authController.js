@@ -23,3 +23,23 @@ exports.login = async(req, res) => {
         res.status(500).json({ error: 'Server error during login'})
     }
 };
+
+exports.register = async(req,res) => {
+    const {name, email, password} = req.body;
+
+    try {
+        let existingUser = await User.findOne({ where: {email}})
+
+        if (existingUser) {
+            return res.status(400).send('User already exisits. Please sign in')
+        } else {
+
+        const hashedPassword = await bcrypt.hash(password, 10)
+        const user = await User.create({ name, email, password: hashedPassword})
+
+        return res.status(201).json(user)}
+        
+    } catch (err) {
+        return res.status(400).json({ message: err.message })
+    }
+}
