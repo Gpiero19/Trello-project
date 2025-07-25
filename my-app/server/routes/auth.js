@@ -4,4 +4,9 @@ const authController = require('../controllers/authController');
 
 router.post('/login', authController.login);
 
+// dummy test for auth
+// router.get('/test', (req, res) => {
+//   res.json({ message: "Auth test route working!" });
+// });
+
 module.exports = router;

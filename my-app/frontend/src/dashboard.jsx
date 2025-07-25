@@ -27,7 +27,7 @@ function Dashboard () {
                 />
                 )}
             {/* Board list */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "1em", marginTop: "2em" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "1em", margin: "1em", justifyContent: "space-between" }}>
         {boards.map((board) => (
           <div
             key={board.id}

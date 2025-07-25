@@ -3,7 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
-const authRoutes = require('./routes/auth.js')
+const authRoutes = require('./routes/auth')
 
 const boardsRoutes = require('./routes/boardRoutes');
 const listsRoutes = require('./routes/listRoutes');
@@ -14,7 +14,6 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use('/api/auth', authRoutes)
 app.use(cors());
 app.use(express.json());  // Parse JSON bodies
 
@@ -59,6 +58,7 @@ app.post('/users', async (req, res) => {
 });
 
 // Use your routes with base paths
+app.use('/api/auth', authRoutes)
 app.use('/api/boards', boardsRoutes);
 app.use('/api/lists', listsRoutes);
 app.use('/api/cards', cardsRoutes);
