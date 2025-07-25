@@ -1,28 +1,51 @@
-// import { useState } from 'react'
 import './Navbar.css'
 import frelloLogo from './Frello.png';
-import { Link } from 'react-router-dom';
-import { NavLink } from "react-router";
+import { NavLink } from 'react-router-dom';
+import { useState } from "react";
+import RegisterUserModal from "../components/registerUserModal";
+import LoginModal from "../components/LoginModal";
+import { useAuth } from '../context/authContext';
 
 function Navbar() {
-// const router = 
+  const { user, logout } = useAuth();
+  const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+
 return (
+
   <div className="navbar">
     <NavLink className='img-logo' to={"/"}> 
     <div className='img-logo'>
       <img className='logo' src={frelloLogo} alt="logo" /> </div>
     </NavLink>
+
     <nav className="navbar-cont">
       <ul className='left-panel'>
         <NavLink to={"/dashboard"}>
-        <li><a href="#">Dashboard</a></li>
-        </NavLink>
-        <li><a href="#">About</a></li>
+        <li>Dashboard</li>
+        {/* Update About link */}
+        </NavLink>              
+        <li>About</li>
       </ul>
     </nav>
+
       <ul className='right-panel'>
-        <a className="profile" href="#"><button>Profile</button></a>
+      {user ? (
+        <>
+          <span>Welcome, {user.name}!</span>
+          <button onClick={logout}>Logout</button>
+        </>
+          ) : (
+        <>
+          <button onClick={() => setShowLogin(true)}>Login</button>
+          <button onClick={() => setShowRegister(true)}>Register</button>
+        </>
+      )}
       </ul>
+        
+        {/* Register Modal */}
+      {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
+      {showRegister && <RegisterUserModal onClose={() => setShowRegister(false)} />}
   </div>
 )}
 

@@ -6,6 +6,7 @@ import Mainboard from "./MainBoard.jsx";
 import NotFoundPage from "./NotFoundPage/NotFoundPage.jsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Dashboard from "./dashboard.jsx"; 
+import { AuthProvider } from "./context/authContext";
 
 
 // npx vite
@@ -13,15 +14,16 @@ import Dashboard from "./dashboard.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <BrowserRouter errorElement={<NotFoundPage/>}>
-      <Navbar />
-
-      <Routes>
-        <Route path="/" element={<Mainboard />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    
-      </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Mainboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      
+        </BrowserRouter>
+      </AuthProvider>
   </StrictMode>
 );

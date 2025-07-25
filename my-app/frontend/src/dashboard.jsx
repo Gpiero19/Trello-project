@@ -4,8 +4,7 @@ import CreateBoardModal from "./components/createBoardModal";
 
 function Dashboard () {
     const [boards, setBoards] = useState([])
-    const [showModal, setShowModal] = useState(false);
-
+    const [NewBoardModal, setNewBoardModal] = useState(false);
 
     useEffect(() => {
     getBoards()
@@ -17,17 +16,17 @@ function Dashboard () {
     return (
         <div style={{ padding: "1em" }}>
 
-        <button onClick={() => setShowModal(true)}>+ New Board</button>
+        <button onClick={() => setNewBoardModal(true)}>+ New Board</button>
 
         {/* Modal */}
-        {showModal && (
+        {NewBoardModal && (
             <CreateBoardModal
                 setBoards={setBoards}
-                onClose={() => setShowModal(false)}
+                onClose={() => setNewBoardModal(false)}
                 />
                 )}
             {/* Board list */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "1em", margin: "1em", justifyContent: "space-between" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "1em", margin: "1em" }}>
         {boards.map((board) => (
           <div
             key={board.id}

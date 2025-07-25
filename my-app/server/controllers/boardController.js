@@ -2,11 +2,9 @@ const { Board, User } = require('../models');
 
 exports.createBoard = async (req, res) => {
   try {
-    const { title, userId } = req.body;
-    const user = await User.findByPk(userId)
-    if (!user) {                                        //validate Id
-      return res.status(400).json({error: "Invalid user ID"})
-    }
+    const userId = req.user.id
+    const { title } = req.body;
+    
     const board = await Board.create({ title, userId }); //creation of board name
 
     res.status(201).json(board);
@@ -18,8 +16,10 @@ exports.createBoard = async (req, res) => {
 
 exports.getAllBoards = async (req, res) => {
     try {
-        const boards = await Board.findAll(); //fetch boards from DB
-        res.status(200).json(boards)
+      const userId = req.user.id
+      const boards = await Board.findAll( {where: {userId}}); //fetch boards of user
+      res.status(200).json(boards)
+
     } catch (err) {
         console.error('Error fetching boards', err)
         res.status(500).json({error: 'Internal server error'})
