@@ -32,7 +32,7 @@ img {
   height: 30px;
 }
 
-li, a, button {
+li, a, button, span {
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
   font-size: 16px;

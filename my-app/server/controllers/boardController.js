@@ -1,4 +1,4 @@
-const { Board, User } = require('../models');
+const { Board, List, Card } = require('../models');
 
 exports.createBoard = async (req, res) => {
   try {
@@ -28,8 +28,21 @@ exports.getAllBoards = async (req, res) => {
 
 exports.getBoardById = async (req, res) => {
   const {id} = req.params;
+  const userId = req.user.id
   try {
-    const board = await Board.findByPk(id);
+    const board = await Board.findOne({
+      where: {
+        id, 
+        userId
+      },
+      include: [{
+        model: List,
+        include: [{
+          model: Card
+        }]
+      }]
+    });
+
     if (!board) return res.status(404).json({ error: 'Board not found'});
     res.status(200).json(board)
   } catch (err) {

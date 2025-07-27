@@ -8,7 +8,7 @@ const authenticateToken = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, SECRET_KEY);
-    req.user = decoded; // Attach user info to request
+    req.user = decoded; // decoded has user information
     next();
 
   } catch (err) {
