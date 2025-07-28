@@ -1,5 +1,5 @@
 import axiosInstance from "./axiosInstance";
-
+// const API_BASE_URL = process.env.API_BASE_URL
 const API_BASE_URL = 'http://localhost:3000/api'; // or use .env later
 
 export async function getLists() {
