@@ -29,21 +29,22 @@ exports.getAllBoards = async (req, res) => {
 exports.getBoardById = async (req, res) => {
   const {id} = req.params;
   const userId = req.user.id
+
+  // console.log("Board ID:", id);
+  console.log("here we are ")
+  // console.log("Authenticated user ID:", userId);
+
   try {
     const board = await Board.findOne({
-      where: {
-        id, 
-        userId
-      },
+      where: {id, userId},
       include: [{
         model: List,
-        include: [{
-          model: Card
-        }]
+        include: [Card]
       }]
     });
 
     if (!board) return res.status(404).json({ error: 'Board not found'});
+
     res.status(200).json(board)
   } catch (err) {
     res.status(500).json({ error: 'Board not found'})

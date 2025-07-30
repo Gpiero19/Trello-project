@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { getBoards } from "./api/boards";
 import CreateBoardModal from "./components/createBoardModal";
+import { Link } from "react-router-dom";
 
 function Dashboard () {
-    const [boards, setBoards] = useState([])
+    const [boards, setBoard] = useState([])
     const [NewBoardModal, setNewBoardModal] = useState(false);
 
     useEffect(() => {
     getBoards()
-        .then(setBoards)
+        .then(setBoard)
         .catch((err) => console.error("Error fetching boards:", err));
     }, []);
 
@@ -21,7 +22,7 @@ function Dashboard () {
         {/* Modal */}
         {NewBoardModal && (
             <CreateBoardModal
-                setBoards={setBoards}
+                setBoards={setBoard}
                 onClose={() => setNewBoardModal(false)}
                 />
                 )}
@@ -38,8 +39,11 @@ function Dashboard () {
               backgroundColor: "white"
             }}
           >
-            <h3>{board.title}</h3>
-            <p>User ID: {board.userId}</p>
+            <Link to={`/boards/${board.id}`} style={{ color:"rgba(78, 31, 0, 0.87)"}}>
+              <h3>{board.title}</h3>
+              <p>User ID: {board.userId}</p>
+              <p>Board ID: {board.id}</p>
+            </Link>
           </div>
         ))}
       </div>

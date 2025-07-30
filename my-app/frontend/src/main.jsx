@@ -7,6 +7,7 @@ import NotFoundPage from "./NotFoundPage/NotFoundPage.jsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Dashboard from "./dashboard.jsx"; 
 import { AuthProvider } from "./context/authContext";
+import BoardsDetailView from "./components/BoardDetailView.jsx";
 
 
 // npx vite
@@ -20,6 +21,7 @@ createRoot(document.getElementById("root")).render(
         <Routes>
           <Route path="/" element={<Mainboard />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/boards/:boardId" element={<BoardsDetailView />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       
