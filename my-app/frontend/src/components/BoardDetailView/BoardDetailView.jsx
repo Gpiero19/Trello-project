@@ -1,8 +1,8 @@
 import './BoardDetailView.css'
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axiosInstance from '../api/axiosInstance';
-import CreateListModal from './createListModal'
+import axiosInstance from '../../api/axiosInstance';
+import CreateListModal from '../createListModal'
 
 function BoardsDetailView() {
     const {boardId} = useParams()    
