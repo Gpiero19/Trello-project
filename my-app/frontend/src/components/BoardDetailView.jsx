@@ -1,3 +1,4 @@
+import './BoardDetailView.css'
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axiosInstance from '../api/axiosInstance';
@@ -36,28 +37,30 @@ function BoardsDetailView() {
 
 
   return (
-    <div style={{ padding: '1em'}}>
-    
-      <h2>Welcome to {board.title}'s Board!</h2>
+    <div className='board-container-wrapper'>
+      <div className='board-header'>
+        <h2 className='board-title'>Welcome to {board.title}'s Board!</h2>
+        <button className='' onClick={() => setNewListModal(true)}>Creat your lists here!</button>
+      </div>
 
+    <div className='board-container'>
       {(!board.Lists || board.Lists.length === 0) ? (
         <div>
           <p>No lists yet</p>
         </div>
       ) : (
         board.Lists.map((list) => (
-          <div key={list.id}>
+          <div key={list.id} className='list-card'>
             <h4>{list.title}</h4>
-            <ul>
+            <ul className='card-list'>
               {list.Cards.map((card) => (
-                <li key={card.id}>{card.title}</li>
+                <li key={card.id} className='card-item'>{card.title}</li>
               ))}
             </ul>
           </div>
         ))
       )}
-
-      <button onClick={() => setNewListModal(true)}>Creat your lists here!</button>
+    </div>
 
       {NewListModal && (
       <CreateListModal 
