@@ -15,7 +15,7 @@ function Dashboard () {
 
     
     return (
-        <div style={{ padding: "1em" }}>
+      <div style={{ padding: "1em" }}>
 
         <button onClick={() => setNewBoardModal(true)}>+ New Board</button>
 

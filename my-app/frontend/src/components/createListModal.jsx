@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 
-function RegisterUserModal({ onClose }) {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+function CreateListModal({ onClose, refreshBoard }) {
+  const {boardId} = useParams()
+  const [form, setForm] = useState({ title: "", boardId });
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -9,13 +11,9 @@ function RegisterUserModal({ onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // if (!name || !email || !password) {          //add later 
-    //   alert("Please fill in all fields");
-    //   return;
-    // }
 
     try {
-      const res = await fetch("http://localhost:3000/api/auth/register", {
+      const res = await fetch("http://localhost:3000/api/lists", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -26,7 +24,8 @@ function RegisterUserModal({ onClose }) {
         throw new Error(error || "Registration failed");
       }
 
-      alert("User registered successfully!");
+      await refreshBoard();
+
       onClose();
     } catch (err) {
       alert("Error: " + err.message);
@@ -36,25 +35,12 @@ function RegisterUserModal({ onClose }) {
   return (
     <div className="modal-backdrop">
       <div className="modal">
-        <h2>Register New User</h2>
+        <h2>Create New List</h2>
         <form onSubmit={handleSubmit}>
           <input
-            name="name"
-            placeholder="Name"
-            value={form.name}
-            onChange={handleChange}
-          />
-          <input
-            name="email"
-            placeholder="E-mail"
-            value={form.email}
-            onChange={handleChange}
-          />
-          <input
-            name="password"
-            placeholder="Password"
-            type="password"
-            value={form.password}
+            name="title"
+            placeholder="Title"
+            value={form.title}
             onChange={handleChange}
           />
           <button type="button" onClick={onClose}>Cancel</button>
@@ -65,4 +51,4 @@ function RegisterUserModal({ onClose }) {
   );
 }
 
-export default RegisterUserModal;
+export default CreateListModal;
