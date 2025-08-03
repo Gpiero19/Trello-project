@@ -19,3 +19,12 @@ export async function createLists(title) {
     throw new Error("Failed to create list", err);
   }
 }
+
+export async function deleteList(id) {
+  try {
+    const response = await axiosInstance.delete(`/lists/${id}`)
+    return response.data
+  } catch (err) {
+    throw new Error("Failed to delete list", err);
+  }
+}

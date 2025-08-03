@@ -13,7 +13,6 @@
 
 .board-view {
   background-color: white;
-  /* border: 1px solid #e2e8f0; */
   border-radius: 12px;
   padding: 1.5rem;
   position: relative;
@@ -39,11 +38,9 @@
   margin-top: -0.2rem;
   margin-bottom: 0.8rem;
   font-size: 1.3rem;
-  /* cursor: zoom-in; */
 }
 
 .board-link p {
-  /* margin: 0.2rem 0; */
   font-size: 0.9rem;
   color: black;
 }
@@ -52,7 +49,6 @@
   color: #D98324;
 }
 
-/* Delete icon */
 .delete-icon {
   position: absolute;
   top: 10px;

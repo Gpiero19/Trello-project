@@ -16,7 +16,7 @@ function Dashboard () {
   }, []);
 
   const handleDeleteBoard = async (boardId) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this board?");
+    const confirmDelete = window.confirm(`Are you sure you want to delete this board?`);
     if (!confirmDelete) return;
 
     try {
@@ -27,7 +27,6 @@ function Dashboard () {
       alert("Failed to delete board.");
     }
   };
-
     
   return (
     <div className="view-container-wrapper">
