@@ -9,10 +9,7 @@ function RegisterUserModal({ onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // if (!name || !email || !password) {          //add later 
-    //   alert("Please fill in all fields");
-    //   return;
-    // }
+    
 
     try {
       const res = await fetch("http://localhost:3000/api/auth/register", {

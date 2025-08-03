@@ -1,0 +1,68 @@
+.view-container-wrapper {
+  padding: 1.5rem;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.board-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.2rem;
+  margin-top: 1.5rem;
+}
+
+.board-view {
+  background-color: white;
+  /* border: 1px solid #e2e8f0; */
+  border-radius: 12px;
+  padding: 1.5rem;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-width: 200px;
+  max-width: 250px;
+}
+
+.board-view:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+  color: rgba(78, 31, 0, 0.87);
+}
+
+.board-link {
+  color: rgba(78, 31, 0, 0.87);
+  text-decoration: none;
+  display: block;
+}
+
+.board-link h3 {
+  margin-top: -0.2rem;
+  margin-bottom: 0.8rem;
+  font-size: 1.3rem;
+  /* cursor: zoom-in; */
+}
+
+.board-link p {
+  /* margin: 0.2rem 0; */
+  font-size: 0.9rem;
+  color: black;
+}
+
+.board-link:hover {
+  color: #D98324;
+}
+
+/* Delete icon */
+.delete-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.4rem;
+  color: #D98324;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.delete-icon:hover {
+  color: #D98324;
+}

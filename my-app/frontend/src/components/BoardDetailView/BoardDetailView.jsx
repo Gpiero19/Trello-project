@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance';
 import CreateListModal from '../createListModal'
+import { TiDelete } from "react-icons/ti";
 
 function BoardsDetailView() {
     const {boardId} = useParams()    
@@ -43,7 +44,7 @@ function BoardsDetailView() {
         <button className='' onClick={() => setNewListModal(true)}>Creat your lists here!</button>
       </div>
 
-    <div className='board-container'>
+    <div className='board-container-view'>
       {(!board.Lists || board.Lists.length === 0) ? (
         <div>
           <p>No lists yet</p>
@@ -56,6 +57,8 @@ function BoardsDetailView() {
               {list.Cards.map((card) => (
                 <li key={card.id} className='card-item'>{card.title}</li>
               ))}
+              <button className='new-card-button'>Add Card</button> 
+              {/* <TiDelete onClick={() => deleteTodo(todo.id)} className='delete-icon' /> */}
             </ul>
           </div>
         ))

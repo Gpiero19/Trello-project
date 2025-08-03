@@ -1,3 +1,4 @@
+// import axios from "axios";
 import axiosInstance from "./axiosInstance";
 
 const API_BASE_URL = 'http://localhost:3000/api'; // or use .env later
@@ -17,5 +18,14 @@ export async function createBoard(title) {
     return response.data;
   } catch (err) {
     throw new Error("Failed to create board", err);
+  }
+}
+
+export async function deleteBoard(id){
+  try {
+    const response = await axiosInstance.delete(`/boards/${id}`)
+    return response.data
+  } catch(err) {
+    throw new Error("Failed to delete board", err)
   }
 }

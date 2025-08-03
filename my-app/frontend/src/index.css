@@ -44,7 +44,7 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: #D98324;
 }
 button:focus,
 button:focus-visible {
@@ -108,7 +108,7 @@ input::placeholder, option {
     background-color: #ffffff;
   }
   a:hover {
-    color: #747bff;
+    color: #D98324;
   }
   button {
     background-color: #f9f9f9;

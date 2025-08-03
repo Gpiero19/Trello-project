@@ -5,9 +5,9 @@ import Navbar from "./Navbar/Navbar.jsx";
 import Mainboard from "./MainBoard.jsx";
 import NotFoundPage from "./NotFoundPage/NotFoundPage.jsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Dashboard from "./dashboard.jsx"; 
+import Dashboard from "./Dashboard/dashboard.jsx"; 
 import { AuthProvider } from "./context/authContext";
-import BoardsDetailView from "./components/BoardDetailView.jsx";
+import BoardsDetailView from "./components/BoardDetailView/BoardDetailView.jsx";
 
 
 // npx vite

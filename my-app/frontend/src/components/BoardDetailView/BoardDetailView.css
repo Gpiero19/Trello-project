@@ -23,12 +23,13 @@
 .new-list-button:hover {
     background-color: rgba(217, 131, 36, 0.8);
 }
-.board-container {
+.board-container-view {
     display: flex;
     flex-wrap: nowrap;
     gap: 1rem;
     padding: 1rem;
     overflow-x: auto;
+    text-align: center;
 }
 .list-card {
     background-color: white;
@@ -39,12 +40,14 @@
     max-width: 300px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.1);
     flex-shrink: 0;
-}
-
-.list-card {
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
 }
+
+/* .list-card {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+} */
 
 .card-list{
     list-style: none;
@@ -64,4 +67,22 @@
 
 .card-item:hover {
     background-color: #e8e8e8;
+}
+.new-card-button {
+    display: block;
+    width: calc(100% - 20px);
+    margin: 0 10px;      
+    margin-top: 10px;      
+    padding: 2px 20px;
+    background-color: white;
+    color: #D98324;
+    border-radius: 20px;
+    border-color: #D98324;
+    border: 1px solid;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+}
+.new-card-button:hover {
+    background-color: #e8e8e8;
+    border-color: #D98324;
 }
