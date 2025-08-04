@@ -98,3 +98,57 @@
 .delete-icon:hover {
   color: #D98324;
 }
+.card-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  width: 100%;
+}
+
+.card-input-container input {
+  padding: 0.5rem;
+  border: 1px solid rgba(78, 31, 0, 0.87);
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: rgb(248 244 225);
+  color: rgba(78, 31, 0, 0.87);
+  
+}
+.card-input-container input::placeholder {
+  font-weight: bold;
+  opacity: 0.5;
+  color: rgba(78, 31, 0, 0.87);
+}
+
+.card-input-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.add-card-btn,
+.cancel-card-btn {
+  padding: 0.3rem 0.6rem;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid rgba(78, 31, 0, 0.87);
+}
+
+.add-card-btn {
+  background-color: rgba(78, 31, 0, 0.87);
+  color: white;
+}
+
+.cancel-card-btn {
+  background-color: transparent;
+  color: #999;
+}
+
+.cancel-card-btn:hover {
+  color: #333;
+}

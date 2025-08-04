@@ -5,13 +5,14 @@ import axiosInstance from '../../api/axiosInstance';
 import CreateListModal from '../createListModal'
 import { TiDelete } from "react-icons/ti";
 import { deleteList } from '../../api/lists';
+import { createCards } from '../../api/cards';
 
 function BoardsDetailView() {
-    const {boardId} = useParams()    
-    // const {listId} = useParams()    
+    const {listId, boardId} = useParams()    
     const [board, setBoard] = useState(null);
-    // const [list, setList] = useState(null);
     const [NewListModal, setNewListModal] = useState(false);
+    const [activeListId, setActiveListId] = useState(null);
+    const [cardTitle, setCardTitle] = useState("")
 
 
   useEffect(() => {
@@ -47,6 +48,18 @@ function BoardsDetailView() {
     }
   };
 
+  const handleAddCard = async () => {
+    if(!cardTitle.trim()) return;
+
+    try {
+      await createCards({ title: cardTitle, listId})
+      await refreshBoard()
+      setCardTitle("")
+    } catch (err) {
+      return ("Failed to create Card", err)
+    }
+  }
+
   if(!board) return <p>No board was found ...</p>
     console.log('board:', board)
 
@@ -60,9 +73,9 @@ function BoardsDetailView() {
 
     <div className='board-container-view'>
       {(!board.Lists || board.Lists.length === 0) ? (
-        <divv>
+        <div>
           <p>You don't have any lists in this Board yet!</p>
-        </divv>
+        </div>
       ) : (
         board.Lists.map((list) => (
           <div key={list.id} className='list-card'>
@@ -71,10 +84,28 @@ function BoardsDetailView() {
             />
             <h4>{list.title}</h4>
             <ul className='card-list'>
-              {list.Cards.map((card) => (
+              {list.Cards?.map((card) => (
                 <li key={card.id} className='card-item'>{card.title}</li>
               ))}
-              <button className='new-card-button'>Add Card</button> 
+              {activeListId === list.id ? (
+                <div className='card-input-container'>
+                  <input
+                  type='text'
+                  value={cardTitle}
+                  placeholder='Card name'
+                  onChange={(e) => setCardTitle(e.target.value)}
+                  />
+                  <div className='card-input-actions'>
+                    <button className='add-card-btn' onClick={() => handleAddCard()}>+</button>
+                    <button className='cancel-card-btn' onClick={() => setActiveListId(null)}>x</button>
+                  </div>
+                </div>
+              ) : (
+              <button className='new-card-button'
+                onClick={() => setActiveListId(list.id)}
+                >Add Card</button> 
+              )
+              }
             </ul>
           </div>
         ))
