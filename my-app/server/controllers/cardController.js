@@ -3,7 +3,7 @@ const { Card } = require('../models');
 exports.createCard = async (req, res) => {
   try {
     const { title, listId, description } = req.body;
-    const card = await Card.create({ title, listId, description }); //creation of card
+    const card = await Card.create({ title, listId }); //creation of card
 
     res.status(201).json(card);
 

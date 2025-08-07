@@ -8,7 +8,7 @@ import { deleteList } from '../../api/lists';
 import { createCards } from '../../api/cards';
 
 function BoardsDetailView() {
-    const {listId, boardId} = useParams()    
+    const {boardId} = useParams()    
     const [board, setBoard] = useState(null);
     const [NewListModal, setNewListModal] = useState(false);
     const [activeListId, setActiveListId] = useState(null);
@@ -48,11 +48,14 @@ function BoardsDetailView() {
     }
   };
 
-  const handleAddCard = async () => {
+  const handleAddCard = async (targetListId) => {
     if(!cardTitle.trim()) return;
+      console.log(typeof(cardTitle));
+      console.log("targetListId:", targetListId);
+
 
     try {
-      await createCards({ title: cardTitle, listId})
+      await createCards(cardTitle, targetListId)
       await refreshBoard()
       setCardTitle("")
     } catch (err) {
@@ -95,9 +98,13 @@ function BoardsDetailView() {
                   placeholder='Card name'
                   onChange={(e) => setCardTitle(e.target.value)}
                   />
-                  <div className='card-input-actions'>
-                    <button className='add-card-btn' onClick={() => handleAddCard()}>+</button>
-                    <button className='cancel-card-btn' onClick={() => setActiveListId(null)}>x</button>
+                  <div className='card-input-actions'> 
+                    <button className='add-card-btn' onClick={() => handleAddCard(list.id)}>+</button>
+                    {console.log('Show info', list)}
+                    <button className='cancel-card-btn' onClick={() => {
+                      setActiveListId(null);
+                      setCardTitle();
+                    }}>x</button>
                   </div>
                 </div>
               ) : (

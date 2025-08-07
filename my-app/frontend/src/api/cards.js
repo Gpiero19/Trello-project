@@ -16,6 +16,7 @@ export async function createCards(title, listId) {
     const response = await axiosInstance.post("/cards", { title, listId });
     return response.data;
   } catch (err) {
-    throw new Error("Failed to create card", err);
+    console.error("Failed to create card:", err.response?.data || err.message);
+    throw err;
   }
 }
