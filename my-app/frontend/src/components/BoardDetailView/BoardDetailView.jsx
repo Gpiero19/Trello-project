@@ -5,7 +5,7 @@ import axiosInstance from '../../api/axiosInstance';
 import CreateListModal from '../createListModal'
 import { TiDelete } from "react-icons/ti";
 import { deleteList } from '../../api/lists';
-import { createCards } from '../../api/cards';
+import { createCards, deleteCard } from '../../api/cards';
 
 function BoardsDetailView() {
     const {boardId} = useParams()    
@@ -38,7 +38,6 @@ function BoardsDetailView() {
   const handleDeleteList = async (listId) => {
     const confirmDelete = window.confirm(`Are you sure you want to delete this list?`);
     if (!confirmDelete) return;
-
     try {
       await deleteList(listId);
       refreshBoard();
@@ -53,13 +52,23 @@ function BoardsDetailView() {
       console.log(typeof(cardTitle));
       console.log("targetListId:", targetListId);
 
-
     try {
       await createCards(cardTitle, targetListId)
       await refreshBoard()
       setCardTitle("")
     } catch (err) {
       return ("Failed to create Card", err)
+    }
+  }
+
+  const handleDeleteCard = async (cardId) => {
+    const confirmDelete = window.confirm(`Are you sure you want to delete this card?`);
+    if (!confirmDelete) return;
+    try {
+      await deleteCard(cardId)
+      refreshBoard()
+    } catch (err) {
+      throw new Error ('Failed to delete card', err)
     }
   }
 
@@ -86,10 +95,16 @@ function BoardsDetailView() {
             onClick={() => handleDeleteList(list.id)} 
             />
             <h4>{list.title}</h4>
-            <ul className='card-list'>
+            <div className='card-list'>
               {list.Cards?.map((card) => (
-                <li key={card.id} className='card-item'>{card.title}</li>
+                <div key={card.id} className='card-item'>
+                <span>{card.title}</span>
+                <TiDelete className='delete-card-icon' 
+                onClick={() => handleDeleteCard(card.id)} 
+                />
+                </div>
               ))}
+
               {activeListId === list.id ? (
                 <div className='card-input-container'>
                   <input
@@ -100,7 +115,6 @@ function BoardsDetailView() {
                   />
                   <div className='card-input-actions'> 
                     <button className='add-card-btn' onClick={() => handleAddCard(list.id)}>+</button>
-                    {console.log('Show info', list)}
                     <button className='cancel-card-btn' onClick={() => {
                       setActiveListId(null);
                       setCardTitle();
@@ -113,7 +127,7 @@ function BoardsDetailView() {
                 >Add Card</button> 
               )
               }
-            </ul>
+            </div>
           </div>
         ))
       )}

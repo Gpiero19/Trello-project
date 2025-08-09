@@ -31,8 +31,10 @@ https://colorhunt.co/palette/f8f4e1feba1774512d4e1f00 */
 img {
   height: 30px;
 }
-
-li, a, button, span {
+.user-name {
+  color: #edf0f1;
+}
+li, a {
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
   font-size: 16px;

@@ -20,3 +20,11 @@ export async function createCards(title, listId) {
     throw err;
   }
 }
+
+export async function deleteCard(cardId) {
+  try {
+    await axiosInstance.delete(`/cards/${cardId}`);
+  } catch (err)  {
+    throw new Error("Failed to delete Card", err);
+  }
+}

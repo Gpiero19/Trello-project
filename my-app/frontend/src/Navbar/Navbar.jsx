@@ -32,7 +32,7 @@ return (
       <ul className='right-panel'>
       {user ? (
         <>
-          <span>Welcome {user.name}!</span>  {/* Fix user name, not showing in navbar! */}
+          <span className='user-name'>Welcome {user.name}!</span>  {/* Fix user name, not showing in navbar! */}
           <button onClick={logout}>Logout</button>
         </>
           ) : (
