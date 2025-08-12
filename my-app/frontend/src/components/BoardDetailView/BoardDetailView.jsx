@@ -1,6 +1,6 @@
 import './BoardDetailView.css'
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance';
 import CreateListModal from '../createListModal'
 import { TiDelete } from "react-icons/ti";
@@ -26,6 +26,8 @@ function BoardsDetailView() {
     }
     fetchBoard();
 }, [boardId])
+
+  const navigate = useNavigate()
 
   const refreshBoard = async() => {
     try {
@@ -79,6 +81,7 @@ function BoardsDetailView() {
   return (
     <div className='board-container-wrapper'>
       <div className='board-header'>
+        <button onClick={()=> navigate(-1)}>Back</button>
         <h2 className='board-title'>Welcome to {board.title}'s Board!</h2>
         <button className='' onClick={() => setNewListModal(true)}>Create your lists here!</button>
       </div>
