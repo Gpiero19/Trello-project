@@ -29,3 +29,12 @@ export async function deleteBoard(id){
     throw new Error("Failed to delete board", err)
   }
 }
+
+export async function updateBoard(title) {
+  try {
+    const response = await axiosInstance.put("/boards", { title });
+    return response.data
+  } catch (err) {
+    throw new Error("Failed to modify board title", err)
+  }
+}
