@@ -6,6 +6,9 @@ import CreateListModal from '../createListModal'
 import { TiDelete } from "react-icons/ti";
 import { deleteList } from '../../api/lists';
 import { createCards, deleteCard } from '../../api/cards';
+import { refreshBoard } from '../../api/useBoard';
+// import { InlineEdit } from './InlineEdit'
+
 
 function BoardsDetailView() {
     const {boardId} = useParams()    
@@ -29,14 +32,7 @@ function BoardsDetailView() {
 
   const navigate = useNavigate()
 
-  const refreshBoard = async() => {
-    try {
-      const res = await axiosInstance.get(`/boards/${boardId}`)
-      setBoard(res.data)
-    } catch (err) {
-        console.error('Failed to load board', err)
-    }
-  }
+
   const handleDeleteList = async (listId) => {
     const confirmDelete = window.confirm(`Are you sure you want to delete this list?`);
     if (!confirmDelete) return;

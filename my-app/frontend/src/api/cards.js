@@ -28,3 +28,15 @@ export async function deleteCard(cardId) {
     throw new Error("Failed to delete Card", err);
   }
 }
+      // Need to add description after in update
+export async function updateCardTitle(cardId, newCardTitle) {
+  try {
+    const response= await axiosInstance.put(`/cards/${cardId}`,{
+      title: newCardTitle
+    });
+    return response.data
+  } catch (err) {
+    console.error("Failed to rename card:", err.response?.data || err.message);
+    throw err;
+  }
+}

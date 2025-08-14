@@ -30,11 +30,15 @@ export async function deleteBoard(id){
   }
 }
 
-export async function updateBoard(title) {
+export async function updateBoard(id, newBoardTitle) {
   try {
-    const response = await axiosInstance.put("/boards", { title });
+    const response = await axiosInstance.put(`/boards/${id}`, { 
+      title : newBoardTitle 
+    });
     return response.data
   } catch (err) {
     throw new Error("Failed to modify board title", err)
   }
 }
+
+
