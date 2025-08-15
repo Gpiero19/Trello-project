@@ -7,22 +7,20 @@ import { TiDelete } from "react-icons/ti";
 import InlineEdit from '../components/InlineEdit/InlineEdit';
 
 function Dashboard () {
-  const { boards, setBoard } = useState([])
-  const [NewBoardModal, setNewBoardModal] = useState(false);
+  const[ boards, setBoards ] = useState([])
+  const [ NewBoardModal, setNewBoardModal ] = useState(false);
 
   const refreshBoards = async () => {
     try {
       const data = await getBoards();
-      setBoard(data);
+      setBoards(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Error fetching boards:", err);
     }
   };
 
   useEffect(() => {
-  getBoards()
-      .then(setBoard)
-      .catch((err) => console.error("Error fetching boards:", err));
+    refreshBoards()
   }, []);
 
   const handleDeleteBoard = async (boardId) => {
@@ -31,7 +29,8 @@ function Dashboard () {
 
     try {
       await deleteBoard(boardId);
-      setBoard(prev => prev.filter(board => board.id !== boardId));
+      // setBoards(prev => prev.filter(board => board.id !== boardId));
+      refreshBoards()
     } catch (err) {
       console.error("Failed to delete board:", err);
       alert("Failed to delete board.");
@@ -46,7 +45,7 @@ function Dashboard () {
 
       {NewBoardModal && (
           <CreateBoardModal
-              setBoards={setBoard}
+              setBoards={setBoards}
               onClose={() => setNewBoardModal(false)}
               />
               )}
@@ -59,7 +58,9 @@ function Dashboard () {
               initialValue={board.title}
               onSave={async (newTitle) => {
                 await updateBoard(board.id, newTitle);
-                setBoard(prev => ({ ...prev, title: newTitle }));
+                setBoards(prev =>
+                  prev.map(b => b.id === board.id ? { ...b, title: newTitle } : b)
+                );
               }}
               className="board-title-wrapper"
               textClassName="board-title"
