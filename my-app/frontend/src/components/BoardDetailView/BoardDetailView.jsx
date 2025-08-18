@@ -4,10 +4,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance';
 import CreateListModal from '../createListModal'
 import { TiDelete } from "react-icons/ti";
-import { deleteList } from '../../api/lists';
-import { createCards, deleteCard } from '../../api/cards';
+import { deleteList, updateList } from '../../api/lists';
+import { createCards, deleteCard, updateCardTitle } from '../../api/cards';
 // import { useBoard } from '../../api/useBoard';
-// import { InlineEdit } from './InlineEdit'
+import InlineEdit from '../InlineEdit/InlineEdit'
 
 
 function BoardsDetailView() {
@@ -97,27 +97,35 @@ function BoardsDetailView() {
         </div>
       ) : (
         board.Lists.map((list) => (
-          <div key={list.id} className='list-card'>
-            <TiDelete className='delete-icon' 
+          <div key={list.id} className='list-container'>
+            <TiDelete className='list-delete-icon' 
             onClick={() => handleDeleteList(list.id)} 
             />
-            <h4>{list.title}</h4>
-            {/* <InlineEdit
-                          initialValue={list.title}
-                          // onSave={async (newTitle) => {
-                          //   await updateBoard(board.id, newTitle);
-                          //   setBoards(prev =>
-                          //     prev.map(b => b.id === board.id ? { ...b, title: newTitle } : b)
-                          //   );
-                          // }}
-                          className="list-title-wrapper"
-                          textClassName="list-title"
-                          refreshBoard ={refreshBoard}
-                        /> */}
-            <div className='card-list'>
+            {/* <h4>{list.title}</h4> */}
+            <InlineEdit
+              initialValue={list.title}
+              onSave={async (newTitle) => {
+                await updateList(list.id, newTitle);
+                refreshBoard();
+              }}
+              className="list-title-wrapper"
+              textClassName="list-title"
+              refreshBoard ={refreshBoard}
+            />
+            <div className='card-container'>
               {list.Cards?.map((card) => (
                 <div key={card.id} className='card-item'>
-                <span>{card.title}</span>
+                {/* <span>{card.title}</span> */}
+                <InlineEdit
+                  initialValue={card.title}
+                  onSave={async (newTitle) => {
+                    await updateCardTitle(card.id, newTitle);
+                    refreshBoard();
+                  }}
+                  className="card-title-wrapper"
+                  textClassName="card-title"
+                  refreshBoard ={refreshBoard}
+                />
                 <TiDelete className='delete-card-icon' 
                 onClick={() => handleDeleteCard(card.id)} 
                 />

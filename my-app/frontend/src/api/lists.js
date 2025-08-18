@@ -31,11 +31,11 @@ export async function deleteList(id) {
 
 export async function updateList(id, newListTitle) {
   try {
-    const response = await axiosInstance.delete(`/lists/${id}`, {
+    const response = await axiosInstance.put(`/lists/${id}`, {
       title : newListTitle
     })
     return response.data
   } catch (err) {
-    throw new Error("Failed to delete list", err);
+    throw new Error("Failed to update list", err);
   }
 }

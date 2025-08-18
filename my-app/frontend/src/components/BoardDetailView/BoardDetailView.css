@@ -12,82 +12,84 @@
     font-weight: bold;
 }
 .new-list-button {
-    padding: 9px 25px;
-    background-color: #D98324;
-    border-radius: 20px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease 0s;
-    margin-left: 20px;
+  padding: 9px 25px;
+  background-color: #D98324;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+  margin-left: 20px;
 }
 .new-list-button:hover {
     background-color: rgba(217, 131, 36, 0.8);
 }
 .board-container-view {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 1rem;
-    padding: 1rem;
-    overflow-x: auto;
-    text-align: center;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  padding: 1rem;
+  overflow-x: auto;
+  text-align: center;
 }
-.list-card {
-    position: relative;
-    background-color: white;
-    color: rgba(78, 31, 0, 0.87);
-    border-radius: 8px;
-    padding: 1rem;
-    min-width: 250px;
-    max-width: 300px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    flex-shrink: 0;
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
+.list-container {
+  position: relative;
+  background-color: white;
+  color: rgba(78, 31, 0, 0.87);
+  border-radius: 8px;
+  padding: 1rem;
+  min-width: 250px;
+  max-width: 300px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  flex-shrink: 0;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
 }
 
-.card-list{
-    list-style: none;
-    padding: 0;
-    margin: 0;
+.card-container {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .card-item {
-    background-color: white;
-    border-radius: 6px;
-    padding: 0.5rem;
-    margin: 0.5rem 0;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    transition: background-color 0.2s ease;
-    border: 1px solid #D98324;
-    color: #D98324;
-    cursor: pointer;
+  position: relative;
+  background-color: white;
+  border-radius: 6px;
+  padding: 0.5rem;
+  padding-top: 1rem;
+  margin: 0.5rem 0;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  transition: background-color 0.2s ease;
+  border: 1px solid #D98324;
+  color: #D98324;
+  cursor: pointer;
 }
 
 .card-item:hover {
-    background-color: #e8e8e8;
+  background-color: #e8e8e8;
 }
 
 .new-card-button {
-    display: block;
-    width: calc(100% - 20px);
-    margin: 0 10px;      
-    margin-top: 10px;      
-    padding: 2px 20px;
-    background-color: #D98324;
-    color: white;
-    border-radius: 20px;
-    /* border-color: #D98324; */
-    border: 1px solid;
-    cursor: pointer;
-    transition: all 0.3s ease 0s;
+  display: block;
+  width: calc(100% - 20px);
+  margin: 0 10px;      
+  margin-top: 10px;      
+  padding: 2px 20px;
+  background-color: #D98324;
+  color: white;
+  border-radius: 20px;
+  /* border-color: #D98324; */
+  border: 1px solid;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
 }
 
 .new-card-button:hover {
-    background-color: #e8e8e8;
-    border-color: #D98324;
+  background-color: #e8e8e8;
+  border-color: #D98324;
 }
 
-.delete-icon {
+.list-delete-icon {
   position: absolute;
   top: 8px;
   right: 8px;
@@ -97,7 +99,7 @@
   z-index: 10;
 }
 
-.delete-icon:hover {
+.list-delete-icon:hover {
   color: #D98324;
 }
 .card-input-container {
@@ -156,8 +158,8 @@
 }
 .delete-card-icon {
   position: absolute;
-  /* top: 8px; */
-  right: 20px;
+  top: 7px;
+  right: 7px;
   color: #D98324;
   cursor: pointer;
   transition: color 0.2s ease;
