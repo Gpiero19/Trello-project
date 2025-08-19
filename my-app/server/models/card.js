@@ -12,6 +12,11 @@ module.exports = (sequelize, DataTypes) => {
   Card.init({
     title: DataTypes.STRING,
     description: DataTypes.TEXT,
+    position: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
     listId: DataTypes.INTEGER,
     userId: DataTypes.INTEGER
   }, {

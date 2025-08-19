@@ -3,7 +3,10 @@ const { Card } = require('../models');
 exports.createCard = async (req, res) => {
   try {
     const { title, listId, description } = req.body;
-    const card = await Card.create({ title, listId }); //creation of card
+    const maxPosition = await List.max('position', { where: { listId } });
+    const position = Number.isFinite(maxPosition) ? maxPosition + 1 : 0;
+
+    const card = await Card.create({ title, listId, position }); 
 
     res.status(201).json(card);
 

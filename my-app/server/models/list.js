@@ -11,7 +11,12 @@ module.exports = (sequelize, DataTypes) => {
   
   List.init({
     title: DataTypes.STRING,
-    boardId: DataTypes.INTEGER
+    position: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+      boardId: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'List',

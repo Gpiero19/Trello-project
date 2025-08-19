@@ -3,7 +3,10 @@ const { List } = require('../models');
 exports.createList = async (req, res) => {
   try {
     const { title, boardId } = req.body;
-    const list = await List.create({ title, boardId }); //creation of list
+    const maxPosition = await List.max('position', { where: { boardId } });
+    const position = Number.isFinite(maxPosition) ? maxPosition + 1 : 0;
+
+    const list = await List.create({ title, boardId, position }); //creation of list
 
     res.status(201).json(list);
 

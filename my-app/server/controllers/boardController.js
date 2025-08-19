@@ -4,8 +4,10 @@ exports.createBoard = async (req, res) => {
   try {
     const userId = req.user.id
     const { title } = req.body;
+    const maxPosition = await List.max('position', { where: { userId } });
+    const position = Number.isFinite(maxPosition) ? maxPosition + 1 : 0;
     
-    const board = await Board.create({ title, userId }); //creation of board name
+    const board = await Board.create({ title, userId, position }); //creation of board name
 
     res.status(201).json(board);
   } catch (err) {
@@ -40,7 +42,11 @@ exports.getBoardById = async (req, res) => {
       include: [{
         model: List,
         include: [Card]
-      }]
+      }],
+      order:[
+        [{model: List}, 'position', 'ASC']
+        [{model: List}, {model: Card}, 'position', 'ASC']
+      ]
     });
 
     if (!board) return res.status(404).json({ error: 'Board not found'});

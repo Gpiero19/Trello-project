@@ -15,6 +15,11 @@ module.exports = {
       description: {
         type: Sequelize.TEXT
       },
+      position: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
       listId: {
         type: Sequelize.INTEGER
       },
