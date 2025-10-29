@@ -54,7 +54,7 @@ exports.updateCard = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: 'Error updating card'})
   }
-}
+};
 
 exports.deleteCard = async (req, res) => {
   const {id} = req.params
@@ -68,3 +68,19 @@ exports.deleteCard = async (req, res) => {
     res.status(500).json({error: 'Error deleting card'})
   }
 }; 
+
+exports.reorderCards = async (req, res) => {
+  try {
+    const { listId, cards} = req.body;
+
+    const updates = cards.map(({ id, position }) =>
+      List.update({ position }, {where: { id, listId}})
+    );
+    
+    await Promise.all(updates)
+
+  } catch (err) {
+    console.error('Error reordering lists', err);
+    res.status(500).json({ error: 'Internal server error'})
+  }
+};

@@ -15,16 +15,16 @@ module.exports = {
       description: {
         type: Sequelize.TEXT
       },
-      position: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        defaultValue: 0,
-      },
       listId: {
         type: Sequelize.INTEGER
       },
       userId: {
         type: Sequelize.INTEGER
+      },
+      position: {
+        type: Sequelize.FLOAT,
+        allowNull: false,
+        defaultValue: 0,
       },
       createdAt: {
         allowNull: false,

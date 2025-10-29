@@ -22,6 +22,7 @@ function BoardsDetailView() {
     async function fetchBoard () {
         try {
             const res = await axiosInstance.get(`/boards/${boardId}`);
+            console.log('Fetched board data:', res.data)
             setBoard(res.data)
         } catch (err) {
             console.error('Failed to load board details', err)
@@ -77,6 +78,27 @@ function BoardsDetailView() {
       throw new Error ('Failed to delete card', err)
     }
   }
+  // const handleDragEnd = async (result) => {
+  //   const { source, destination } = result;
+  //   if (!destination) return; // dropped outside
+
+  //   if (source.index === destination.index) return; // no movement
+
+  //   // create new order array
+  //   const newLists = Array.from(board.Lists);
+  //   const [movedList] = newLists.splice(source.index, 1);
+  //   newLists.splice(destination.index, 0, movedList);
+
+  //   // update UI immediately
+  //   setBoard({ ...board, Lists: newLists });
+
+  //   // call backend
+  //   await axiosInstance.put("/lists/reorder", {
+  //     boardId: board.id,
+  //     lists: newLists.map((l, i) => ({ id: l.id, position: i }))
+  //   });
+  // };
+
 
   if(!board) return <p>No board was found ...</p>
     console.log('board:', board)

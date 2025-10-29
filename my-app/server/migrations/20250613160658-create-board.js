@@ -16,7 +16,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       position: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
         allowNull: false,
         defaultValue: 0,
       },

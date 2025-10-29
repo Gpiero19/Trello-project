@@ -4,14 +4,14 @@
   box-sizing: border-box;
 }
 
-.board-container {
+.boards-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1.2rem;
   margin-top: 1.5rem;
 }
 
-.board-view {
+.board-card {
   background-color: white;
   border-radius: 12px;
   padding: 1.5rem;
@@ -22,10 +22,16 @@
   max-width: 250px;
 }
 
-.board-view:hover {
+.board-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0,0,0,0.12);
-  color: rgba(78, 31, 0, 0.87);
+  /* color: rgba(78, 31, 0, 0.87); */
+}
+
+.board-title {
+  font-size: 1.3rem;
+  margin-top: 0;
+  margin-bottom: 0.8rem;
 }
 
 .board-link {

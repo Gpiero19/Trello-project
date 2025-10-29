@@ -12,13 +12,13 @@ module.exports = {
       title: {
         type: Sequelize.STRING
       },
-      position: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        defaultValue: 0,
-      },
       boardId: {
         type: Sequelize.INTEGER
+      },
+      position: {
+        type: Sequelize.FLOAT,
+        allowNull: false,
+        defaultValue: 0,
       },
       createdAt: {
         allowNull: false,

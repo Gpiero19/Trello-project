@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
   List.init({
     title: DataTypes.STRING,
     position: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
       allowNull: false,
       defaultValue: 0,
     },

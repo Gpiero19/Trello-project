@@ -15,6 +15,7 @@ function CreateBoardModal({ setBoards, onClose }) {
     try {
       await createBoard(title);
       const newBoards = await getBoards();
+      console.log(title)
       setBoards(newBoards);
       onClose();
     } catch (err) {

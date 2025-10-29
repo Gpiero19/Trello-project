@@ -66,3 +66,18 @@ exports.deleteList = async (req, res) => {
     res.status(500).json({error: 'Error deleting list'})
   }
 }; 
+
+exports.reorderLists = async (req, res) => {
+  try {
+    const { boardId, lists} = req.body;
+
+    const updates = lists.map(({ id, position }) =>
+      List.update({ position }, { where: { id, boardId }})
+    );
+    await Promise.all(updates)
+  } catch (err) {
+    await t.rollback();
+    console.error('Error reordering lists', err);
+    res.status(500).json({ error: 'Internal server error'})
+  }
+};

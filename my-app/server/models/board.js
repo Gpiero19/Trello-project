@@ -13,13 +13,13 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     userId: DataTypes.INTEGER,
     position: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
       allowNull: false,
       defaultValue: 0,
-    },
-  }, {
+    }  }, {
     sequelize,
     modelName: 'Board',
   });
   return Board;
 };
+
