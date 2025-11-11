@@ -58,7 +58,7 @@ function Dashboard () {
       await axiosInstance.put("/boards/reorder", {
         boards: newBoards.map((b, i) => ({ id: b.id, position: i }))
       });
-      // Success: UI is already updated, nothing else needed.
+      console.log(newBoards.map(b => b.id));
 
     } catch (err) {
       console.error("Failed to reorder boards:", err);

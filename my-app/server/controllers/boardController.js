@@ -93,14 +93,15 @@ exports.reorderBoards = async (req, res) => {
   try {
     const { boards} = req.body;
 
-    const updates = boards.map(({ id, position}) =>
+    const updates = boards.map(({ id, position}) => {
+      console.log(`Updating board ID ${id} to position ${position}`)
       Board.update({ position }, { where: {id}})
-    );
+  });
 
     await Promise.all(updates)
+    res.status(200).json({ message: "Boards reordered successfully" });
 
   } catch (err) {
-    await t.rollback();
     console.error('Error reordering lists', err);
     res.status(500).json({ error: 'Internal server error'})
   }

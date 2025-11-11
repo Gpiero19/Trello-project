@@ -7,8 +7,8 @@ router.get('/:id', authenticateToken, boardController.getBoardById); //Fetch api
 
 router.post('/', authenticateToken, boardController.createBoard); //Post api/boards
 router.get('/', authenticateToken, boardController.getAllBoards); //Fetch api/boards
-router.put('/:id', authenticateToken, boardController.updateBoard); //Update api/boards by ID
 router.put('/reorder', boardController.reorderBoards);                 //Reorder boards by dragging
+router.put('/:id', authenticateToken, boardController.updateBoard); //Update api/boards by ID
 router.delete('/:id', authenticateToken, boardController.deleteBoard); //Delete api/boards
 
 
