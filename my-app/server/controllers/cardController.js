@@ -72,13 +72,14 @@ exports.deleteCard = async (req, res) => {
 
 exports.reorderCards = async (req, res) => {
   try {
-    const { listId, cards} = req.body;
+    const { cards} = req.body;
 
-    const updates = cards.map(({ id, position }) =>
-      Card.update({ position }, {where: { id, listId}})
+    const updates = cards.map(({ id, listId, position }) =>
+      Card.update({ listId, position }, {where: { id}})
     );
     
     await Promise.all(updates)
+    res.status(200).json({ message: "Cards reordered successfully" });
 
   } catch (err) {
     console.error('Error reordering lists', err);
