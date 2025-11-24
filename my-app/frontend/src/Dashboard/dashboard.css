@@ -12,19 +12,25 @@
 }
 
 .board-card {
-  background-color: white;
-  border-radius: 12px;
-  padding: 1.5rem;
   position: relative;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: white;
+  color: rgba(78, 31, 0, 0.87);
+  border-radius: 8px;
+  padding: 0.5rem;
   min-width: 200px;
-  max-width: 250px;
+  max-width: 300px;
+  box-shadow: 0 1px 4px rgba(78, 31, 0, 0.87, 0.1);
+  flex-shrink: 0;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
 }
 
 .board-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+  box-shadow: 0 4px 8px rgba(78, 31, 0, 0.87, 0.12);
   /* color: rgba(78, 31, 0, 0.87); */
 }
 

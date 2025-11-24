@@ -45,6 +45,18 @@
   margin-bottom: 1rem;
 }
 
+.list-container:hover {
+  transform: translateY(-2px); /* lifts the list */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.12); /* stronger shadow on hover */
+  transition: all 0.2s ease; /* smooth transition */
+}
+
+/* Card hover effect (already exists, just make sure it's similar) */
+.card-item:hover {
+  transform: translateY(-1px); /* subtle lift */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
 .card-container {
   list-style: none;
   padding: 0;

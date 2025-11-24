@@ -8,6 +8,7 @@ import { deleteList, updateList } from '../../api/lists';
 import { createCards, deleteCard, updateCardTitle } from '../../api/cards';
 // import { useBoard } from '../../api/useBoard';
 import InlineEdit from '../InlineEdit/InlineEdit'
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 
 function BoardsDetailView() {
@@ -78,26 +79,26 @@ function BoardsDetailView() {
       throw new Error ('Failed to delete card', err)
     }
   }
-  // const handleDragEnd = async (result) => {
-  //   const { source, destination } = result;
-  //   if (!destination) return; // dropped outside
+  const handleDragEnd = async (result) => {
+    const { source, destination } = result;
+    if (!destination) return; // dropped outside
 
-  //   if (source.index === destination.index) return; // no movement
+    if (source.index === destination.index) return; // no movement
 
-  //   // create new order array
-  //   const newLists = Array.from(board.Lists);
-  //   const [movedList] = newLists.splice(source.index, 1);
-  //   newLists.splice(destination.index, 0, movedList);
+    // create new order array
+    const newLists = Array.from(board.Lists);
+    const [movedList] = newLists.splice(source.index, 1);
+    newLists.splice(destination.index, 0, movedList);
 
-  //   // update UI immediately
-  //   setBoard({ ...board, Lists: newLists });
+    // update UI immediately
+    setBoard({ ...board, Lists: newLists });
 
-  //   // call backend
-  //   await axiosInstance.put("/lists/reorder", {
-  //     boardId: board.id,
-  //     lists: newLists.map((l, i) => ({ id: l.id, position: i }))
-  //   });
-  // };
+    // call backend
+    await axiosInstance.put("/lists/reorder", {
+      boardId: board.id,
+      lists: newLists.map((l, i) => ({ id: l.id, position: i }))
+    });
+  };
 
 
   if(!board) return <p>No board was found ...</p>
@@ -105,91 +106,108 @@ function BoardsDetailView() {
 
 
   return (
-    <div className='board-container-wrapper'>
-      <div className='board-header'>
-        <button onClick={()=> navigate(-1)}>Back</button>
-        <h2 className='board-title'>Welcome to {board.title}'s Board!</h2>
-        <button className='' onClick={() => setNewListModal(true)}>Create your lists here!</button>
-      </div>
+  <div className='board-container-wrapper'>
+    <div className='board-header'>
+      <button onClick={() => navigate(-1)}>Back</button>
+      <h2 className='board-title'>Welcome to {board.title}'s Board!</h2>
+      <button onClick={() => setNewListModal(true)}>Create your lists here!</button>
+    </div>
 
-    <div className='board-container-view'>
-      {(!board.Lists || board.Lists.length === 0) ? (
-        <div>
-          <p>You don't have any lists in this Board yet!</p>
-        </div>
-      ) : (
-        board.Lists.map((list) => (
-          <div key={list.id} className='list-container'>
-            <TiDelete className='list-delete-icon' 
-            onClick={() => handleDeleteList(list.id)} 
-            />
-            {/* <h4>{list.title}</h4> */}
-            <InlineEdit
-              initialValue={list.title}
-              onSave={async (newTitle) => {
-                await updateList(list.id, newTitle);
-                refreshBoard();
-              }}
-              className="list-title-wrapper"
-              textClassName="list-title"
-              refreshBoard ={refreshBoard}
-            />
-            <div className='card-container'>
-              {list.Cards?.map((card) => (
-                <div key={card.id} className='card-item'>
-                {/* <span>{card.title}</span> */}
-                <InlineEdit
-                  initialValue={card.title}
-                  onSave={async (newTitle) => {
-                    await updateCardTitle(card.id, newTitle);
-                    refreshBoard();
-                  }}
-                  className="card-title-wrapper"
-                  textClassName="card-title"
-                  refreshBoard ={refreshBoard}
-                />
-                <TiDelete className='delete-card-icon' 
-                onClick={() => handleDeleteCard(card.id)} 
-                />
-                </div>
-              ))}
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <Droppable droppableId="board-lists" direction="horizontal">
+        {(provided) => (
+          <div
+            className="board-container-view"
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+            {board.Lists?.map((list, index) => (
+              <Draggable key={list.id} draggableId={String(list.id)} index={index}>
+                {(provided) => (
+                  <div
+                    className="list-container"
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                  >
+                    <TiDelete
+                      className='list-delete-icon'
+                      onClick={() => handleDeleteList(list.id)}
+                    />
+                    <InlineEdit
+                      initialValue={list.title}
+                      onSave={async (newTitle) => {
+                        await updateList(list.id, newTitle);
+                        refreshBoard();
+                      }}
+                      className="list-title-wrapper"
+                      textClassName="list-title"
+                      refreshBoard={refreshBoard}
+                    />
 
-              {activeListId === list.id ? (
-                <div className='card-input-container'>
-                  <input
-                  type='text'
-                  value={cardTitle}
-                  placeholder='Card name'
-                  onChange={(e) => setCardTitle(e.target.value)}
-                  />
-                  <div className='card-input-actions'> 
-                    <button className='add-card-btn' onClick={() => handleAddCard(list.id)}>+</button>
-                    <button className='cancel-card-btn' onClick={() => {
-                      setActiveListId(null);
-                      setCardTitle();
-                    }}>x</button>
+                    <div className='card-container'>
+                      {list.Cards?.map((card) => (
+                        <div key={card.id} className='card-item'>
+                          <InlineEdit
+                            initialValue={card.title}
+                            onSave={async (newTitle) => {
+                              await updateCardTitle(card.id, newTitle);
+                              refreshBoard();
+                            }}
+                            className="card-title-wrapper"
+                            textClassName="card-title"
+                            refreshBoard={refreshBoard}
+                          />
+                          <TiDelete
+                            className='delete-card-icon'
+                            onClick={() => handleDeleteCard(card.id)}
+                          />
+                        </div>
+                      ))}
+
+                      {activeListId === list.id ? (
+                        <div className='card-input-container'>
+                          <input
+                            type='text'
+                            value={cardTitle}
+                            placeholder='Card name'
+                            onChange={(e) => setCardTitle(e.target.value)}
+                          />
+                          <div className='card-input-actions'>
+                            <button className='add-card-btn' onClick={() => handleAddCard(list.id)}>+</button>
+                            <button className='cancel-card-btn' onClick={() => {
+                              setActiveListId(null);
+                              setCardTitle("");
+                            }}>x</button>
+                          </div>
+                        </div>
+                      ) : (
+                        <button
+                          className='new-card-button'
+                          onClick={() => setActiveListId(list.id)}
+                        >
+                          Add Card
+                        </button>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ) : (
-              <button className='new-card-button'
-                onClick={() => setActiveListId(list.id)}
-                >Add Card</button> 
-              )
-              }
-            </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
           </div>
-        ))
-      )}
-    </div>
+        )}
+      </Droppable>
+    </DragDropContext>
 
-      {NewListModal && (
-      <CreateListModal 
+    {NewListModal && (
+      <CreateListModal
         onClose={() => setNewListModal(false)}
-        refreshBoard ={refreshBoard}
+        refreshBoard={refreshBoard}
       />
-      )}
-    </div>
-  )
+    )}
+  </div>
+);
 };
 
 export default BoardsDetailView;

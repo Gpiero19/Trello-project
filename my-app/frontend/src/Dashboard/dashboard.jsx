@@ -54,7 +54,6 @@ function Dashboard () {
     setBoards(newBoards);
 
     try {
-      // 3. Call backend with the new position array
       await axiosInstance.put("/boards/reorder", {
         boards: newBoards.map((b, i) => ({ id: b.id, position: i }))
       });
@@ -62,16 +61,10 @@ function Dashboard () {
 
     } catch (err) {
       console.error("Failed to reorder boards:", err);
-      // 4. Failure: Revert UI state by fetching the canonical data from the DB
       alert("Failed to save board order. Reverting changes.");
       refreshBoards(); // Revert to database state
     }
   };
-  //   // call backend
-  //   await axiosInstance.put("/boards/reorder", {
-  //     boards: newBoards.map((b, i) => ({ id: b.id, position: i }))
-  //   });
-  // };
     
   return (
   <div className="view-container-wrapper">
