@@ -39,16 +39,20 @@ exports.getBoardById = async (req, res) => {
   // console.log("Authenticated user ID:", userId);
 
   try {
-   const board = await Board.findByPk(id, {
+    const board = await Board.findOne({
+      where: { id, userId },
       include: [
         {
-          model: List,           
-        
-        },
-      ],
+          model: List,
+          include: [
+            {
+              model: Card,
+              order: [["position", "ASC"]]
+            }
+          ]
+        }
+      ]
     });
-+
-      console.log("Fetched board:", board);
 
     if (!board) return res.status(404).json({ error: 'Board not found'});
 

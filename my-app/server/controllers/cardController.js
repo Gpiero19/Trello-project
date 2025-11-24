@@ -1,9 +1,10 @@
-const { Card } = require('../models');
+const { Card, List } = require('../models');
 
 exports.createCard = async (req, res) => {
   try {
-    const { title, listId, description } = req.body;
-    const maxPosition = await List.max('position', { where: { listId } });
+    const { title, listId } = req.body;
+    // add description field later 
+    const maxPosition = await Card.max('position', { where: { listId } });
     const position = Number.isFinite(maxPosition) ? maxPosition + 1 : 0;
 
     const card = await Card.create({ title, listId, position }); 
@@ -74,7 +75,7 @@ exports.reorderCards = async (req, res) => {
     const { listId, cards} = req.body;
 
     const updates = cards.map(({ id, position }) =>
-      List.update({ position }, {where: { id, listId}})
+      Card.update({ position }, {where: { id, listId}})
     );
     
     await Promise.all(updates)

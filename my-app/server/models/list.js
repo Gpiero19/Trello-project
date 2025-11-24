@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
   class List extends Model {
     static associate(models) {
       List.belongsTo(models.Board, { foreignKey: 'boardId' });
-      List.hasMany(models.Card, { foreignKey: 'cardId' });
+      List.hasMany(models.Card, { foreignKey: 'listId' });
     };
   }
   
