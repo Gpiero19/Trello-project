@@ -17,8 +17,13 @@ exports.createList = async (req, res) => {
 };
 
 exports.getAllLists = async (req, res) => {
+  const {boardId} = req.params;
+
     try {
-        const lists = await List.findAll(); //fetch list from DB
+      const lists = await List.findAll({
+        where: { boardId },
+        order: [['position', 'ASC']]
+      });
         res.status(200).json(lists)
     } catch (err) {
         console.error('Error fetching lists', err)
@@ -29,7 +34,16 @@ exports.getAllLists = async (req, res) => {
 exports.getListById = async (req, res) => {
   const {id} = req.params;
   try {
-    const list = await List.findByPk(id);
+    const list = await List.findByPk(id, {
+      include: [
+        {
+          model: Card,
+          as: 'cards',
+          separate: true,          
+          order: [['position', 'ASC']]
+        }
+      ]
+    });
     if (!list) return res.status(404).json({ error: 'List not found'});
     res.status(200).json(list)
   } catch (err) {
@@ -69,12 +83,14 @@ exports.deleteList = async (req, res) => {
 
 exports.reorderLists = async (req, res) => {
   try {
-    const { boardId, lists} = req.body;
+    const {lists} = req.body;
 
-    const updates = lists.map(({ id, position }) =>
-      List.update({ position }, { where: { id, boardId }})
+    const updates = lists.map(({ id, boardId, position }) =>
+      List.update({ boardId, position }, { where: { id }})
     );
     await Promise.all(updates)
+    res.status(200).json({ message: "Lists reordered successfully" });
+
   } catch (err) {
     await t.rollback();
     console.error('Error reordering lists', err);

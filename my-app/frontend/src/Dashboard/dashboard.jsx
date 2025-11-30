@@ -113,8 +113,9 @@ function Dashboard () {
                       textClassName="board-title"
                     />
                   <Link to={`/boards/${board.id}`} className='board-link'>
-                    <p>User ID: {board.userId}</p>
+                    {/* <p>User ID: {board.userId}</p> */}
                     <p>Board ID: {board.id}</p>
+                    {/* <p>Number of Lists: {board.lists.length}</p> */}
                   </Link>
                   <TiDelete className='delete-icon' 
                     onClick={() => handleDeleteBoard(board.id)} 

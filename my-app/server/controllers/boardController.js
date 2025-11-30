@@ -34,9 +34,7 @@ exports.getBoardById = async (req, res) => {
   const {id} = req.params
   const userId = req.user.id
 
-  // console.log("Board ID:", id);
-  console.log("here we are ", id)
-  // console.log("Authenticated user ID:", userId);
+  // console.log("here we are ", id)
 
   try {
     const board = await Board.findOne({
@@ -44,10 +42,15 @@ exports.getBoardById = async (req, res) => {
       include: [
         {
           model: List,
+          as: 'lists',
+          separate: true,             
+          order: [['position', 'ASC']],
           include: [
             {
               model: Card,
-              order: [["position", "ASC"]]
+              as: 'cards',
+              separate: true,          
+              order: [['position', 'ASC']]
             }
           ]
         }

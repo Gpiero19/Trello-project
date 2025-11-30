@@ -33,11 +33,11 @@ fs
   });
 
 // Define relationships
-db.Board.hasMany(db.List, { foreignKey: 'boardId', onDelete: 'CASCADE' });
-db.List.belongsTo(db.Board, { foreignKey: 'boardId' });
+db.Board.hasMany(db.List, { foreignKey: 'boardId', as: 'lists', onDelete: 'CASCADE' });
+db.List.belongsTo(db.Board, { foreignKey: 'boardId', as: 'board' });
 
-db.List.hasMany(db.Card, { foreignKey: 'listId', onDelete: 'CASCADE' });
-db.Card.belongsTo(db.List, { foreignKey: 'listId' });
+db.List.hasMany(db.Card, { foreignKey: 'listId', as: 'cards', onDelete: 'CASCADE' });
+db.Card.belongsTo(db.List, { foreignKey: 'listId', as: 'list' });
 
 // Attach Sequelize instance
 db.sequelize = sequelize;
