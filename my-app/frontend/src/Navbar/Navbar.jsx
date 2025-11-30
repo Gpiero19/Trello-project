@@ -14,22 +14,20 @@ function Navbar() {
 return (
 
   <div className="navbar">
-    <NavLink className='img-logo' to={"/"}> 
-    <div className='img-logo'>
-      <img className='logo' src={frelloLogo} alt="logo" /> </div>
+    <NavLink className='img-logo' to={"/dashboard"}> 
+      <img className='logo' src={frelloLogo} alt="logo" />
     </NavLink>
 
-    <nav className="navbar-cont">
-      <ul className='left-panel'>
-        <NavLink to={"/dashboard"}>
-        <li>Dashboard</li>
-        {/* Update About link */}
-        </NavLink>              
-        <li>About</li>
+      <ul className='left-panel'>           
+        <li>
+          <NavLink to={"/about"}>
+            About
+          </NavLink>
+        </li>
       </ul>
-    </nav>
 
-      <ul className='right-panel'>
+
+      <div className='right-panel'>
       {user ? (
         <>
           <span className='user-name'>Welcome {user.name}!</span>  {/* Fix user name, not showing in navbar! */}
@@ -41,7 +39,7 @@ return (
           <button onClick={() => setShowRegister(true)}>Register</button>
         </>
       )}
-      </ul>
+      </div>
         
         {/* Register Modal */}
       {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}

@@ -14,7 +14,8 @@ const NotFoundPage = () => {
                 How you got here is a mystery. But you can click the button below
                 to go back to the homepage.
                 </p>
-                <Link to={"/"}>
+                <Link to={"/dashboard"}>
+                <br/>
                     <button className="btn orange">Go back Home</button>
                 </Link>
             </div>

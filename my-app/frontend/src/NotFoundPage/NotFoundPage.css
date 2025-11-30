@@ -12,13 +12,13 @@
 }
 
 .NotFoundMessage {
-    /* display: block;
+    display: block;
     margin-block-start: 1em;
     margin-block-end: 1em;
     margin-inline-start: 1em;
     margin-inline-end: 1em;
     unicode-bidi: isolate;
-    max-width: 50%; */
+    max-width: 50%;
     align-self: center !important;
 }
 button {

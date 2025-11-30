@@ -28,8 +28,17 @@ function BoardsDetailView() {
   };
 
   useEffect(() => {
-    fetchBoard();
-  }, [boardId]);
+     async function fetchBoard () {
+      try {
+          const res = await axiosInstance.get(`/boards/${boardId}`);
+          console.log('Fetched board data:', res.data); // <-- check this
+          setBoard(res.data)
+      } catch (err) {
+          console.error('Failed to load board details', err)
+      }
+  }
+  fetchBoard();
+}, [boardId])
 
   const refreshBoard = async () => fetchBoard();
 
