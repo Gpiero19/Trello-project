@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
   
   List.init({
     title: DataTypes.STRING,
+    guestId: DataTypes.INTEGER,
     position: {
       type: DataTypes.FLOAT,
       allowNull: false,

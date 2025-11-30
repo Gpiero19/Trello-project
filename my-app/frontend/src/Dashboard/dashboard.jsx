@@ -7,14 +7,16 @@ import { Link } from "react-router-dom";
 import { TiDelete } from "react-icons/ti";
 import InlineEdit from '../components/InlineEdit/InlineEdit';
 import axiosInstance from '../api/axiosInstance';
+import { useAuth } from '../context/authContext';
 
 function Dashboard () {
+  const { user, guestId } = useAuth();
   const[ boards, setBoards ] = useState([])
   const [ NewBoardModal, setNewBoardModal ] = useState(false);
 
   const refreshBoards = async () => {
     try {
-      const data = await getBoards();
+      const data = await getBoards(user?.id || guestId);
       setBoards(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Error fetching boards:", err);
@@ -22,16 +24,15 @@ function Dashboard () {
   };
 
   useEffect(() => {
-    refreshBoards()
-  }, []);
+    refreshBoards();
+  }, [user, guestId]);
 
   const handleDeleteBoard = async (boardId) => {
     const confirmDelete = window.confirm(`Are you sure you want to delete this board?`);
     if (!confirmDelete) return;
 
     try {
-      await deleteBoard(boardId);
-      // setBoards(prev => prev.filter(board => board.id !== boardId));
+      await deleteBoard(boardId, user?.id || guestId);
       refreshBoards()
     } catch (err) {
       console.error("Failed to delete board:", err);
@@ -55,7 +56,7 @@ function Dashboard () {
 
     try {
       await axiosInstance.put("/boards/reorder", {
-        boards: newBoards.map((b, i) => ({ id: b.id, position: i }))
+        boards: newBoards.map((b, i) => ({ id: b.id, position: i, guestId: user?.id || guestId }))
       });
       console.log(newBoards.map(b => b.id));
 
@@ -69,15 +70,22 @@ function Dashboard () {
   return (
   <div className="view-container-wrapper">
 
+    {!user && guestId && (
+      <div className="homepage">
+        <h2>Welcome to Frello!</h2>
+        <p>You can start creating boards and later claim them by signing up.</p>
+      </div>
+     )}
       <button onClick={() => setNewBoardModal(true)}>+ New Board</button>
 
 
       {NewBoardModal && (
         <CreateBoardModal
-            setBoards={refreshBoards}
-            onClose={() => setNewBoardModal(false)}
-            />
-            )}
+          guestId={guestId}
+          setBoards={refreshBoards}
+          onClose={() => setNewBoardModal(false)}
+          />
+          )}
       
     <DragDropContext onDragEnd={handleDragEnd}>
       <div className="board-container">
@@ -104,7 +112,7 @@ function Dashboard () {
                   <InlineEdit
                       initialValue={board.title}
                       onSave={async (newTitle) => {
-                        await updateBoard(board.id, newTitle);
+                        await updateBoard(board.id, newTitle, user?.id || guestId);
                         setBoards(prev =>
                           prev.map(b => b.id === board.id ? { ...b, title: newTitle } : b)
                         );

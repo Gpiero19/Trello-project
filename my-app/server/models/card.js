@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
   Card.init({
     title: DataTypes.STRING,
     description: DataTypes.TEXT,
+    guestId: DataTypes.INTEGER,
     position: {
       type: DataTypes.FLOAT,
       allowNull: false,
