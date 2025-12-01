@@ -1,0 +1,77 @@
+.view-container-wrapper {
+  padding: 1.5rem;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.boards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.2rem;
+  margin-top: 1.5rem;
+}
+
+.board-card {
+  position: relative;
+  background-color: white;
+  color: rgba(78, 31, 0, 0.87);
+  border-radius: 8px;
+  padding: 0.5rem;
+  min-width: 200px;
+  max-width: 300px;
+  box-shadow: 0 1px 4px rgba(78, 31, 0, 0.87, 0.1);
+  flex-shrink: 0;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.board-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(78, 31, 0, 0.87, 0.12);
+  /* color: rgba(78, 31, 0, 0.87); */
+}
+
+.board-title {
+  font-size: 1.3rem;
+  margin-top: 0;
+  margin-bottom: 0.8rem;
+}
+
+.board-link {
+  color: rgba(78, 31, 0, 0.87);
+  text-decoration: none;
+  display: block;
+}
+
+.board-link h3 {
+  margin-top: -0.2rem;
+  margin-bottom: 0.8rem;
+  font-size: 1.3rem;
+}
+
+.board-link p {
+  margin-top: 0.2rem;
+  font-size: 0.9rem;
+  color: black;
+}
+
+.board-link:hover {
+  color: #D98324;
+}
+
+.delete-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.4rem;
+  color: #D98324;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.delete-icon:hover {
+  color: #D98324;
+}

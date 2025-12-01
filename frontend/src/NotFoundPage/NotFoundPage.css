@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito+Sans');
+:root {
+  --blue: #4E1F00;
+  --white: #fff;
+  --orange: #D98324;
+}
+
+.container {
+  display: flex;
+  max-width: 1140px;
+  box-sizing: border-box;
+}
+
+.NotFoundMessage {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 1em;
+    margin-inline-end: 1em;
+    unicode-bidi: isolate;
+    max-width: 50%;
+    align-self: center !important;
+}
+button {
+  font-family:"Nunito Sans";
+}
+
+h1 {
+  font-size: 7.5em;
+  margin: 15px 0px;
+  font-weight:bold;
+}
+h2 {
+  font-weight:bold;
+}
+
+.btn {
+  z-index: 1;
+  overflow: hidden;
+  background: transparent;
+  position: relative;
+  padding: 8px 50px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 1em;
+  letter-spacing: 2px;
+  transition: 0.2s ease;
+  font-weight: bold;
+  margin: 5px 0px;
+  &.orange {
+    border: 4px solid var(--orange);
+    color: var(--blue);
+    &:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 0%;
+      height: 100%;
+      background: var(--orange);
+      z-index: -1;
+      transition: 0.2s ease;
+    }
+    &:hover {
+      color: var(--white);
+      background: var(--orange);
+      transition: 0.2s ease;
+      &:before {
+        width: 100%;
+      }
+    }
+  }
+}
+/* @media screen and (max-width:768px) {
+  body {
+    display:block;
+  }
+  .NotFoundMessage {
+    margin-top:70px;
+    margin-bottom:70px;
+  }
+}  */
