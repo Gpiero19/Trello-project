@@ -10,7 +10,7 @@ import axiosInstance from '../api/axiosInstance';
 import { useAuth } from '../context/authContext';
 
 function Dashboard () {
-  const { user, guestId } = useAuth();
+  const { user } = useAuth();
   const[ boards, setBoards ] = useState([])
   const [ NewBoardModal, setNewBoardModal ] = useState(false);
 
@@ -25,7 +25,7 @@ function Dashboard () {
 
   useEffect(() => {
     refreshBoards();
-  }, [user, guestId]);
+  }, [user]);
 
   const handleDeleteBoard = async (boardId) => {
     const confirmDelete = window.confirm(`Are you sure you want to delete this board?`);
