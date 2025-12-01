@@ -1,21 +1,23 @@
 import { useState } from "react";
 import { createBoard, getBoards } from "../api/boards";
+import { useAuth } from "../context/authContext";
 
 function CreateBoardModal({ setBoards, onClose }) {
+  const { user, guestId } = useAuth();
   const [title, setTitle] = useState("");
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title) {
+    if (!title.trim()) {
       alert("Please enter a board title");
       return;
     }
 
     try {
-      await createBoard(title);
-      const newBoards = await getBoards();
-      console.log(title)
+      const idForBoard = user?.id || guestId;
+      await createBoard(title, idForBoard);
+
+      const newBoards = await getBoards(idForBoard);
       setBoards(newBoards);
       onClose();
     } catch (err) {

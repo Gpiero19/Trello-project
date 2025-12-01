@@ -1,19 +1,21 @@
 import axiosInstance from "./axiosInstance";
 
-const API_BASE_URL = 'http://localhost:3000/api'; // or use .env later
-
-export async function getCards() {
+export async function getCards(userIdOrGuestId = null) {
   try {
-    const response = await axiosInstance.get("/cards");
-    return response.data;                   // axios wraps the response in `data`
+    const url = userIdOrGuestId ? `/cards?userIdOrGuestId=${userIdOrGuestId}` : "/cards";
+    const response = await axiosInstance.get(url);
+    return response.data; 
   } catch (err) {
     throw new Error('Failed to fetch cards', err);
   }
 }
 
-export async function createCards(title, listId) {
+export async function createCards(title, listId, guestId = null) {
   try {
-    const response = await axiosInstance.post("/cards", { title, listId });
+    const payload = { title, listId };
+    if (guestId) payload.guestId = guestId;
+
+    const response = await axiosInstance.post("/cards", payload);
     return response.data;
   } catch (err) {
     console.error("Failed to create card:", err.response?.data || err.message);
@@ -21,20 +23,22 @@ export async function createCards(title, listId) {
   }
 }
 
-export async function deleteCard(cardId) {
+export async function deleteCard(cardId, userIdOrGuestId = null) {
   try {
-    await axiosInstance.delete(`/cards/${cardId}`);
+    const url = userIdOrGuestId ? `/cards/${cardId}?userIdOrGuestId=${userIdOrGuestId}` : `/cards/${cardId}`;
+    await axiosInstance.delete(url);
   } catch (err)  {
-    throw new Error("Failed to delete Card", err);
+    throw new Error("Failed to delete card", err);
   }
 }
-      // Need to add description after in update
-export async function updateCardTitle(cardId, newCardTitle) {
+
+export async function updateCardTitle(cardId, newCardTitle, guestId = null) {
   try {
-    const response= await axiosInstance.put(`/cards/${cardId}`,{
-      title: newCardTitle
-    });
-    return response.data
+    const payload = { title: newCardTitle };
+    if (guestId) payload.guestId = guestId;
+
+    const response = await axiosInstance.put(`/cards/${cardId}`, payload);
+    return response.data;
   } catch (err) {
     console.error("Failed to rename card:", err.response?.data || err.message);
     throw err;

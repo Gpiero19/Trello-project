@@ -5,13 +5,14 @@ module.exports = (sequelize, DataTypes) => {
   class Card extends Model {
     static associate(models) {
         Card.belongsTo(models.User, { foreignKey: 'userId' });
-        Card.belongsTo(models.List, { foreignKey: 'listId', as: 'list' });
+        Card.belongsTo(models.List, { foreignKey: 'listId' });
     }
   }
   
   Card.init({
     title: DataTypes.STRING,
     description: DataTypes.TEXT,
+    guestId: DataTypes.INTEGER,
     position: {
       type: DataTypes.FLOAT,
       allowNull: false,
