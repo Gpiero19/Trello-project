@@ -75,3 +75,10 @@
 .delete-icon:hover {
   color: #D98324;
 }
+
+.homepage {
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  padding: 0px 60px 10px;
+}

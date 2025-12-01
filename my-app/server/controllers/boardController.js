@@ -25,6 +25,28 @@ exports.createBoard = async (req, res) => {
 };
 
 exports.getAllBoards = async (req, res) => {
+<<<<<<< HEAD
+=======
+    try {
+      const userId = req.user.id
+      const boards = await Board.findAll( {where: {userId}}); //fetch boards of user
+      res.status(200).json(boards)
+
+    } catch (err) {
+        console.error('Error fetching boards', err)
+        res.status(500).json({error: 'Internal server error'})
+    } 
+};
+
+exports.getBoardById = async (req, res) => {
+  const {id} = req.params
+  const userId = req.user.id
+
+  // console.log("Board ID:", id);
+  console.log("here we are ", id)
+  // console.log("Authenticated user ID:", userId);
+
+>>>>>>> parent of a8dbd4b (Reorder - drag n drop fixed)
   try {
     const userId = req.user?.id || null;
     const guestId = req.query.guestId || null;
@@ -34,6 +56,7 @@ exports.getAllBoards = async (req, res) => {
       include: [
         {
           model: List,
+<<<<<<< HEAD
           as: 'lists',
           separate: true,
           order: [['position', 'ASC']],
@@ -77,6 +100,12 @@ exports.getBoardById = async (req, res) => {
               as: 'cards',
               separate: true,
               order: [['position', 'ASC']]
+=======
+          include: [
+            {
+              model: Card,
+              order: [["position", "ASC"]]
+>>>>>>> parent of a8dbd4b (Reorder - drag n drop fixed)
             }
           ]
         }
