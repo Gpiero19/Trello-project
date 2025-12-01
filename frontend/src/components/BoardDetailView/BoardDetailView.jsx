@@ -8,8 +8,10 @@ import { deleteList, updateList } from '../../api/lists';
 import { createCards, deleteCard, updateCardTitle } from '../../api/cards';
 import InlineEdit from '../InlineEdit/InlineEdit'
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { useAuth } from '../../context/authContext';
 
 function BoardsDetailView() {
+  const { user } = useAuth();
   const { boardId } = useParams();
   const [board, setBoard] = useState({ lists: [] });
   const [NewListModal, setNewListModal] = useState(false);
@@ -19,6 +21,10 @@ function BoardsDetailView() {
   const navigate = useNavigate();
 
   const fetchBoard = async () => {
+    if (!user) {
+      setBoard({ lists: [] });
+      return;
+    }
     try {
       const res = await axiosInstance.get(`/boards/${boardId}`);
       setBoard(res.data);
@@ -28,17 +34,8 @@ function BoardsDetailView() {
   };
 
   useEffect(() => {
-     async function fetchBoard () {
-      try {
-          const res = await axiosInstance.get(`/boards/${boardId}`);
-          console.log('Fetched board data:', res.data); // <-- check this
-          setBoard(res.data)
-      } catch (err) {
-          console.error('Failed to load board details', err)
-      }
-  }
-  fetchBoard();
-}, [boardId])
+    fetchBoard();
+  }, [user, boardId]) // ✅ Fixed: removed 'board', added 'boardId'
 
   const refreshBoard = async () => fetchBoard();
 
@@ -123,6 +120,7 @@ function BoardsDetailView() {
       });
 
       await axiosInstance.put("/cards/reorder", { cards: updatedCards });
+      await refreshBoard();  // ✅ Add refresh after reorder
     }
   };
 

@@ -7,12 +7,18 @@ import { Link } from "react-router-dom";
 import { TiDelete } from "react-icons/ti";
 import InlineEdit from '../components/InlineEdit/InlineEdit';
 import axiosInstance from '../api/axiosInstance';
+import { useAuth } from '../context/authContext';
 
 function Dashboard () {
+  const { user } = useAuth();
   const[ boards, setBoards ] = useState([])
   const [ NewBoardModal, setNewBoardModal ] = useState(false);
 
   const refreshBoards = async () => {
+    if (!user) {
+      setBoards([]);
+      return;
+    }
     try {
       const data = await getBoards();
       setBoards(Array.isArray(data) ? data : []);
@@ -22,8 +28,8 @@ function Dashboard () {
   };
 
   useEffect(() => {
-    refreshBoards()
-  }, []);
+    refreshBoards();
+  }, [user]);
 
   const handleDeleteBoard = async (boardId) => {
     const confirmDelete = window.confirm(`Are you sure you want to delete this board?`);

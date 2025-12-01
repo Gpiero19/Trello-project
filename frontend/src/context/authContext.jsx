@@ -15,11 +15,16 @@ export const AuthProvider = ({ children }) => {
   const login = (userData) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
+    
+    window.dispatchEvent(new Event("user-login"));
   };
 
   const logout = () => {
-    setUser(null);
+    localStorage.removeItem("token");
     localStorage.removeItem("user");
+    setUser(null);
+    
+    window.dispatchEvent(new Event("user-logout"));
   };
 
   return (
