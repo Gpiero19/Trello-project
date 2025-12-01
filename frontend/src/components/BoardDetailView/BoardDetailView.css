@@ -1,0 +1,179 @@
+.board-container-wrapper {
+    padding: 1rem;
+}
+.board-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+.board-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.new-list-button {
+  padding: 9px 25px;
+  background-color: #D98324;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+  margin-left: 20px;
+}
+.new-list-button:hover {
+    background-color: rgba(217, 131, 36, 0.8);
+}
+.board-container-view {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  padding: 1rem;
+  overflow-x: auto;
+  text-align: center;
+}
+.list-container {
+  position: relative;
+  background-color: white;
+  color: rgba(78, 31, 0, 0.87);
+  border-radius: 8px;
+  padding: 1rem;
+  min-width: 250px;
+  max-width: 300px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  flex-shrink: 0;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.list-container:hover {
+  transform: translateY(-2px); /* lifts the list */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.12); /* stronger shadow on hover */
+  transition: all 0.2s ease; /* smooth transition */
+}
+
+/* Card hover effect (already exists, just make sure it's similar) */
+.card-item:hover {
+  transform: translateY(-1px); /* subtle lift */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card-container {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.card-item {
+  position: relative;
+  background-color: white;
+  border-radius: 6px;
+  padding: 0.5rem;
+  padding-top: 1rem;
+  margin: 0.5rem 0;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  transition: background-color 0.2s ease;
+  border: 1px solid #D98324;
+  color: #D98324;
+  cursor: pointer;
+}
+
+.card-item:hover {
+  background-color: #e8e8e8;
+}
+
+.new-card-button {
+  display: block;
+  width: calc(100% - 20px);
+  margin: 0 10px;      
+  margin-top: 10px;      
+  padding: 2px 20px;
+  background-color: #D98324;
+  color: white;
+  border-radius: 20px;
+  /* border-color: #D98324; */
+  border: 1px solid;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+}
+
+.new-card-button:hover {
+  background-color: #e8e8e8;
+  border-color: #D98324;
+}
+
+.list-delete-icon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  color: #D98324;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  z-index: 10;
+}
+
+.list-delete-icon:hover {
+  color: #D98324;
+}
+.card-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.card-input-container input {
+  padding: 0.5rem;
+  border: 1px solid rgba(78, 31, 0, 0.87);
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: rgb(248 244 225);
+  color: rgba(78, 31, 0, 0.87);
+  
+}
+.card-input-container input::placeholder {
+  font-weight: bold;
+  opacity: 0.5;
+  color: rgba(78, 31, 0, 0.87);
+}
+
+.card-input-actions {
+  display: flex;
+  /* gap: 0.5rem; */
+  justify-content: flex-end;
+}
+
+.add-card-btn,
+.cancel-card-btn {
+  padding: 0.3rem 0.6rem;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid #D98324;
+}
+/* #D98324 */
+.add-card-btn {
+  background-color: #D98324;
+  color: white;
+}
+
+.cancel-card-btn {
+  background-color: transparent;
+  color: #999;
+}
+
+.cancel-card-btn:hover {
+  color: #333;
+}
+.delete-card-icon {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  color: #D98324;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  z-index: 10;
+}
