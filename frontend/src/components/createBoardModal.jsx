@@ -1,25 +1,20 @@
 import { useState } from "react";
 import { createBoard, getBoards } from "../api/boards";
-import { useAuth } from "../context/authContext";
 
 function CreateBoardModal({ setBoards, onClose }) {
-  const { user, guestId } = useAuth();
   const [title, setTitle] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title.trim()) {
-      alert("Please enter a board title");
-      return;
-    }
+    if (!title.trim()) return "Please enter a board title";
 
     try {
-      const idForBoard = user?.id || guestId;
-      await createBoard(title, idForBoard);
-
-      const newBoards = await getBoards(idForBoard);
+      await createBoard(title);
+      const newBoards = await getBoards();
       setBoards(newBoards);
+      setTitle("");
       onClose();
+      
     } catch (err) {
       console.error("Error creating board:", err);
       alert("Failed to create board. Try again.");

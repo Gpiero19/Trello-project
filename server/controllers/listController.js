@@ -2,16 +2,12 @@ const { List, Card } = require('../models');
 
 exports.createList = async (req, res) => {
   try {
-    const userId = req.user?.id || null;
-    const { title, boardId, guestId } = req.body;
+    const { title, boardId } = req.body;
 
-    const maxPosition = await List.max('position', {
-      where: { boardId, ...(userId ? { userId } : { guestId }) }
-    });
+    const maxPosition = await List.max('position', {where: { boardId }});
     const position = Number.isFinite(maxPosition) ? maxPosition + 1 : 0;
 
-    const list = await List.create({ title, boardId, position, userId, guestId });
-
+    const list = await List.create({ title, boardId, position });
     res.status(201).json(list);
   } catch (err) {
     console.error('Error creating list:', err);
@@ -31,8 +27,6 @@ exports.getAllLists = async (req, res) => {
 
 exports.getListById = async (req, res) => {
   const { id } = req.params;
-  const userId = req.user?.id || null;
-  const guestId = req.query.guestId || null;
 
   try {
     const list = await List.findByPk(id);
@@ -47,12 +41,10 @@ exports.getListById = async (req, res) => {
 exports.updateList = async (req, res) => {
   const { id } = req.params;
   const { title } = req.body;
-  const userId = req.user?.id || null;
-  const guestId = req.body.guestId || null;
 
   try {
     const list = await List.findOne({
-      where: { id, ...(userId ? { userId } : { guestId }) },
+      where: { id },
     });
     if (!list) return res.status(404).json({ error: 'List not found' });
 
@@ -68,12 +60,10 @@ exports.updateList = async (req, res) => {
 
 exports.deleteList = async (req, res) => {
   const { id } = req.params;
-  const userId = req.user?.id || null;
-  const guestId = req.query.guestId || null;
 
   try {
     const list = await List.findOne({
-      where: { id, ...(userId ? { userId } : { guestId }) },
+      where: { id },
     });
     if (!list) return res.status(404).json({ error: 'List not found' });
 
@@ -90,7 +80,7 @@ exports.reorderLists = async (req, res) => {
     const { boardId, lists} = req.body;
 
     const updates = lists.map(({ id, position }) =>
-      List.update({ position }, { where: { id, boardId }})
+      List.update({ position }, { where: { id }})
     );
     await Promise.all(updates)
   } catch (err) {

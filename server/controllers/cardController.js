@@ -2,16 +2,14 @@ const { Card, List } = require('../models');
 
 exports.createCard = async (req, res) => {
   try {
-    const userId = req.user?.id || null;
-    const { title, listId, guestId } = req.body;
+    const { title, listId } = req.body;
 
     const maxPosition = await Card.max('position', {
-      where: { listId, ...(userId ? { userId } : { guestId }) }
+      where: { listId }
     });
     const position = Number.isFinite(maxPosition) ? maxPosition + 1 : 0;
 
-    const card = await Card.create({ title, listId, position, userId, guestId });
-
+    const card = await Card.create({ title, listId, position });
     res.status(201).json(card);
   } catch (err) {
     console.error('Error creating card:', err);
@@ -20,14 +18,11 @@ exports.createCard = async (req, res) => {
 };
 
 exports.getAllCards = async (req, res) => {
-  const userId = req.user?.id || null;
-  const guestId = req.query.guestId || null;
   const { listId } = req.query; // optional filter by list
 
   try {
     const whereClause = {
-      ...(listId ? { listId } : {}),
-      ...(userId ? { userId } : { guestId })
+      ...(listId ? { listId } : {})
     };
     const cards = await Card.findAll({ where: whereClause, order: [['position', 'ASC']] });
     res.status(200).json(cards);
@@ -39,11 +34,9 @@ exports.getAllCards = async (req, res) => {
 
 exports.getCardById = async (req, res) => {
   const { id } = req.params;
-  const userId = req.user?.id || null;
-  const guestId = req.query.guestId || null;
 
   try {
-    const card = await Card.findOne({ where: { id, ...(userId ? { userId } : { guestId }) } });
+    const card = await Card.findOne({ where: { id } });
     if (!card) return res.status(404).json({ error: 'Card not found' });
     res.status(200).json(card);
   } catch (err) {
@@ -54,11 +47,10 @@ exports.getCardById = async (req, res) => {
 
 exports.updateCard = async (req, res) => {
   const { id } = req.params;
-  const { title, description, guestId } = req.body;
-  const userId = req.user?.id || null;
+  const { title, description } = req.body;
 
   try {
-    const card = await Card.findOne({ where: { id, ...(userId ? { userId } : { guestId }) } });
+    const card = await Card.findOne({ where: { id } });
     if (!card) return res.status(404).json({ error: 'Card not found' });
 
     if (title !== undefined) card.title = title;
@@ -74,11 +66,9 @@ exports.updateCard = async (req, res) => {
 
 exports.deleteCard = async (req, res) => {
   const { id } = req.params;
-  const userId = req.user?.id || null;
-  const guestId = req.query.guestId || null;
 
   try {
-    const card = await Card.findOne({ where: { id, ...(userId ? { userId } : { guestId }) } });
+    const card = await Card.findOne({ where: { id } });
     if (!card) return res.status(404).json({ error: 'Card not found' });
 
     await card.destroy();
@@ -91,13 +81,12 @@ exports.deleteCard = async (req, res) => {
 
 exports.reorderCards = async (req, res) => {
   try {
-    const { cards, guestId } = req.body;
-    const userId = req.user?.id || null;
+    const { cards } = req.body;
 
     const updates = cards.map(({ id, listId, position }) =>
       Card.update(
         { listId, position },
-        { where: { id, ...(userId ? { userId } : { guestId }) } }
+        { where: { id } }
       )
     );
 

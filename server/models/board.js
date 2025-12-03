@@ -12,7 +12,6 @@ module.exports = (sequelize, DataTypes) => {
   Board.init({
     title: DataTypes.STRING,
     userId: DataTypes.INTEGER,
-    guestId: DataTypes.INTEGER,
     position: {
       type: DataTypes.FLOAT,
       allowNull: false,
