@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ‣ Node.js dependencies
 node_modules/
 npm-debug.log*
@@ -56,3 +57,27 @@ yarn-debug.log*
 
 # ‣ Optional lockfiles (if you want to ignore one)
 yarn.lock
+=======
+# OS
+.DS_Store
+
+# dependencies
+node_modules/
+
+# output / caches
+dist/
+build/
+.vite/
+.cache/
+.next/
+out/
+coverage/
+
+# environment
+*.env
+.env.*.local
+
+# editors
+.vscode/
+.idea/
+>>>>>>> 2edc3959718c08e4758e2180a0ab390530004f95

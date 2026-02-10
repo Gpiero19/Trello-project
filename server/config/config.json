@@ -3,7 +3,11 @@
     "username": "postgres",
     "password": "postgres",
     "database": "frello_db",
+<<<<<<< HEAD
     "host": "127.0.0.1",
+=======
+    "host": "localhost",
+>>>>>>> 2edc3959718c08e4758e2180a0ab390530004f95
     "dialect": "postgres"
   },
   "test": {
