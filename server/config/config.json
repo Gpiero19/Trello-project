@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "postgres",
-    "password": "postgres",
-    "database": "frello_db",
+    "username": "giancanevari",
+    "password": "",
+    "database": "frello",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
