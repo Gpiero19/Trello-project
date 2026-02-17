@@ -3,10 +3,8 @@ const { List, Card } = require('../models');
 exports.createList = async (req, res) => {
   try {
     const { title, boardId } = req.body;
-
     const maxPosition = await List.max('position', {where: { boardId }});
     const position = Number.isFinite(maxPosition) ? maxPosition + 1 : 0;
-
     const list = await List.create({ title, boardId, position });
     res.status(201).json(list);
   } catch (err) {
@@ -47,10 +45,8 @@ exports.updateList = async (req, res) => {
       where: { id },
     });
     if (!list) return res.status(404).json({ error: 'List not found' });
-
     list.title = title;
     await list.save();
-
     res.status(200).json(list);
   } catch (err) {
     console.error('Error updating list:', err);
@@ -80,9 +76,9 @@ exports.reorderLists = async (req, res) => {
     const { boardId, lists} = req.body;
 
     const updates = lists.map(({ id, position }) =>
-      List.update({ position }, { where: { id }})
-    );
+      List.update({ position }, { where: { id }}));
     await Promise.all(updates)
+    res.status(200).json({ message: 'Lists reordered successfully' });
   } catch (err) {
     console.error('Error reordering lists', err);
     res.status(500).json({ error: 'Internal server error' });

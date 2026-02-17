@@ -1,34 +1,22 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import axiosInstance from "../api/axiosInstance";
 
 function CreateListModal({ onClose, refreshBoard }) {
   const {boardId} = useParams()
-  const [form, setForm] = useState({ title: "", boardId });
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const [title, setTitle] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!title.trim()) return;
 
     try {
-      const res = await fetch("http://localhost:3000/api/lists", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-
-      if (!res.ok) {
-        const error = await res.text();
-        throw new Error(error || "Registration failed");
-      }
-
+      await axiosInstance.post("/lists", { title, boardId });
       await refreshBoard();
-
       onClose();
     } catch (err) {
-      alert("Error: " + err.message);
+      console.error("Error creating list:", err);
+      alert("Error: " + (err.response?.data?.error || err.message));
     }
   };
 
@@ -38,13 +26,13 @@ function CreateListModal({ onClose, refreshBoard }) {
         <h2>Create New List</h2>
         <form onSubmit={handleSubmit}>
           <input
-            name="title"
-            placeholder="Title"
-            value={form.title}
-            onChange={handleChange}
+            type="text"
+            placeholder="List title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
           <button type="button" onClick={onClose}>Cancel</button>
-          <button type="submit">Register</button>
+          <button type="submit">Create</button>
         </form>
       </div>
     </div>

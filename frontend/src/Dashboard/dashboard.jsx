@@ -72,10 +72,10 @@ function Dashboard () {
     {!user && (
       <div className="homepage">
         <h2>Welcome to Frello!</h2>
-        <p>You don’t have any boards yet. Create a user to start creating boards to continue the adventure!.</p>
+        <p>You don't have any boards yet. Create a user to start creating boards to continue the adventure!</p>
       </div>
      )}
-      <button onClick={() => setNewBoardModal(true)}>+ New Board</button>
+      {user && <button onClick={() => setNewBoardModal(true)}>+ New Board</button>}
 
       {NewBoardModal && (
         <CreateBoardModal

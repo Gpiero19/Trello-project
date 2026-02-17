@@ -23,8 +23,8 @@ export default function InlineEdit({
     };
 
      const handleKeyDown = (e) => {
-        if (e.key == "Enter") handleSave()
-        if (e.key == "Escape") {
+        if (e.key === "Enter") handleSave()
+        if (e.key === "Escape") {
             setValue(initialValue);
             setIsEditing(false)
         }

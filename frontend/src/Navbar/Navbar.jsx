@@ -30,7 +30,7 @@ return (
       <div className='right-panel'>
       {user ? (
         <>
-          <span className='user-name'>Welcome {user.name}!</span>  {/* Fix user name, not showing in navbar! */}
+          <span className='user-name'>Welcome {user.name || user.username || user.email}!</span>
           <button onClick={logout}>Logout</button>
         </>
           ) : (

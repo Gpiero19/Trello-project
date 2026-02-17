@@ -1,17 +1,16 @@
 import { useState } from "react";
-import { createBoard, getBoards } from "../api/boards";
+import { createBoard } from "../api/boards";
 
-function CreateBoardModal({ setBoards, onClose }) {
+function CreateBoardModal({ setBoards: refreshBoards, onClose }) {
   const [title, setTitle] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title.trim()) return "Please enter a board title";
+    if (!title.trim()) return;
 
     try {
       await createBoard(title);
-      const newBoards = await getBoards();
-      setBoards(newBoards);
+      await refreshBoards();
       setTitle("");
       onClose();
       

@@ -11,7 +11,11 @@ function LoginModal({ onClose }) {
     e.preventDefault();
     try {
       const res = await axios.post("http://localhost:3000/api/auth/login", { email, password });
-      login(res.data);  // Save user in context
+      const userData = res.data.user || res.data;  // Extract user object if nested
+      if (res.data.token) {
+        localStorage.setItem("token", res.data.token);
+      }
+      login(userData);  // Save user in context
       onClose();
     } catch (err) {
       console.error("Login error:", err);
