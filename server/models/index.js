@@ -11,7 +11,6 @@ const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
 let sequelize;
 
-// Initialize Sequelize
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
@@ -32,12 +31,12 @@ fs
     db[model.name] = model;
   });
 
-// Define relationships
-db.Board.hasMany(db.List, { foreignKey: 'boardId', onDelete: 'CASCADE' });
-db.List.belongsTo(db.Board, { foreignKey: 'boardId' });
-
-db.List.hasMany(db.Card, { foreignKey: 'listId', onDelete: 'CASCADE' });
-db.Card.belongsTo(db.List, { foreignKey: 'listId' });
+// Call associate method on all models
+Object.keys(db).forEach(modelName => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
 
 // Attach Sequelize instance
 db.sequelize = sequelize;

@@ -4,8 +4,15 @@ const {Model} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class List extends Model {
     static associate(models) {
-      List.belongsTo(models.Board, { foreignKey: 'boardId' });
-      List.hasMany(models.Card, { foreignKey: 'listId' });
+      List.belongsTo(models.Board, { 
+        foreignKey: 'boardId', 
+        as: 'Board'
+      });
+      List.hasMany(models.Card, { 
+        foreignKey: 'listId', 
+        as: 'Cards',
+        onDelete: 'CASCADE'
+      });
     };
   }
   
@@ -16,10 +23,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 0,
     },
-      boardId: DataTypes.INTEGER,
+    boardId: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'List',
+    tableName: 'Lists'
   });
   return List;
 };

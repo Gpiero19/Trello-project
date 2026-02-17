@@ -5,7 +5,16 @@ module.exports = (sequelize, DataTypes) => {
   class Board extends Model {
     static associate(models) {
       Board.belongsTo(models.User, { foreignKey: 'userId' });
-      Board.hasMany(models.List, { foreignKey: 'boardId' });
+      Board.hasMany(models.List, { 
+        foreignKey: 'boardId', 
+        as: 'Lists',
+        onDelete: 'CASCADE'
+      });
+      Board.hasMany(models.Label, {
+        foreignKey: 'boardId',
+        as: 'labels',
+        onDelete: 'CASCADE'
+      });
     }
   }
 
@@ -19,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     }  }, {
     sequelize,
     modelName: 'Board',
+    tableName: 'Boards'
   });
   return Board;
 };
-

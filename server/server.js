@@ -3,12 +3,14 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const db = require('./models');   //sequelize initialize
+const { errorHandler } = require('./middleware/errorHandler');
 
 const authRoutes = require('./routes/auth')
 const boardsRoutes = require('./routes/boardRoutes');
 const listsRoutes = require('./routes/listRoutes');
 const cardsRoutes = require('./routes/cardRoutes');
 const userRoutes = require('./routes/userRoutes');
+const labelRoutes = require('./routes/labelRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -32,6 +34,10 @@ app.use('/api/boards', boardsRoutes);
 app.use('/api/lists', listsRoutes);
 app.use('/api/cards', cardsRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api', labelRoutes);
+
+// Centralized error handler
+app.use(errorHandler);
 
 db.sequelize.authenticate()
   .then(() => console.log('Database connected.'))

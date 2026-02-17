@@ -44,9 +44,11 @@ exports.getBoardById = async (req, res) => {
       include: [
         {
           model: List,
+          as: 'Lists',
           include: [
             {
               model: Card,
+              as: 'Cards'
             }
           ]
         }
