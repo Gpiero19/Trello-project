@@ -19,7 +19,7 @@ const authorizeBoardMember = async (req, res, next) => {
       boardId = parseInt(req.params.boardId);
     } else if (req.params.cardId) {
       const card = await Card.findByPk(req.params.cardId, {
-        include: [{ model: List }]
+        include: [{ model: List, as: 'list' }]
       });
       if (!card) {
         return res.status(404).json({ error: 'Card not found' });
@@ -27,7 +27,7 @@ const authorizeBoardMember = async (req, res, next) => {
       boardId = card.list.boardId;
     } else if (req.params.listId) {
       const list = await List.findByPk(req.params.listId, {
-        include: [{ model: Board }]
+        include: [{ model: Board, as: 'Board' }]
       });
       if (!list) {
         return res.status(404).json({ error: 'List not found' });
@@ -56,7 +56,7 @@ const authorizeCardEdit = async (req, res, next) => {
     
     const card = await Card.findByPk(cardId, {
       include: [
-        { model: List, include: [{ model: Board }] }
+        { model: List, as: 'list' }
       ]
     });
     
@@ -64,7 +64,18 @@ const authorizeCardEdit = async (req, res, next) => {
       return res.status(404).json({ error: 'Card not found' });
     }
     
-    const board = card.list.board;
+    // Check if list exists
+    if (!card.list) {
+      console.error('Card list not found:', { cardId, listId: card.listId });
+      return res.status(500).json({ error: 'Card data integrity issue' });
+    }
+    
+    // Get board directly from list's boardId
+    const board = await Board.findByPk(card.list.boardId);
+    if (!board) {
+      return res.status(500).json({ error: 'Board not found' });
+    }
+    
     const isBoardOwner = board.userId === userId;
     const isAssignedUser = card.assignedUserId === userId;
     const isCardCreator = card.userId === userId;
@@ -100,12 +111,26 @@ const authorizeSensitiveFields = async (req, res, next) => {
     return next();
   }
   
-  const card = req.card || await Card.findByPk(req.params.id, {
-    include: [{ model: List, include: [{ model: Board }] }]
-  });
+  // If card is already loaded by previous middleware, use it; otherwise fetch
+  let card = req.card;
+  if (!card) {
+    card = await Card.findByPk(req.params.id, {
+      include: [{ model: List, as: 'list' }]
+    });
+  }
+  
+  if (!card || !card.list) {
+    return res.status(500).json({ error: 'Card data integrity issue' });
+  }
+  
+  // Get board directly
+  const board = await Board.findByPk(card.list.boardId);
+  if (!board) {
+    return res.status(500).json({ error: 'Board not found' });
+  }
   
   const userId = req.user.id;
-  const isBoardOwner = card.list.board.userId === userId;
+  const isBoardOwner = board.userId === userId;
   const isAssignedUser = card.assignedUserId === userId;
   
   if (!isBoardOwner && !isAssignedUser) {

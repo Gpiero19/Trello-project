@@ -3,8 +3,7 @@ const { AppError, asyncHandler } = require('../middleware/errorHandler');
 
 // Create label for a board
 exports.createLabel = asyncHandler(async (req, res) => {
-  const { boardId } = req.params;
-  const { name, color } = req.body;
+  const { boardId, name, color } = req.body;
   const userId = req.user.id;
   
   // Verify board exists and user is owner
@@ -40,7 +39,7 @@ exports.updateLabel = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   
   const label = await Label.findByPk(id, {
-    include: [{ model: Board }]
+    include: [{ model: Board, as: 'board' }]
   });
   
   if (!label) {
@@ -48,7 +47,7 @@ exports.updateLabel = asyncHandler(async (req, res) => {
   }
   
   // Only board owner can update
-  if (label.Board.userId !== userId) {
+  if (label.board.userId !== userId) {
     throw new AppError('Only board owner can update labels', 403);
   }
   
@@ -63,7 +62,7 @@ exports.deleteLabel = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   
   const label = await Label.findByPk(id, {
-    include: [{ model: Board }]
+    include: [{ model: Board, as: 'board' }]
   });
   
   if (!label) {
@@ -71,9 +70,12 @@ exports.deleteLabel = asyncHandler(async (req, res) => {
   }
   
   // Only board owner can delete
-  if (label.Board.userId !== userId) {
+  if (label.board.userId !== userId) {
     throw new AppError('Only board owner can delete labels', 403);
   }
+  
+  // First delete all CardLabels referencing this label
+  await CardLabel.destroy({ where: { labelId: id } });
   
   await label.destroy();
   

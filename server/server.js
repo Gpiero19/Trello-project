@@ -34,7 +34,7 @@ app.use('/api/boards', boardsRoutes);
 app.use('/api/lists', listsRoutes);
 app.use('/api/cards', cardsRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api', labelRoutes);
+app.use('/api/labels', labelRoutes);
 
 // Centralized error handler
 app.use(errorHandler);

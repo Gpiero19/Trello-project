@@ -81,6 +81,76 @@
   background-color: #e8e8e8;
 }
 
+/* Priority Badge */
+.priority-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+/* Card Labels */
+.card-labels {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 4px;
+}
+
+.card-label-dot {
+  width: 24px;
+  height: 6px;
+  border-radius: 3px;
+}
+
+/* Due Date Badge */
+.due-date-badge {
+  display: block;
+  font-size: 0.75rem;
+  color: #D98324;
+  margin-top: 4px;
+}
+
+.due-date-badge.overdue {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.due-date-badge.today {
+  color: #eab308;
+  font-weight: 600;
+}
+
+/* Comments Count */
+.comments-count {
+  display: block;
+  font-size: 0.75rem;
+  color: #D98324;
+  margin-top: 4px;
+}
+
+/* Delete Card Icon */
+.delete-card-icon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  color: #999;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.card-item:hover .delete-card-icon {
+  opacity: 1;
+}
+
+.delete-card-icon:hover {
+  color: #ef4444;
+}
+
 .new-card-button {
   display: block;
   width: calc(100% - 20px);

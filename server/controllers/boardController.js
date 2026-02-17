@@ -1,4 +1,4 @@
-const { Board, List, Card } = require('../models');
+const { Board, List, Card, Label, Comment, User } = require('../models');
 
 exports.createBoard = async (req, res) => {
   try {
@@ -48,7 +48,11 @@ exports.getBoardById = async (req, res) => {
           include: [
             {
               model: Card,
-              as: 'Cards'
+              as: 'Cards',
+              include: [
+                { model: Label, as: 'labels', through: { attributes: [] } },
+                { model: Comment, as: 'comments', include: [{ model: User, as: 'author', attributes: ['id', 'name'] }] }
+              ]
             }
           ]
         }

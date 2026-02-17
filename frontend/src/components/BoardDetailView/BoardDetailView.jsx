@@ -9,6 +9,14 @@ import { createCards, deleteCard, updateCardTitle } from '../../api/cards';
 import InlineEdit from '../InlineEdit/InlineEdit'
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { useAuth } from '../../context/authContext';
+import CardDetailModal from '../CardDetailModal/CardDetailModal';
+
+const PRIORITY_COLORS = {
+  low: '#22c55e',
+  medium: '#eab308', 
+  high: '#f97316',
+  urgent: '#ef4444'
+};
 
 function BoardsDetailView() {
   const { user } = useAuth();
@@ -17,12 +25,13 @@ function BoardsDetailView() {
   const [NewListModal, setNewListModal] = useState(false);
   const [activeListId, setActiveListId] = useState(null);
   const [cardTitle, setCardTitle] = useState("");
+  const [selectedCard, setSelectedCard] = useState(null);
 
   const navigate = useNavigate();
 
   const fetchBoard = async () => {
     if (!user) {
-      setBoard({ lists: [] });
+      setBoard({ Lists: [] });
       return;
     }
     try {
@@ -52,7 +61,7 @@ function BoardsDetailView() {
   const handleAddCard = async (targetListId) => {
     if (!cardTitle.trim()) return;
     try {
-      await createCards(cardTitle, targetListId);
+      await createCards(cardTitle, targetListId, 'medium');
       await refreshBoard();
       setCardTitle("");
       setActiveListId(null);
@@ -133,6 +142,22 @@ function BoardsDetailView() {
     }
   };
 
+  const formatDueDate = (dateString) => {
+    if (!dateString) return null;
+    const date = new Date(dateString);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const isOverdue = date < today;
+    const isToday = date.toDateString() === today.toDateString();
+    
+    return { 
+      text: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+      isOverdue,
+      isToday
+    };
+  };
+
   if (!board) return <p>No board was found ...</p>;
 
   return (
@@ -188,37 +213,83 @@ function BoardsDetailView() {
                             ref={provided.innerRef}
                             {...provided.droppableProps}
                           >
-                            {list.Cards?.map((card, cardIndex) => (
-                              <Draggable
-                                key={card.id}
-                                draggableId={`card-${card.id}`}
-                                index={cardIndex}
-                              >
-                                {(provided) => (
-                                  <div
-                                    className='card-item'
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                  >
-                                    <InlineEdit
-                                      initialValue={card.title}
-                                      onSave={async (newTitle) => {
-                                        await updateCardTitle(card.id, newTitle);
-                                        refreshBoard();
-                                      }}
-                                      className="card-title-wrapper"
-                                      textClassName="card-title"
-                                      refreshBoard={refreshBoard}
-                                    />
-                                    <TiDelete
-                                      className='delete-card-icon'
-                                      onClick={() => handleDeleteCard(card.id)}
-                                    />
-                                  </div>
-                                )}
-                              </Draggable>
-                            ))}
+                            {list.Cards?.map((card, cardIndex) => {
+                              const dueInfo = formatDueDate(card.dueDate);
+                              return (
+                                <Draggable
+                                  key={card.id}
+                                  draggableId={`card-${card.id}`}
+                                  index={cardIndex}
+                                >
+                                  {(provided) => (
+                                    <div
+                                      className='card-item'
+                                      ref={provided.innerRef}
+                                      {...provided.draggableProps}
+                                      {...provided.dragHandleProps}
+                                      onClick={() => setSelectedCard(card)}
+                                    >
+                                      {/* Priority Badge */}
+                                      {card.priority && card.priority !== 'medium' && (
+                                        <span 
+                                          className="priority-badge"
+                                          style={{ backgroundColor: PRIORITY_COLORS[card.priority] }}
+                                        >
+                                          {card.priority}
+                                        </span>
+                                      )}
+                                      
+                                      {/* Labels */}
+                                      {card.labels && card.labels.length > 0 && (
+                                        <div className="card-labels">
+                                          {card.labels.slice(0, 3).map(label => (
+                                            <span 
+                                              key={label.id}
+                                              className="card-label-dot"
+                                              style={{ backgroundColor: label.color }}
+                                              title={label.name}
+                                            />
+                                          ))}
+                                        </div>
+                                      )}
+                                      
+                                      <InlineEdit
+                                        initialValue={card.title}
+                                        onSave={async (newTitle) => {
+                                          await updateCardTitle(card.id, newTitle);
+                                          refreshBoard();
+                                        }}
+                                        className="card-title-wrapper"
+                                        textClassName="card-title"
+                                        refreshBoard={refreshBoard}
+                                      />
+                                      
+                                      {/* Due Date */}
+                                      {dueInfo && (
+                                        <span className={`due-date-badge ${dueInfo.isOverdue ? 'overdue' : ''} ${dueInfo.isToday ? 'today' : ''}`}>
+                                          📅 {dueInfo.text}
+                                        </span>
+                                      )}
+                                      
+                                      {/* Comments Count */}
+                                      {card.comments && card.comments.length > 0 && (
+                                        <span className="comments-count">
+                                          💬 {card.comments.length}
+                                        </span>
+                                      )}
+                                      
+                                      <TiDelete
+                                        className='delete-card-icon'
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          handleDeleteCard(card.id);
+                                        }}
+                                      />
+                                    </div>
+                                  )}
+                                </Draggable>
+                              );
+                            })}
                             {provided.placeholder}
 
                             {activeListId === list.id ? (
@@ -261,6 +332,17 @@ function BoardsDetailView() {
       {NewListModal && (
         <CreateListModal
           onClose={() => setNewListModal(false)}
+          refreshBoard={refreshBoard}
+        />
+      )}
+
+      {selectedCard && (
+        <CardDetailModal
+          card={selectedCard}
+          onClose={() => {
+            setSelectedCard(null);
+            refreshBoard();
+          }}
           refreshBoard={refreshBoard}
         />
       )}

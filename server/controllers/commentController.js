@@ -8,7 +8,7 @@ exports.deleteComment = asyncHandler(async (req, res) => {
   
   const comment = await Comment.findByPk(id, {
     include: [
-      { model: Card, include: [{ model: List, include: [{ model: Board }] }] },
+      { model: Card, as: 'card', include: [{ model: List, as: 'list', include: [{ model: Board, as: 'Board' }] }] },
       { model: User, as: 'author' }
     ]
   });
@@ -19,7 +19,7 @@ exports.deleteComment = asyncHandler(async (req, res) => {
   
   // Authorization: comment owner OR board owner
   const isCommentOwner = comment.userId === userId;
-  const isBoardOwner = comment.Card.List.Board.userId === userId;
+  const isBoardOwner = comment.card.list.Board.userId === userId;
   
   if (!isCommentOwner && !isBoardOwner) {
     throw new AppError('Not authorized to delete this comment', 403);

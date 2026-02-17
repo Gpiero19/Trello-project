@@ -69,7 +69,7 @@ exports.getAllCards = asyncHandler(async (req, res) => {
       where: Object.keys(listWhere).length ? listWhere : undefined,
       include: [{
         model: Board,
-        as: 'board',
+        as: 'Board',
         where: Object.keys(boardWhere).length ? boardWhere : undefined,
         attributes: ['id', 'title']
       }]
@@ -131,7 +131,7 @@ exports.getCardById = asyncHandler(async (req, res) => {
   
   const card = await Card.findByPk(id, {
     include: [
-      { model: List, as: 'list', include: [{ model: Board, as: 'board' }] },
+      { model: List, as: 'list', include: [{ model: Board, as: 'Board' }] },
       { model: User, as: 'assignedUser', attributes: ['id', 'name', 'email'] },
       { model: User, as: 'creator', attributes: ['id', 'name', 'email'] },
       { model: Label, as: 'labels', through: { attributes: [] } },
@@ -194,11 +194,16 @@ exports.updateCard = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   
   const card = await Card.findByPk(id, {
-    include: [{ model: List, include: [{ model: Board }] }]
+    include: [{ model: List, as: 'list', include: [{ model: Board, as: 'Board' }] }]
   });
   
   if (!card) {
     throw new AppError('Card not found', 404);
+  }
+  
+  // Check if list and board are loaded
+  if (!card.list || !card.list.Board) {
+    throw new AppError('Card data integrity issue - list or board not found', 500);
   }
   
   // Authorization check for sensitive fields
@@ -206,7 +211,7 @@ exports.updateCard = asyncHandler(async (req, res) => {
   const hasSensitiveFields = Object.keys(updates).some(f => sensitiveFields.includes(f));
   
   if (hasSensitiveFields) {
-    const isBoardOwner = card.list.board.userId === userId;
+    const isBoardOwner = card.list.Board.userId === userId;
     const isAssignedUser = card.assignedUserId === userId;
     
     if (!isBoardOwner && !isAssignedUser) {
@@ -351,7 +356,7 @@ exports.addLabel = asyncHandler(async (req, res) => {
   const { labelId } = req.body;
   
   const card = await Card.findByPk(cardId, {
-    include: [{ model: List, include: [{ model: Board }] }]
+    include: [{ model: List, as: 'list', include: [{ model: Board, as: 'Board' }] }]
   });
   
   if (!card) {
@@ -364,7 +369,7 @@ exports.addLabel = asyncHandler(async (req, res) => {
     throw new AppError('Label not found', 404);
   }
   
-  if (label.boardId !== card.list.boardId) {
+  if (label.boardId !== card.list.Board.id) {
     throw new AppError('Label must belong to the same board as the card', 400);
   }
   
@@ -432,7 +437,7 @@ exports.createComment = asyncHandler(async (req, res) => {
   
   // Verify card exists
   const card = await Card.findByPk(cardId, {
-    include: [{ model: List, include: [{ model: Board }] }]
+    include: [{ model: List, as: 'list', include: [{ model: Board, as: 'Board' }] }]
   });
   
   if (!card) {
