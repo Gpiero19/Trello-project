@@ -45,6 +45,27 @@ const errorHandler = (err, req, res, next) => {
     return res.status(401).json({ error: 'Token expired' });
   }
   
+  // Invalid ID format (e.g., non-numeric ID passed to route)
+  if (err.name === 'CastError' || err.name === 'ObjectParameter') {
+    return res.status(400).json({ error: 'Invalid ID format' });
+  }
+  
+  // JSON parse error (malformed request body)
+  if (err instanceof SyntaxError && err.status === 400) {
+    return res.status(400).json({ error: 'Invalid JSON in request body' });
+  }
+  
+  // TypeError (undefined property access - internal bug)
+  if (err instanceof TypeError) {
+    console.error('TypeError:', err);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+  
+  // Timeout errors
+  if (err.name === 'TimeoutError' || err.code === 'ETIMEDOUT') {
+    return res.status(503).json({ error: 'Request timeout' });
+  }
+  
   // Custom operational errors
   if (err.isOperational) {
     return res.status(err.statusCode).json({ error: err.message });
