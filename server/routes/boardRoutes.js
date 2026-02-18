@@ -3,11 +3,12 @@ const router = express.Router();
 const boardController = require('../controllers/boardController');
 const labelController = require('../controllers/labelController');
 const authenticateToken = require('../middleware/authMiddleware');
+const { validateBoard, validateBoardUpdate, validateBoardReorder } = require('../middleware/validation');
 
-router.post("/", authenticateToken, boardController.createBoard);
+router.post("/", authenticateToken, validateBoard, boardController.createBoard);
 router.get('/', authenticateToken, boardController.getAllBoards);
-router.put('/reorder', authenticateToken, boardController.reorderBoards);
-router.put('/:id', authenticateToken, boardController.updateBoard);
+router.put('/reorder', authenticateToken, validateBoardReorder, boardController.reorderBoards);
+router.put('/:id', authenticateToken, validateBoardUpdate, boardController.updateBoard);
 router.get('/:id', authenticateToken, boardController.getBoardById);
 router.delete('/:id', authenticateToken, boardController.deleteBoard);
 

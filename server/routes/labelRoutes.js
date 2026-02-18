@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const labelController = require('../controllers/labelController');
-const { validateLabel } = require('../middleware/validation');
+const { validateLabel, validateLabelUpdate } = require('../middleware/validation');
 const { authenticate, authorizeBoardMember } = require('../middleware/authorization');
 const authenticateToken = require('../middleware/authMiddleware');
 
@@ -12,7 +12,7 @@ router.post('/', authenticateToken, validateLabel, labelController.createLabel);
 router.get('/:boardId', authenticateToken, labelController.getLabelsByBoard);
 
 // PUT /labels/:id - Update label
-router.put('/:id', authenticateToken, validateLabel, labelController.updateLabel);
+router.put('/:id', authenticateToken, validateLabelUpdate, labelController.updateLabel);
 
 // DELETE /labels/:id - Delete label
 router.delete('/:id', authenticateToken, labelController.deleteLabel);

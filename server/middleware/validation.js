@@ -1,6 +1,79 @@
 const Joi = require('joi');
 
-// Card validation schemas
+// =====================
+// AUTH VALIDATION SCHEMAS
+// =====================
+
+// Registration schema
+const registerSchema = Joi.object({
+  name: Joi.string().min(1).max(100).required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).max(100).required()
+});
+
+// Login schema
+const loginSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().required()
+});
+
+// =====================
+// USER VALIDATION SCHEMAS
+// =====================
+
+const userSchema = Joi.object({
+  name: Joi.string().min(1).max(100).required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).max(100)
+});
+
+const userUpdateSchema = Joi.object({
+  name: Joi.string().min(1).max(100),
+  email: Joi.string().email(),
+  password: Joi.string().min(6).max(100)
+}).min(1);
+
+// =====================
+// BOARD VALIDATION SCHEMAS
+// =====================
+
+const boardSchema = Joi.object({
+  title: Joi.string().min(1).max(255).required(),
+  position: Joi.number().min(0)
+});
+
+const boardUpdateSchema = Joi.object({
+  title: Joi.string().min(1).max(255),
+  position: Joi.number().min(0)
+}).min(1);
+
+const boardReorderSchema = Joi.object({
+  boardIds: Joi.array().items(Joi.number().integer().positive()).required()
+});
+
+// =====================
+// LIST VALIDATION SCHEMAS
+// =====================
+
+const listSchema = Joi.object({
+  title: Joi.string().min(1).max(255).required(),
+  boardId: Joi.number().integer().positive().required(),
+  position: Joi.number().min(0)
+});
+
+const listUpdateSchema = Joi.object({
+  title: Joi.string().min(1).max(255),
+  position: Joi.number().min(0)
+}).min(1);
+
+const listReorderSchema = Joi.object({
+  listIds: Joi.array().items(Joi.number().integer().positive()).required()
+});
+
+// =====================
+// CARD VALIDATION SCHEMAS
+// =====================
+
 const cardSchema = Joi.object({
   title: Joi.string().min(1).max(255).required(),
   description: Joi.string().max(5000).allow('', null),
@@ -28,14 +101,32 @@ const cardMoveSchema = Joi.object({
   newPosition: Joi.number().min(0).required()
 });
 
+// =====================
+// COMMENT VALIDATION SCHEMAS
+// =====================
+
 const commentSchema = Joi.object({
   content: Joi.string().min(1).max(2000).required()
 });
 
+// =====================
+// LABEL VALIDATION SCHEMAS
+// =====================
+
 const labelSchema = Joi.object({
   name: Joi.string().min(1).max(50).required(),
-  color: Joi.string().pattern(/^#[0-9A-Fa-f]{6}$/).required()
+  color: Joi.string().pattern(/^#[0-9A-Fa-f]{6}$/).required(),
+  boardId: Joi.number().integer().positive()
 });
+
+const labelUpdateSchema = Joi.object({
+  name: Joi.string().min(1).max(50),
+  color: Joi.string().pattern(/^#[0-9A-Fa-f]{6}$/)
+}).min(1);
+
+// =====================
+// VALIDATION MIDDLEWARE
+// =====================
 
 // Validation middleware factory
 const validate = (schema) => (req, res, next) => {
@@ -57,9 +148,33 @@ const validate = (schema) => (req, res, next) => {
 };
 
 module.exports = {
+  // Auth
+  validateRegister: validate(registerSchema),
+  validateLogin: validate(loginSchema),
+  
+  // User
+  validateUser: validate(userSchema),
+  validateUserUpdate: validate(userUpdateSchema),
+  
+  // Board
+  validateBoard: validate(boardSchema),
+  validateBoardUpdate: validate(boardUpdateSchema),
+  validateBoardReorder: validate(boardReorderSchema),
+  
+  // List
+  validateList: validate(listSchema),
+  validateListUpdate: validate(listUpdateSchema),
+  validateListReorder: validate(listReorderSchema),
+  
+  // Card
   validateCard: validate(cardSchema),
   validateCardUpdate: validate(cardUpdateSchema),
   validateCardMove: validate(cardMoveSchema),
+  
+  // Comment
   validateComment: validate(commentSchema),
-  validateLabel: validate(labelSchema)
+  
+  // Label
+  validateLabel: validate(labelSchema),
+  validateLabelUpdate: validate(labelUpdateSchema)
 };
