@@ -24,7 +24,22 @@ exports.createBoard = async (req, res) => {
 exports.getAllBoards = async (req, res) => {
     try {
       const userId = req.user?.id;
-      const boards = await Board.findAll({ where: { userId } });
+      const boards = await Board.findAll({
+        where: { userId },
+        include: [
+          {
+            model: List,
+            as: 'Lists',
+            include: [
+              {
+                model: Card,
+                as: 'Cards'
+              }
+            ]
+          }
+        ],
+        order: [['position', 'ASC']]
+      });
       return ok(res, boards);
     } catch (err) {
         console.error('Error fetching boards', err);

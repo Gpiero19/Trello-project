@@ -247,6 +247,7 @@ exports.useTemplate = async (req, res) => {
     // Create the board
     const board = await Board.create({
       title: template.name,
+      description: template.description,
       userId,
       position: boardPosition
     }, { transaction });

@@ -107,23 +107,34 @@ function Dashboard () {
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                       >
-                        <InlineEdit
-                          initialValue={board.title}
-                          onSave={async (newTitle) => {
-                            await updateBoard(board.id, newTitle);
-                            setBoards(prev =>
-                              prev.map(b => b.id === board.id ? { ...b, title: newTitle } : b)
-                            );
-                          }}
-                          className="board-card"
-                          textClassName="board-title"
-                        />
-                        <Link to={`/boards/${board.id}`} className='board-link'>
+                        <div className="board-card-header">
+                          <InlineEdit
+                            initialValue={board.title}
+                            onSave={async (newTitle) => {
+                              await updateBoard(board.id, newTitle);
+                              setBoards(prev =>
+                                prev.map(b => b.id === board.id ? { ...b, title: newTitle } : b)
+                              );
+                            }}
+                            className="board-card-title"
+                            textClassName="board-title"
+                          />
+                          <TiDelete className='delete-icon' 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteBoard(board.id);
+                            }} 
+                          />
+                        </div>
+                        <Link to={`/boards/${board.id}`} className='board-card-link'>
                           {board.description && <p className='board-description'>{board.description}</p>}
+                          <div className="board-stats">
+                            <span>{board.Lists?.length || 0} lists</span>
+                            <span>
+                              {board.Lists?.reduce((acc, list) => acc + (list.Cards?.length || 0), 0) || 0} cards
+                            </span>
+                          </div>
                         </Link>
-                        <TiDelete className='delete-icon' 
-                          onClick={() => handleDeleteBoard(board.id)} 
-                        />
                       </div>
                     )}
                   </Draggable>
