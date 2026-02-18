@@ -48,7 +48,10 @@ const boardUpdateSchema = Joi.object({
 }).min(1);
 
 const boardReorderSchema = Joi.object({
-  boardIds: Joi.array().items(Joi.number().integer().positive()).required()
+  boards: Joi.array().items(Joi.object({
+    id: Joi.number().integer().positive().required(),
+    position: Joi.number().integer().min(0).required()
+  })).required()
 });
 
 // =====================
@@ -67,7 +70,11 @@ const listUpdateSchema = Joi.object({
 }).min(1);
 
 const listReorderSchema = Joi.object({
-  listIds: Joi.array().items(Joi.number().integer().positive()).required()
+  boardId: Joi.number().integer().positive(),
+  lists: Joi.array().items(Joi.object({
+    id: Joi.number().integer().positive().required(),
+    position: Joi.number().integer().min(0).required()
+  })).required()
 });
 
 // =====================
@@ -128,6 +135,8 @@ const labelUpdateSchema = Joi.object({
 // VALIDATION MIDDLEWARE
 // =====================
 
+const { badRequest } = require('./responseFormatter');
+
 // Validation middleware factory
 const validate = (schema) => (req, res, next) => {
   const { error, value } = schema.validate(req.body, { 
@@ -140,7 +149,7 @@ const validate = (schema) => (req, res, next) => {
       field: detail.path.join('.'),
       message: detail.message
     }));
-    return res.status(400).json({ error: 'Validation failed', details: errors });
+    return badRequest(res, 'Validation failed', JSON.stringify(errors));
   }
   
   req.validatedBody = value;

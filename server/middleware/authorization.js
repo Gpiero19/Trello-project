@@ -1,4 +1,5 @@
 const { Board, List, Card } = require('../models');
+const { notFound, forbidden, serverError } = require('./responseFormatter');
 
 // Check if user is board member (owner)
 const checkBoardMembership = async (userId, boardId) => {
@@ -22,7 +23,7 @@ const authorizeBoardMember = async (req, res, next) => {
         include: [{ model: List, as: 'list' }]
       });
       if (!card) {
-        return res.status(404).json({ error: 'Card not found' });
+        return notFound(res, 'Card not found', 'Card does not exist');
       }
       boardId = card.list.boardId;
     } else if (req.params.listId) {
@@ -30,21 +31,21 @@ const authorizeBoardMember = async (req, res, next) => {
         include: [{ model: Board, as: 'Board' }]
       });
       if (!list) {
-        return res.status(404).json({ error: 'List not found' });
+        return notFound(res, 'List not found', 'List does not exist');
       }
       boardId = list.boardId;
     }
     
     const isMember = await checkBoardMembership(userId, boardId);
     if (!isMember) {
-      return res.status(403).json({ error: 'Not a member of this board' });
+      return forbidden(res, 'Not authorized', 'You are not a member of this board');
     }
     
     req.boardId = boardId;
     next();
   } catch (err) {
     console.error('Authorization error:', err);
-    res.status(500).json({ error: 'Authorization failed' });
+    return serverError(res, 'Authorization failed');
   }
 };
 
@@ -61,19 +62,19 @@ const authorizeCardEdit = async (req, res, next) => {
     });
     
     if (!card) {
-      return res.status(404).json({ error: 'Card not found' });
+      return notFound(res, 'Card not found', 'Card does not exist');
     }
     
     // Check if list exists
     if (!card.list) {
       console.error('Card list not found:', { cardId, listId: card.listId });
-      return res.status(500).json({ error: 'Card data integrity issue' });
+      return serverError(res, 'Data integrity error', 'Card has no associated list');
     }
     
     // Get board directly from list's boardId
     const board = await Board.findByPk(card.list.boardId);
     if (!board) {
-      return res.status(500).json({ error: 'Board not found' });
+      return notFound(res, 'Board not found', 'Board does not exist');
     }
     
     const isBoardOwner = board.userId === userId;
@@ -90,7 +91,7 @@ const authorizeCardEdit = async (req, res, next) => {
     // Check board membership for basic operations
     const isMember = board.userId === userId;
     if (!isMember) {
-      return res.status(403).json({ error: 'Not authorized to edit this card' });
+      return forbidden(res, 'Not authorized', 'You cannot edit this card');
     }
     
     req.card = card;
@@ -98,7 +99,7 @@ const authorizeCardEdit = async (req, res, next) => {
     next();
   } catch (err) {
     console.error('Authorization error:', err);
-    res.status(500).json({ error: 'Authorization failed' });
+    return serverError(res, 'Authorization failed');
   }
 };
 
@@ -120,13 +121,13 @@ const authorizeSensitiveFields = async (req, res, next) => {
   }
   
   if (!card || !card.list) {
-    return res.status(500).json({ error: 'Card data integrity issue' });
+    return serverError(res, 'Data integrity error', 'Card has no associated list');
   }
   
   // Get board directly
   const board = await Board.findByPk(card.list.boardId);
   if (!board) {
-    return res.status(500).json({ error: 'Board not found' });
+    return notFound(res, 'Board not found', 'Board does not exist');
   }
   
   const userId = req.user.id;
@@ -134,9 +135,7 @@ const authorizeSensitiveFields = async (req, res, next) => {
   const isAssignedUser = card.assignedUserId === userId;
   
   if (!isBoardOwner && !isAssignedUser) {
-    return res.status(403).json({ 
-      error: 'Only board owner or assigned user can update priority or due date' 
-    });
+    return forbidden(res, 'Not authorized', 'Only board owner or assigned user can update priority or due date');
   }
   
   next();

@@ -1,26 +1,30 @@
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const { ok, created, notFound, unauthorized, badRequest, serverError } = require('../middleware/responseFormatter');
 
-const SECRET_KEY = process.env.SECRET_KEY
+const SECRET_KEY = process.env.SECRET_KEY;
 
 exports.login = async(req, res) => {
     const {email, password} = req.body;
 
     try {
         const user = await User.findOne({ where: {email}})
-        if (!user) return res.status(404).json({ error: 'User not found'})
+        if (!user) return notFound(res, 'User not found', 'No user found with this email');
 
         const valid = await bcrypt.compare(password, user.password)
-        if (!valid) return res.status(401).json({ error: 'Invalid Credentials'})
+        if (!valid) return unauthorized(res, 'Invalid credentials', 'Email or password is incorrect');
         
         const token = jwt.sign({ id: user.id, email: user.email}, SECRET_KEY, 
-            {expiresIn: '2h'})
+            {expiresIn: '2h'});
 
-        res.json({ token, user: {id: user.id, name: user.name, email: user.email }})
+        return ok(res, { 
+            token, 
+            user: {id: user.id, name: user.name, email: user.email } 
+        }, 'Login successful');
 
     } catch(err) {
-        res.status(500).json({ error: 'Server error during login'})
+        return serverError(res, 'Server error during login');
     }
 };
 
@@ -31,19 +35,17 @@ exports.register = async(req,res) => {
         let existingUser = await User.findOne({ where: {email}})
 
         if (existingUser) {
-            return res.status(400).send('User already exisits. Please sign in')
-        } else {
+            return badRequest(res, 'User already exists', 'A user with this email already exists');
+        }
 
-        const hashedPassword = await bcrypt.hash(password, 10)
-        const user = await User.create({ name, email, password: hashedPassword})
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = await User.create({ name, email, password: hashedPassword});
 
-        return res.status(201).json([{
-            message: 'User registered successfully',
+        return created(res, { 
             user: { id: user.id, name: user.name, email: user.email }
-        }])}
+        }, 'User registered successfully');
 
-        
     } catch (err) {
-        return res.status(400).json({ message: err.message })
+        return badRequest(res, 'Registration failed', err.message);
     }
 }

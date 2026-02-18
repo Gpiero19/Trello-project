@@ -1,3 +1,5 @@
+const { badRequest, unauthorized, notFound, conflict, serverError } = require('./responseFormatter');
+
 // Custom error class
 class AppError extends Error {
   constructor(message, statusCode) {
@@ -18,63 +20,64 @@ const errorHandler = (err, req, res, next) => {
   // Sequelize validation errors
   if (err.name === 'SequelizeValidationError') {
     const errors = err.errors.map(e => ({ field: e.path, message: e.message }));
-    return res.status(400).json({ error: 'Validation failed', details: errors });
+    return badRequest(res, 'Validation failed', JSON.stringify(errors));
   }
   
   // Sequelize unique constraint errors
   if (err.name === 'SequelizeUniqueConstraintError') {
-    return res.status(409).json({ error: 'Resource already exists' });
+    return conflict(res, 'Resource already exists');
   }
   
   // Sequelize foreign key errors
   if (err.name === 'SequelizeForeignKeyConstraintError') {
-    return res.status(400).json({ error: 'Referenced resource does not exist' });
+    return badRequest(res, 'Referenced resource does not exist');
   }
   
   // Sequelize database error
   if (err.name === 'SequelizeDatabaseError') {
-    return res.status(500).json({ error: 'Database error' });
+    return serverError(res, 'Database error');
   }
   
   // JWT errors
   if (err.name === 'JsonWebTokenError') {
-    return res.status(401).json({ error: 'Invalid token' });
+    return unauthorized(res, 'Invalid token');
   }
   
   if (err.name === 'TokenExpiredError') {
-    return res.status(401).json({ error: 'Token expired' });
+    return unauthorized(res, 'Token expired');
   }
   
   // Invalid ID format (e.g., non-numeric ID passed to route)
   if (err.name === 'CastError' || err.name === 'ObjectParameter') {
-    return res.status(400).json({ error: 'Invalid ID format' });
+    return badRequest(res, 'Invalid ID format');
   }
   
   // JSON parse error (malformed request body)
   if (err instanceof SyntaxError && err.status === 400) {
-    return res.status(400).json({ error: 'Invalid JSON in request body' });
+    return badRequest(res, 'Invalid JSON in request body');
   }
   
   // TypeError (undefined property access - internal bug)
   if (err instanceof TypeError) {
     console.error('TypeError:', err);
-    return res.status(500).json({ error: 'Internal server error' });
+    return serverError(res, 'Internal server error');
   }
   
   // Timeout errors
   if (err.name === 'TimeoutError' || err.code === 'ETIMEDOUT') {
-    return res.status(503).json({ error: 'Request timeout' });
+    return serverError(res, 'Request timeout', 'Service temporarily unavailable');
   }
   
   // Custom operational errors
   if (err.isOperational) {
-    return res.status(err.statusCode).json({ error: err.message });
+    return res.status(err.statusCode).json({ 
+      success: false, 
+      error: err.message 
+    });
   }
   
   // Default server error
-  res.status(500).json({ 
-    error: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error' 
-  });
+  return serverError(res, 'Internal server error');
 };
 
 // Async handler wrapper to catch errors in async routes

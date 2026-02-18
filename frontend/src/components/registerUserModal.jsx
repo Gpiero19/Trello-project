@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axiosInstance from "../api/axiosInstance";
 
 function RegisterUserModal({ onClose }) {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
@@ -10,23 +11,15 @@ function RegisterUserModal({ onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-
     try {
-      const res = await fetch("http://localhost:3000/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-
-      if (!res.ok) {
-        const error = await res.text();
-        throw new Error(error || "Registration failed");
-      }
-
-      alert("User registered successfully!");
+      const res = await axiosInstance.post("/auth/register", form);
+      
+      // Response is already extracted by interceptor
+      alert(res.data?.message || "User registered successfully!");
       onClose();
     } catch (err) {
-      alert("Error: " + err.message);
+      const errorMessage = err.response?.data?.message || err.response?.data?.error || "Registration failed";
+      alert("Error: " + errorMessage);
     }
   };
 

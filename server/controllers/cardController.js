@@ -1,6 +1,7 @@
 const { Card, List, Board, User, Label, CardLabel, Comment, sequelize } = require('../models');
 const { Op } = require('sequelize');
 const { AppError, asyncHandler } = require('../middleware/errorHandler');
+const { ok, created, notFound, badRequest, serverError, forbidden } = require('../middleware/responseFormatter');
 
 // Get all cards with filtering, sorting, and pagination
 exports.getAllCards = asyncHandler(async (req, res) => {
@@ -116,7 +117,7 @@ exports.getAllCards = asyncHandler(async (req, res) => {
     return cardJson;
   });
   
-  res.status(200).json({
+  return ok(res, {
     cards: cardsWithMeta,
     total: cards.count,
     limit: parseInt(limit),
@@ -147,7 +148,7 @@ exports.getCardById = asyncHandler(async (req, res) => {
   cardJson.isOverdue = card.isOverdue();
   cardJson.isDueToday = card.isDueToday();
   
-  res.status(200).json(cardJson);
+  return ok(res, cardJson);
 });
 
 // Create new card
@@ -184,7 +185,7 @@ exports.createCard = asyncHandler(async (req, res) => {
     ]
   });
   
-  res.status(201).json(cardWithAssociations);
+  return created(res, cardWithAssociations, 'Card created successfully');
 });
 
 // Update card (partial update)
@@ -230,7 +231,7 @@ exports.updateCard = asyncHandler(async (req, res) => {
     ]
   });
   
-  res.status(200).json(updatedCard);
+  return ok(res, updatedCard, 'Card updated successfully');
 });
 
 // Delete card
@@ -245,7 +246,7 @@ exports.deleteCard = asyncHandler(async (req, res) => {
   
   await card.destroy();
   
-  res.status(204).send();
+  return res.status(204).send();
 });
 
 // Move card to new list/position
@@ -347,7 +348,7 @@ exports.moveCard = asyncHandler(async (req, res) => {
     ]
   });
   
-  res.status(200).json(updatedCard);
+  return ok(res, updatedCard, 'Card moved successfully');
 });
 
 // Add label to card
@@ -390,7 +391,7 @@ exports.addLabel = asyncHandler(async (req, res) => {
     ]
   });
   
-  res.status(201).json(cardWithLabels);
+  return created(res, cardWithLabels, 'Label added to card');
 });
 
 // Remove label from card
@@ -405,7 +406,7 @@ exports.removeLabel = asyncHandler(async (req, res) => {
     throw new AppError('Label not found on card', 404);
   }
   
-  res.status(204).send();
+  return res.status(204).send();
 });
 
 // Get comments for a card
@@ -421,7 +422,7 @@ exports.getComments = asyncHandler(async (req, res) => {
     offset: parseInt(offset)
   });
   
-  res.status(200).json({
+  return ok(res, {
     comments: comments.rows,
     total: comments.count,
     limit: parseInt(limit),
@@ -455,7 +456,7 @@ exports.createComment = asyncHandler(async (req, res) => {
     include: [{ model: User, as: 'author', attributes: ['id', 'name', 'email'] }]
   });
   
-  res.status(201).json(commentWithAuthor);
+  return created(res, commentWithAuthor, 'Comment created successfully');
 });
 
 // Reorder cards (bulk update)
@@ -470,5 +471,5 @@ exports.reorderCards = asyncHandler(async (req, res) => {
   );
   
   await Promise.all(updates);
-  res.status(200).json({ message: 'Cards reordered successfully' });
+  return ok(res, null, 'Cards reordered successfully');
 });

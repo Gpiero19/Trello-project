@@ -1,4 +1,5 @@
 const { Board, List, Card, Label, Comment, User } = require('../models');
+const { ok, created, notFound, badRequest, serverError } = require('../middleware/responseFormatter');
 
 exports.createBoard = async (req, res) => {
   try {
@@ -6,37 +7,34 @@ exports.createBoard = async (req, res) => {
     const { title } = req.body; 
 
     if (!userId) {
-      return res.status(400).json({ error: "Must provide userId" });
+      return badRequest(res, 'User ID required', 'Must provide userId');
     }
 
     const maxPosition = await Board.max('position', { where: { userId } });
     const position = Number.isFinite(maxPosition) ? maxPosition + 1 : 0;
 
     const board = await Board.create({ title, userId, position });
-    res.status(201).json(board);
+    return created(res, board, 'Board created successfully');
   } catch (err) {
     console.error('Error creating board:', err);
-    res.status(500).json({ error: 'Internal server error' });
+    return serverError(res, 'Failed to create board');
   }
 };
 
 exports.getAllBoards = async (req, res) => {
     try {
-      const userId = req.user?.id
-      const boards = await Board.findAll( {where: {userId}}); //fetch boards of user
-      res.status(200).json(boards)
-
+      const userId = req.user?.id;
+      const boards = await Board.findAll({ where: { userId } });
+      return ok(res, boards);
     } catch (err) {
-        console.error('Error fetching boards', err)
-        res.status(500).json({error: 'Internal server error'})
+        console.error('Error fetching boards', err);
+        return serverError(res, 'Failed to fetch boards');
     } 
 };
 
 exports.getBoardById = async (req, res) => {
-  const {id} = req.params
-  const userId = req.user?.id
-
-  console.log("Authenticated user ID:", userId);
+  const {id} = req.params;
+  const userId = req.user?.id;
 
   try {
     const board = await Board.findOne({
@@ -57,18 +55,17 @@ exports.getBoardById = async (req, res) => {
           ]
         }
       ],
-        order: [
-    [{ model: List, as: 'Lists' }, 'position', 'ASC'],
-    [{ model: List, as: 'Lists' }, { model: Card, as: 'Cards' }, 'position', 'ASC']
-  ]
+      order: [
+        [{ model: List, as: 'Lists' }, 'position', 'ASC'],
+        [{ model: List, as: 'Lists' }, { model: Card, as: 'Cards' }, 'position', 'ASC']
+      ]
     });
 
-    if (!board) return res.status(404).json({ error: 'Board not found' });
-
-    res.status(200).json(board);
+    if (!board) return notFound(res, 'Board not found', 'No board found with this ID');
+    return ok(res, board);
   } catch (err) {
     console.error('Error fetching board:', err);
-    res.status(500).json({ error: 'Board not found' });
+    return serverError(res, 'Failed to fetch board');
   }
 };
 
@@ -78,16 +75,16 @@ exports.updateBoard = async (req, res) => {
 
   try {
     const board = await Board.findByPk(id);
-    if (!board) return res.status(404).json({ error: 'Board not found' });
+    if (!board) return notFound(res, 'Board not found', 'No board found with this ID');
 
     if (title !== undefined) board.title = title;
     if (userId !== undefined) board.userId = userId;
 
     await board.save();
-    res.status(200).json(board);
+    return ok(res, board, 'Board updated successfully');
   } catch (err) {
     console.error('Error updating board:', err);
-    res.status(500).json({ error: 'Error updating board' });
+    return serverError(res, 'Failed to update board');
   }
 };
 
@@ -99,13 +96,13 @@ exports.deleteBoard = async (req, res) => {
     const board = await Board.findOne({
       where: { id, userId }
     });
-    if (!board) return res.status(404).json({ error: 'Board not found' });
+    if (!board) return notFound(res, 'Board not found', 'No board found with this ID');
 
     await board.destroy();
-    res.status(204).send();
+    return res.status(204).send();
   } catch (err) {
     console.error('Error deleting board:', err);
-    res.status(500).json({ error: 'Error deleting board' });
+    return serverError(res, 'Failed to delete board');
   }
 };
 
@@ -122,25 +119,9 @@ exports.reorderBoards = async (req, res) => {
     });
 
     await Promise.all(updates);
-    res.status(200).json({ message: 'Boards reordered successfully' });
+    return ok(res, null, 'Boards reordered successfully');
   } catch (err) {
     console.error('Error reordering boards', err);
-    res.status(500).json({ error: 'Internal server error' });
+    return serverError(res, 'Failed to reorder boards');
   }
 };
-// Needs to be added after creating guest ID
-// exports.claimGuestBoards = async (req, res) => {
-
-//   try {
-//     const boards = await Board.findAll({ where: { userId: req.body.userId } });
-//     if (!boards.length) return res.status(404).json({ message: "No guest boards found" });
-
-//     const updates = boards.map(b => Board.update({ userId: req.body.userId }, { where: { id: b.id } }));
-//     await Promise.all(updates);
-
-//     res.status(200).json({ message: "Guest boards successfully claimed" });
-//   } catch (err) {
-//     console.error("Error claiming guest boards:", err);
-//     res.status(500).json({ error: "Internal server error" });
-//   }
-// };

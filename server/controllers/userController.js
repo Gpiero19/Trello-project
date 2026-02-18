@@ -1,32 +1,32 @@
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
+const { ok, created, notFound, badRequest, serverError } = require('../middleware/responseFormatter');
 
 exports.createUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-      // Check if email already exists (optional but good practice)
     const existingUser = await User.findOne({ where: { email } });
-    if (existingUser) return res.status(400).json({ error: 'Email already in use' });
+    if (existingUser) return badRequest(res, 'Email already in use', 'A user with this email already exists');
 
-    const hashedPassword = await bcrypt.hash(password, 10); //hashing password
-    const user = await User.create({ name, email, password: hashedPassword }); //creation of user
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await User.create({ name, email, password: hashedPassword });
     const { password: _, ...userData } = user.toJSON(); 
-    res.status(201).json(userData); // Do not return password in the response
+    return created(res, userData, 'User created successfully');
   } catch (err) {
     console.error('Error creating user:', err);
-    res.status(500).json({ error: 'Internal server error' });
+    return serverError(res, 'Failed to create user');
   }
 };
 
 exports.getAllUsers = async (req, res) => {
     try {
         const users = await User.findAll({
-            attributes: { exclude: ['password'] }  //fetch users from DB // hide passwords
-        })
-        res.status(200).json(users)
+            attributes: { exclude: ['password'] }
+        });
+        return ok(res, users);
     } catch (err) {
-        console.error('Error fetching users', err)
-        res.status(500).json({error: 'Internal server error'})
+        console.error('Error fetching users', err);
+        return serverError(res, 'Failed to fetch users');
     } 
 };
 
@@ -34,22 +34,22 @@ exports.getUserById = async (req, res) => {
   const {id} = req.params;
   try {
     const user = await User.findByPk(id, {
-            attributes: { exclude: ['password'] }  //fetch users from DB // hide passwords
+            attributes: { exclude: ['password'] }
         });
-    if (!user) return res.status(404).json({ error: 'User not found'});
-    res.status(200).json(user)
+    if (!user) return notFound(res, 'User not found', 'No user found with this ID');
+    return ok(res, user);
   } catch (err) {
-    res.status(500).json({ error: 'User not found'})
+    return serverError(res, 'Failed to fetch user');
   }
-}
+};
 
 exports.updateUser = async (req, res) => {
   const {id} = req.params;
-  const {name, email, password} = req.body
+  const {name, email, password} = req.body;
   
   try {
-    const user = await User.findByPk(id)
-    if (!user) return res.status(404).json({ error: 'User not found'})
+    const user = await User.findByPk(id);
+    if (!user) return notFound(res, 'User not found', 'No user found with this ID');
 
     if (name) user.name = name;
     if (email) user.email = email;
@@ -60,21 +60,21 @@ exports.updateUser = async (req, res) => {
     await user.save();
     const { password: _, ...userData } = user.toJSON();
 
-    res.status(200).json(user)
+    return ok(res, userData, 'User updated successfully');
   } catch (err) {
-    res.status(500).json({ error: 'Error updating user'})
+    return serverError(res, 'Failed to update user');
   }
-}
+};
 
 exports.deleteUser = async (req, res) => {
-  const {id} = req.params
+  const {id} = req.params;
   try {
-    const user = await User.findByPk(id)
-    if (!user) return res.status(404).json({ error: 'User not found'})
+    const user = await User.findByPk(id);
+    if (!user) return notFound(res, 'User not found', 'No user found with this ID');
 
-    await user.destroy()
-    res.status(204).send()
+    await user.destroy();
+    return res.status(204).send();
   } catch (err) {
-    res.status(500).json({error: 'Error deleting user'})
+    return serverError(res, 'Failed to delete user');
   }
 }; 

@@ -1,4 +1,5 @@
 const { List, Card } = require('../models');
+const { ok, created, notFound, serverError } = require('../middleware/responseFormatter');
 
 exports.createList = async (req, res) => {
   try {
@@ -6,20 +7,20 @@ exports.createList = async (req, res) => {
     const maxPosition = await List.max('position', {where: { boardId }});
     const position = Number.isFinite(maxPosition) ? maxPosition + 1 : 0;
     const list = await List.create({ title, boardId, position });
-    res.status(201).json(list);
+    return created(res, list, 'List created successfully');
   } catch (err) {
     console.error('Error creating list:', err);
-    res.status(500).json({ error: 'Internal server error' });
+    return serverError(res, 'Failed to create list');
   }
 };
 
 exports.getAllLists = async (req, res) => {
     try {
-        const lists = await List.findAll(); //fetch list from DB
-        res.status(200).json(lists)
+        const lists = await List.findAll();
+        return ok(res, lists);
     } catch (err) {
-        console.error('Error fetching lists', err)
-        res.status(500).json({error: 'Internal server error'})
+        console.error('Error fetching lists', err);
+        return serverError(res, 'Failed to fetch lists');
     } 
 };
 
@@ -28,11 +29,11 @@ exports.getListById = async (req, res) => {
 
   try {
     const list = await List.findByPk(id);
-    if (!list) return res.status(404).json({ error: 'List not found'});
-    res.status(200).json(list)
+    if (!list) return notFound(res, 'List not found', 'No list found with this ID');
+    return ok(res, list);
   } catch (err) {
     console.error('Error fetching list:', err);
-    res.status(500).json({ error: 'List not found' });
+    return serverError(res, 'Failed to fetch list');
   }
 };
 
@@ -44,13 +45,13 @@ exports.updateList = async (req, res) => {
     const list = await List.findOne({
       where: { id },
     });
-    if (!list) return res.status(404).json({ error: 'List not found' });
+    if (!list) return notFound(res, 'List not found', 'No list found with this ID');
     list.title = title;
     await list.save();
-    res.status(200).json(list);
+    return ok(res, list, 'List updated successfully');
   } catch (err) {
     console.error('Error updating list:', err);
-    res.status(500).json({ error: 'Error updating list' });
+    return serverError(res, 'Failed to update list');
   }
 };
 
@@ -61,13 +62,13 @@ exports.deleteList = async (req, res) => {
     const list = await List.findOne({
       where: { id },
     });
-    if (!list) return res.status(404).json({ error: 'List not found' });
+    if (!list) return notFound(res, 'List not found', 'No list found with this ID');
 
     await list.destroy();
-    res.status(204).send();
+    return res.status(204).send();
   } catch (err) {
     console.error('Error deleting list:', err);
-    res.status(500).json({ error: 'Error deleting list' });
+    return serverError(res, 'Failed to delete list');
   }
 };
 
@@ -77,10 +78,10 @@ exports.reorderLists = async (req, res) => {
 
     const updates = lists.map(({ id, position }) =>
       List.update({ position }, { where: { id }}));
-    await Promise.all(updates)
-    res.status(200).json({ message: 'Lists reordered successfully' });
+    await Promise.all(updates);
+    return ok(res, null, 'Lists reordered successfully');
   } catch (err) {
     console.error('Error reordering lists', err);
-    res.status(500).json({ error: 'Internal server error' });
+    return serverError(res, 'Failed to reorder lists');
   }
 };

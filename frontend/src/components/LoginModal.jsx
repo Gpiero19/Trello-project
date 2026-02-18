@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../context/authContext";
-import axios from "axios";
+import axiosInstance from "../api/axiosInstance";
 
 function LoginModal({ onClose }) {
   const [email, setEmail] = useState("");
@@ -10,8 +10,11 @@ function LoginModal({ onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:3000/api/auth/login", { email, password });
-      const userData = res.data.user || res.data;  // Extract user object if nested
+      const res = await axiosInstance.post("/auth/login", { email, password });
+      
+      // Response is already extracted by interceptor: { token, user }
+      const userData = res.data.user || res.data;
+      
       if (res.data.token) {
         localStorage.setItem("token", res.data.token);
       }
@@ -19,7 +22,8 @@ function LoginModal({ onClose }) {
       onClose();
     } catch (err) {
       console.error("Login error:", err);
-      alert("Invalid credentials");
+      const errorMessage = err.response?.data?.message || err.response?.data?.error || "Invalid credentials";
+      alert(errorMessage);
     }
   };
 

@@ -1,5 +1,6 @@
 const { Label, Card, CardLabel, Board, List } = require('../models');
 const { AppError, asyncHandler } = require('../middleware/errorHandler');
+const { ok, created, notFound, forbidden, serverError } = require('../middleware/responseFormatter');
 
 // Create label for a board
 exports.createLabel = asyncHandler(async (req, res) => {
@@ -17,7 +18,7 @@ exports.createLabel = asyncHandler(async (req, res) => {
   }
   
   const label = await Label.create({ name, color, boardId: parseInt(boardId) });
-  res.status(201).json(label);
+  return created(res, label, 'Label created successfully');
 });
 
 // Get all labels for a board
@@ -29,7 +30,7 @@ exports.getLabelsByBoard = asyncHandler(async (req, res) => {
     order: [['name', 'ASC']]
   });
   
-  res.status(200).json(labels);
+  return ok(res, labels);
 });
 
 // Update label
@@ -53,7 +54,7 @@ exports.updateLabel = asyncHandler(async (req, res) => {
   
   await label.update({ name, color });
   
-  res.status(200).json(label);
+  return ok(res, label, 'Label updated successfully');
 });
 
 // Delete label
@@ -79,5 +80,5 @@ exports.deleteLabel = asyncHandler(async (req, res) => {
   
   await label.destroy();
   
-  res.status(204).send();
+  return res.status(204).send();
 });

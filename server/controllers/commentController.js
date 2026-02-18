@@ -1,5 +1,6 @@
 const { Comment, Card, User, Board, List } = require('../models');
 const { AppError, asyncHandler } = require('../middleware/errorHandler');
+const { ok } = require('../middleware/responseFormatter');
 
 // Delete comment
 exports.deleteComment = asyncHandler(async (req, res) => {
@@ -27,7 +28,7 @@ exports.deleteComment = asyncHandler(async (req, res) => {
   
   await comment.destroy();
   
-  res.status(204).send();
+  return res.status(204).send();
 });
 
 // Update comment
@@ -53,5 +54,5 @@ exports.updateComment = asyncHandler(async (req, res) => {
     include: [{ model: User, as: 'author', attributes: ['id', 'name', 'email'] }]
   });
   
-  res.status(200).json(updatedComment);
+  return ok(res, updatedComment, 'Comment updated successfully');
 });

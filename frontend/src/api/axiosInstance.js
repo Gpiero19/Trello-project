@@ -18,4 +18,29 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+// Add a response interceptor to handle the new response format
+// New format: { success: true, data: {...}, message }
+// This extracts the data so components get the actual response
+axiosInstance.interceptors.response.use(
+  (response) => {
+    // If response has success: true, extract the data
+    if (response.data && response.data.success === true) {
+      // Return a new object with the extracted data
+      return {
+        ...response,
+        data: response.data.data
+      };
+    }
+    return response;
+  },
+  (error) => {
+    // Handle error responses
+    if (error.response && error.response.data) {
+      // Keep the error format as is for components to handle
+      console.error("API Error:", error.response.data);
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default axiosInstance;
