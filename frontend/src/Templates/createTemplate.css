@@ -1,0 +1,362 @@
+.create-template-page {
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.create-template-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.create-template-header h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #172b4d;
+}
+
+.create-template-header .back-btn {
+  padding: 8px 16px;
+  background-color: #f4f5f7;
+  color: #172b4d;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.create-template-header .back-btn:hover {
+  background-color: #ebecf0;
+}
+
+.create-template-error {
+  text-align: center;
+  padding: 40px;
+}
+
+.create-template-error p {
+  margin-bottom: 16px;
+  color: #666;
+}
+
+.create-template-form {
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  animation: fadeIn 0.4s ease-out 0.1s both;
+}
+
+.form-section {
+  margin-bottom: 24px;
+}
+
+.form-section label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #5e6c84;
+}
+
+.form-section input[type="text"],
+.form-section textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #dfe1e6;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.form-section input[type="text"]:focus,
+.form-section textarea:focus {
+  border-color: #0079bf;
+  outline: none;
+}
+
+.checkbox-section label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.checkbox-section input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.lists-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.lists-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #172b4d;
+}
+
+.add-list-btn {
+  padding: 8px 16px;
+  background-color: #0079bf;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.add-list-btn:hover {
+  background-color: #026aa7;
+  transform: translateY(-1px);
+}
+
+.add-list-btn:active {
+  transform: translateY(0);
+}
+
+.empty-lists-state {
+  text-align: center;
+  padding: 40px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border: 2px dashed #e2e8f0;
+}
+
+.empty-lists-state .empty-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.empty-lists-state p {
+  color: #64748b;
+  margin: 0;
+}
+
+.template-builder-lists {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.builder-list {
+  background-color: #f4f5f7;
+  border-radius: 8px;
+  padding: 16px;
+  animation: slideIn 0.3s ease-out both;
+}
+
+.builder-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.list-title-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 2px solid #dfe1e6;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.list-title-input:focus {
+  border-color: #0079bf;
+  outline: none;
+}
+
+.remove-list-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #6b778c;
+  cursor: pointer;
+  padding: 0 8px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.remove-list-btn:hover {
+  color: #eb5a46;
+}
+
+.builder-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.builder-card {
+  background: white;
+  border-radius: 4px;
+  padding: 12px;
+  position: relative;
+  animation: slideIn 0.3s ease-out both;
+}
+
+.card-title-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #dfe1e6;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.card-title-input:focus {
+  border-color: #0079bf;
+  outline: none;
+}
+
+.card-description-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #dfe1e6;
+  border-radius: 4px;
+  font-size: 12px;
+  resize: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.card-description-input:focus {
+  border-color: #0079bf;
+  outline: none;
+}
+
+.remove-card-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #6b778c;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.remove-card-btn:hover {
+  color: #eb5a46;
+}
+
+.add-card-btn {
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  color: #5e6c84;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.add-card-btn:hover {
+  background-color: #ebecf0;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #dfe1e6;
+}
+
+.cancel-btn {
+  padding: 10px 20px;
+  background-color: #f4f5f7;
+  color: #172b4d;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.cancel-btn:hover {
+  background-color: #ebecf0;
+}
+
+.submit-btn {
+  padding: 10px 24px;
+  background-color: #0079bf;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.submit-btn:hover {
+  background-color: #026aa7;
+  transform: translateY(-1px);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+.submit-btn:disabled {
+  background-color: #c1c7d0;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .create-template-header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  
+  .create-template-header h1 {
+    font-size: 24px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .form-actions .cancel-btn,
+  .form-actions .submit-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

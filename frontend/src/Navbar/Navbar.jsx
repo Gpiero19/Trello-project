@@ -18,7 +18,14 @@ return (
       <img className='logo' src={frelloLogo} alt="logo" />
     </NavLink>
 
-      <ul className='left-panel'>           
+      <ul className='left-panel'>       
+        {user && (
+          <li>
+            <NavLink to={"/templates"}>
+              Templates
+            </NavLink>
+          </li>
+        )}    
         <li>
           <NavLink to={"/about"}>
             About

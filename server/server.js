@@ -11,6 +11,7 @@ const listsRoutes = require('./routes/listRoutes');
 const cardsRoutes = require('./routes/cardRoutes');
 const userRoutes = require('./routes/userRoutes');
 const labelRoutes = require('./routes/labelRoutes');
+const templateRoutes = require('./routes/templateRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -35,6 +36,7 @@ app.use('/api/lists', listsRoutes);
 app.use('/api/cards', cardsRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/labels', labelRoutes);
+app.use('/api/templates', templateRoutes);
 
 // Centralized error handler
 app.use(errorHandler);

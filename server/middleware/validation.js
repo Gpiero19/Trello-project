@@ -132,6 +132,33 @@ const labelUpdateSchema = Joi.object({
 }).min(1);
 
 // =====================
+// TEMPLATE VALIDATION SCHEMAS
+// =====================
+
+const templateCardSchema = Joi.object({
+  title: Joi.string().min(1).max(255).required(),
+  description: Joi.string().max(5000).allow('', null)
+});
+
+const templateListSchema = Joi.object({
+  title: Joi.string().min(1).max(255).required(),
+  cards: Joi.array().items(templateCardSchema)
+});
+
+const templateSchema = Joi.object({
+  name: Joi.string().min(1).max(255).required(),
+  description: Joi.string().max(2000).allow('', null),
+  isPublic: Joi.boolean().default(true),
+  lists: Joi.array().items(templateListSchema).default([])
+});
+
+const templateUpdateSchema = Joi.object({
+  name: Joi.string().min(1).max(255),
+  description: Joi.string().max(2000).allow('', null),
+  isPublic: Joi.boolean()
+}).min(1);
+
+// =====================
 // VALIDATION MIDDLEWARE
 // =====================
 
@@ -185,5 +212,9 @@ module.exports = {
   
   // Label
   validateLabel: validate(labelSchema),
-  validateLabelUpdate: validate(labelUpdateSchema)
+  validateLabelUpdate: validate(labelUpdateSchema),
+
+  // Template
+  validateTemplate: validate(templateSchema),
+  validateTemplateUpdate: validate(templateUpdateSchema)
 };
