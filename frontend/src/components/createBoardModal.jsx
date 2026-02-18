@@ -3,15 +3,17 @@ import { createBoard } from "../api/boards";
 
 function CreateBoardModal({ setBoards: refreshBoards, onClose }) {
   const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim()) return;
 
     try {
-      await createBoard(title);
+      await createBoard(title, description || null);
       await refreshBoards();
       setTitle("");
+      setDescription("");
       onClose();
       
     } catch (err) {
@@ -30,6 +32,13 @@ function CreateBoardModal({ setBoards: refreshBoards, onClose }) {
             placeholder="Board title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+          />
+          <textarea
+            placeholder="Description (optional)"
+            value={description}
+            maxLength={500}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={3}
           />
 
           <button type="button" onClick={onClose}>Cancel</button>

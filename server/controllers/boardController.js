@@ -4,7 +4,7 @@ const { ok, created, notFound, badRequest, serverError } = require('../middlewar
 exports.createBoard = async (req, res) => {
   try {
     const userId = req.user?.id; 
-    const { title } = req.body; 
+    const { title, description } = req.body; 
 
     if (!userId) {
       return badRequest(res, 'User ID required', 'Must provide userId');
@@ -13,7 +13,7 @@ exports.createBoard = async (req, res) => {
     const maxPosition = await Board.max('position', { where: { userId } });
     const position = Number.isFinite(maxPosition) ? maxPosition + 1 : 0;
 
-    const board = await Board.create({ title, userId, position });
+    const board = await Board.create({ title, description, userId, position });
     return created(res, board, 'Board created successfully');
   } catch (err) {
     console.error('Error creating board:', err);
@@ -71,13 +71,14 @@ exports.getBoardById = async (req, res) => {
 
 exports.updateBoard = async (req, res) => {
   const { id } = req.params;
-  const { title, userId } = req.body;
+  const { title, description, userId } = req.body;
 
   try {
     const board = await Board.findByPk(id);
     if (!board) return notFound(res, 'Board not found', 'No board found with this ID');
 
     if (title !== undefined) board.title = title;
+    if (description !== undefined) board.description = description;
     if (userId !== undefined) board.userId = userId;
 
     await board.save();

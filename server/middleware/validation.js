@@ -39,11 +39,13 @@ const userUpdateSchema = Joi.object({
 
 const boardSchema = Joi.object({
   title: Joi.string().min(1).max(255).required(),
+  description: Joi.string().allow('', null),
   position: Joi.number().min(0)
 });
 
 const boardUpdateSchema = Joi.object({
   title: Joi.string().min(1).max(255),
+  description: Joi.string().allow('', null),
   position: Joi.number().min(0)
 }).min(1);
 

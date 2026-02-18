@@ -9,9 +9,9 @@ export async function getBoards() {
   }
 }
 
-export async function createBoard(title) {
+export async function createBoard(title, description = null) {
   try {
-    const response = await axiosInstance.post("/boards", {title});
+    const response = await axiosInstance.post("/boards", {title, description});
     return response.data;
   } catch (err) {
     throw new Error("Failed to create board", err);
@@ -27,9 +27,12 @@ export async function deleteBoard(boardId) {
   }
 }
 
-export async function updateBoard(boardId, newTitle) {
+export async function updateBoard(boardId, newTitle, newDescription = null) {
   try {
     const payload = { title: newTitle };
+    if (newDescription !== null) {
+      payload.description = newDescription;
+    }
 
     const response = await axiosInstance.put(`/boards/${boardId}`, payload);
     return response.data;

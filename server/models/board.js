@@ -20,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
 
   Board.init({
     title: DataTypes.STRING,
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
     userId: DataTypes.INTEGER,
     position: {
       type: DataTypes.FLOAT,

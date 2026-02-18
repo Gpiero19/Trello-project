@@ -110,7 +110,7 @@ function Dashboard () {
                         <InlineEdit
                           initialValue={board.title}
                           onSave={async (newTitle) => {
-                            await updateBoard(board.id, newTitle, user?.id);
+                            await updateBoard(board.id, newTitle);
                             setBoards(prev =>
                               prev.map(b => b.id === board.id ? { ...b, title: newTitle } : b)
                             );
@@ -119,8 +119,7 @@ function Dashboard () {
                           textClassName="board-title"
                         />
                         <Link to={`/boards/${board.id}`} className='board-link'>
-                          <p>User ID: {board.userId}</p>
-                          <p>Board ID: {board.id}</p>
+                          {board.description && <p className='board-description'>{board.description}</p>}
                         </Link>
                         <TiDelete className='delete-icon' 
                           onClick={() => handleDeleteBoard(board.id)} 
