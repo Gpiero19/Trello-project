@@ -9,6 +9,7 @@ import {
   removeLabelFromCard
 } from '../../api/cards';
 import { getLabelsByBoard, createLabel, deleteLabel } from '../../api/labels';
+import { useToast } from '../../context/ToastContext';
 
 const PRIORITY_COLORS = {
   low: '#22c55e',
@@ -35,6 +36,7 @@ function CardDetailModal({ card, onClose, refreshBoard }) {
   const [newLabelColor, setNewLabelColor] = useState('#3b82f6');
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [description, setDescription] = useState(card.description || '');
+  const { addToast } = useToast();
 
   // Fetch full card data on mount
   useEffect(() => {
@@ -155,9 +157,11 @@ function CardDetailModal({ card, onClose, refreshBoard }) {
       await deleteLabel(Number(labelId));
       setBoardLabels(boardLabels.filter(l => l.id !== labelId && l.id !== Number(labelId)));
       setLabels(labels.filter(l => l.id !== labelId && l.id !== Number(labelId)));
+      addToast("Label deleted successfully", "success");
       refreshBoard();
     } catch (err) {
       console.error('Failed to delete label:', err);
+      addToast("Failed to delete label", "error");
     }
   };
 

@@ -10,6 +10,7 @@ import { updateBoard } from '../../api/boards';
 import InlineEdit from '../InlineEdit/InlineEdit'
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { useAuth } from '../../context/authContext';
+import { useToast } from '../../context/ToastContext';
 import CardDetailModal from '../CardDetailModal/CardDetailModal';
 
 const PRIORITY_COLORS = {
@@ -22,6 +23,7 @@ const PRIORITY_COLORS = {
 function BoardsDetailView() {
   const { user } = useAuth();
   const { boardId } = useParams();
+  const { addToast } = useToast();
   const [board, setBoard] = useState(null);
   const [NewListModal, setNewListModal] = useState(false);
   const [activeListId, setActiveListId] = useState(null);
@@ -66,9 +68,11 @@ function BoardsDetailView() {
     if (!window.confirm(`Are you sure you want to delete this list?`)) return;
     try {
       await deleteList(listId);
+      addToast("List deleted successfully", "success");
       refreshBoard();
     } catch (err) {
       console.error("Failed to delete list:", err);
+      addToast("Failed to delete list", "error");
     }
   };
 
@@ -88,9 +92,11 @@ function BoardsDetailView() {
     if (!window.confirm(`Are you sure you want to delete this card?`)) return;
     try {
       await deleteCard(cardId);
+      addToast("Card deleted successfully", "success");
       refreshBoard();
     } catch (err) {
       console.error("Failed to delete card", err);
+      addToast("Failed to delete card", "error");
     }
   };
 

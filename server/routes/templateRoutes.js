@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const templateController = require('../controllers/templateController');
-const authenticateToken = require('../middleware/authMiddleware');
+const { authenticateToken, optionalAuth } = require('../middleware/authMiddleware');
 const { validateTemplate, validateTemplateUpdate } = require('../middleware/validation');
 
 // Public routes (authentication optional)
 // GET /api/templates - Returns all public templates and user's private templates
-router.get('/', templateController.getAllTemplates);
+router.get('/', optionalAuth, templateController.getAllTemplates);
 
 // Protected routes (authentication required)
 // POST /api/templates - Creates a new custom template

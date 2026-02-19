@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { createBoard } from "../api/boards";
+import { useToast } from "../context/ToastContext";
 
 function CreateBoardModal({ setBoards: refreshBoards, onClose }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const { addToast } = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,7 +20,7 @@ function CreateBoardModal({ setBoards: refreshBoards, onClose }) {
       
     } catch (err) {
       console.error("Error creating board:", err);
-      alert("Failed to create board. Try again.");
+      addToast("Failed to create board. Try again.", "error");
     }
   };
 

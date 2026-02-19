@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../api/axiosInstance";
+import { useToast } from "../context/ToastContext";
 
 function CreateListModal({ onClose, refreshBoard }) {
   const {boardId} = useParams()
   const [title, setTitle] = useState("");
+  const { addToast } = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,7 +18,7 @@ function CreateListModal({ onClose, refreshBoard }) {
       onClose();
     } catch (err) {
       console.error("Error creating list:", err);
-      alert("Error: " + (err.response?.data?.error || err.message));
+      addToast("Error: " + (err.response?.data?.error || err.message), "error");
     }
   };
 

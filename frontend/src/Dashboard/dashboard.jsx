@@ -8,9 +8,11 @@ import { TiDelete } from "react-icons/ti";
 import InlineEdit from '../components/InlineEdit/InlineEdit';
 import axiosInstance from '../api/axiosInstance';
 import { useAuth } from '../context/authContext';
+import { useToast } from '../context/ToastContext';
 
 function Dashboard () {
   const { user } = useAuth();
+  const { addToast } = useToast();
   const [boards, setBoards] = useState([]);
   const [NewBoardModal, setNewBoardModal] = useState(false);
 
@@ -37,10 +39,11 @@ function Dashboard () {
 
     try {
       await deleteBoard(boardId, user?.id);
+      addToast("Board deleted successfully", "success");
       refreshBoards();
     } catch (err) {
       console.error("Failed to delete board:", err);
-      alert("Failed to delete board.");
+      addToast("Failed to delete board.", "error");
     }
   };
 
@@ -61,7 +64,7 @@ function Dashboard () {
       console.log(newBoards.map(b => b.id));
     } catch (err) {
       console.error("Failed to reorder boards:", err);
-      alert("Failed to save board order. Reverting changes.");
+      addToast("Failed to save board order. Reverting changes.", "error");
       refreshBoards();
     }
   };

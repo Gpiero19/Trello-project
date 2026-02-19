@@ -5,11 +5,18 @@ import { useState } from "react";
 import RegisterUserModal from "../components/registerUserModal";
 import LoginModal from "../components/LoginModal";
 import { useAuth } from '../context/authContext';
+import { useToast } from '../context/ToastContext';
 
 function Navbar() {
   const { user, logout } = useAuth();
+  const { addToast } = useToast();
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    addToast("Logged out successfully", "success");
+  };
 
 return (
 
@@ -38,7 +45,7 @@ return (
       {user ? (
         <>
           <span className='user-name'>Welcome {user.name || user.username || user.email}!</span>
-          <button onClick={logout}>Logout</button>
+          <button onClick={handleLogout}>Logout</button>
         </>
           ) : (
         <>

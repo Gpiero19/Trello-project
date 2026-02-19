@@ -8,47 +8,76 @@ const { Op } = require('sequelize');
  */
 exports.getAllTemplates = async (req, res) => {
   try {
+    // Handle both authenticated and unauthenticated requests
     const userId = req.user?.id;
 
-    const whereClause = userId
-      ? {
+    // Build where clause - return public templates AND user's private templates
+    let whereClause;
+    if (userId) {
+      const userIdInt = parseInt(userId);
+      
+      templates = await Template.findAll({
+        where: {
           [Op.or]: [
             { isPublic: true },
-            { userId: userId }
-          ]
-        }
-      : { isPublic: true };
-
-    const templates = await Template.findAll({
-      where: whereClause,
-      include: [
-        {
-          model: TemplateList,
-          as: 'lists',
-          include: [
-            {
-              model: TemplateCard,
-              as: 'cards'
-            }
+            { userId: userIdInt }
           ]
         },
-        {
-          model: User,
-          as: 'user',
-          attributes: ['id', 'name']
-        }
-      ],
-      order: [
-        ['createdAt', 'DESC'],
-        [{ model: TemplateList, as: 'lists' }, 'position', 'ASC'],
-        [{ model: TemplateList, as: 'lists' }, { model: TemplateCard, as: 'cards' }, 'position', 'ASC']
-      ]
-    });
+        include: [
+          {
+            model: TemplateList,
+            as: 'lists',
+            include: [
+              {
+                model: TemplateCard,
+                as: 'cards'
+              }
+            ]
+          },
+          {
+            model: User,
+            as: 'user',
+            attributes: ['id', 'name']
+          }
+        ],
+        order: [
+          ['createdAt', 'DESC'],
+          [{ model: TemplateList, as: 'lists' }, 'position', 'ASC'],
+          [{ model: TemplateList, as: 'lists' }, { model: TemplateCard, as: 'cards' }, 'position', 'ASC']
+        ]
+      });
+    } else {
+      templates = await Template.findAll({
+        where: { isPublic: true },
+        include: [
+          {
+            model: TemplateList,
+            as: 'lists',
+            include: [
+              {
+                model: TemplateCard,
+                as: 'cards'
+              }
+            ]
+          },
+          {
+            model: User,
+            as: 'user',
+            attributes: ['id', 'name']
+          }
+        ],
+        order: [
+          ['createdAt', 'DESC'],
+          [{ model: TemplateList, as: 'lists' }, 'position', 'ASC'],
+          [{ model: TemplateList, as: 'lists' }, { model: TemplateCard, as: 'cards' }, 'position', 'ASC']
+        ]
+      });
+    }
 
     return ok(res, templates);
   } catch (err) {
-    console.error('Error fetching templates:', err);
-    return serverError(res, 'Failed to fetch templates');
+      console.error('Error fetching templates:', err);
+      return serverError(res, 'Failed to fetch templates');
   }
 };
 
@@ -64,6 +93,12 @@ exports.createTemplate = async (req, res) => {
     const userId = req.user?.id;
     const { name, description, isPublic, lists } = req.body;
 
+    console.log('=== CREATE TEMPLATE DEBUG ===');
+    console.log('userId from token:', userId);
+    console.log('Received data:', { name, description, isPublic, listsCount: lists?.length });
+    console.log('isPublic value:', isPublic, 'type:', typeof isPublic);
+    console.log('===========================');
+
     if (!userId) {
       await transaction.rollback();
       return badRequest(res, 'User authentication required');
@@ -76,6 +111,8 @@ exports.createTemplate = async (req, res) => {
       isPublic: isPublic !== undefined ? isPublic : true,
       userId
     }, { transaction });
+
+    console.log('Created template with id:', template.id, 'isPublic:', template.isPublic, 'userId:', template.userId);
 
     // If lists are provided, create them with their cards
     if (lists && Array.isArray(lists) && lists.length > 0) {

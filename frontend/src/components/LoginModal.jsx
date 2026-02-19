@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useAuth } from "../context/authContext";
+import { useToast } from "../context/ToastContext";
 import axiosInstance from "../api/axiosInstance";
 
 function LoginModal({ onClose }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login } = useAuth();
+  const { addToast } = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,11 +21,12 @@ function LoginModal({ onClose }) {
         localStorage.setItem("token", res.data.token);
       }
       login(userData);  // Save user in context
+      addToast("Login successful! Welcome " + (userData.name || userData.email), "success");
       onClose();
     } catch (err) {
       console.error("Login error:", err);
       const errorMessage = err.response?.data?.message || err.response?.data?.error || "Invalid credentials";
-      alert(errorMessage);
+      addToast(errorMessage, "error");
     }
   };
 

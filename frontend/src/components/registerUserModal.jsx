@@ -1,8 +1,10 @@
 import { useState } from "react";
 import axiosInstance from "../api/axiosInstance";
+import { useToast } from "../context/ToastContext";
 
 function RegisterUserModal({ onClose }) {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const { addToast } = useToast();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -15,11 +17,11 @@ function RegisterUserModal({ onClose }) {
       const res = await axiosInstance.post("/auth/register", form);
       
       // Response is already extracted by interceptor
-      alert(res.data?.message || "User registered successfully!");
+      addToast(res.data?.message || "User registered successfully!", "success");
       onClose();
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.response?.data?.error || "Registration failed";
-      alert("Error: " + errorMessage);
+      addToast("Error: " + errorMessage, "error");
     }
   };
 
