@@ -15,15 +15,15 @@
 .create-template-header h1 {
   margin: 0;
   font-size: 28px;
-  color: #172b4d;
+  color: rgba(78, 31, 0, 0.87);
 }
 
 .create-template-header .back-btn {
   padding: 8px 16px;
-  background-color: #f4f5f7;
-  color: #172b4d;
+  background-color: white;
+  color: #D98324;
   text-decoration: none;
-  border-radius: 4px;
+  border-radius: 20px;
   transition: background-color 0.2s;
 }
 
@@ -57,23 +57,26 @@
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
-  color: #5e6c84;
+  color: rgba(78, 31, 0, 0.87);
 }
 
 .form-section input[type="text"],
 .form-section textarea {
   width: 100%;
   padding: 10px 12px;
-  border: 2px solid #dfe1e6;
+  border: 1px solid #D98324;
   border-radius: 4px;
   font-size: 14px;
   transition: border-color 0.2s;
   box-sizing: border-box;
+  background-color: white;
+  color: #5e6c84;
+
 }
 
 .form-section input[type="text"]:focus,
 .form-section textarea:focus {
-  border-color: #0079bf;
+  border: 2px solid #D98324;
   outline: none;
 }
 
@@ -105,17 +108,17 @@
 
 .add-list-btn {
   padding: 8px 16px;
-  background-color: #0079bf;
+  background-color: #D98324;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 20px;
   cursor: pointer;
   font-size: 14px;
   transition: background-color 0.2s, transform 0.1s;
 }
 
 .add-list-btn:hover {
-  background-color: #026aa7;
+  background-color: rgba(217, 131, 36, 0.8);
   transform: translateY(-1px);
 }
 
@@ -256,9 +259,7 @@
 
 .add-card-btn {
   padding: 8px 12px;
-  background: none;
   border: none;
-  color: #5e6c84;
   cursor: pointer;
   text-align: left;
   font-size: 14px;
@@ -267,7 +268,7 @@
 }
 
 .add-card-btn:hover {
-  background-color: #ebecf0;
+  background-color: rgba(217, 131, 36, 0.8);
 }
 
 .form-actions {
@@ -281,11 +282,12 @@
 
 .cancel-btn {
   padding: 10px 20px;
-  background-color: #f4f5f7;
-  color: #172b4d;
+  background-color: white;
+  color: #D98324;
   text-decoration: none;
-  border-radius: 4px;
+  border-radius: 20px;
   transition: background-color 0.2s;
+  border: 1px solid #D98324;
 }
 
 .cancel-btn:hover {
@@ -294,10 +296,10 @@
 
 .submit-btn {
   padding: 10px 24px;
-  background-color: #0079bf;
+  background-color: #D98324;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 20px;
   font-size: 14px;
   cursor: pointer;
   transition: background-color 0.2s, transform 0.1s;

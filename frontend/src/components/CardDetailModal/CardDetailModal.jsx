@@ -367,7 +367,6 @@ function CardDetailModal({ card, onClose, refreshBoard }) {
             {/* Card Info */}
             <div className="sidebar-section">
               <h4>Card Info</h4>
-              <p className="card-id">Card ID: {card.id}</p>
               <p className="card-list">List: {cardData.list?.title || 'Unknown'}</p>
             </div>
           </div>

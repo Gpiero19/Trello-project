@@ -1,6 +1,6 @@
 import './BoardDetailView.css'
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance';
 import CreateListModal from '../createListModal'
 import { TiDelete } from "react-icons/ti";
@@ -27,7 +27,6 @@ function BoardsDetailView() {
   const [cardTitle, setCardTitle] = useState("");
   const [selectedCard, setSelectedCard] = useState(null);
 
-  const navigate = useNavigate();
 
   const fetchBoard = async () => {
     if (!user) {
@@ -163,9 +162,14 @@ function BoardsDetailView() {
   return (
     <div className='board-container-wrapper'>
       <div className='board-header'>
-        <button onClick={() => navigate(-1)}>Back</button>
-        <h2 className='board-title'>Welcome to {board.title}'s Board!</h2>
-        <button onClick={() => setNewListModal(true)}>Create your lists here!</button>
+        <div className='header-info'> 
+          <h1>Welcome to {board.title}'s Board!</h1>
+          <p className="board-description">{board.description || "No description"}</p>
+        </div>
+        <div className='header-buttons'>
+          <Link to="/dashboard" className="back-btn">Back</Link>
+          <button onClick={() => setNewListModal(true)}>Create your lists here!</button>
+        </div>
       </div>
 
       <DragDropContext onDragEnd={handleDragEnd}>
@@ -263,6 +267,11 @@ function BoardsDetailView() {
                                         textClassName="card-title"
                                         refreshBoard={refreshBoard}
                                       />
+                                      
+                                      {/* Card Description */}
+                                      {card.description && (
+                                        <p className="card-item-description">{card.description}</p>
+                                      )}
                                       
                                       {/* Due Date */}
                                       {dueInfo && (
