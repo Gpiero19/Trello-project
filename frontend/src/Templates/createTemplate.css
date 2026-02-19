@@ -56,7 +56,7 @@
 .form-section label {
   display: block;
   margin-bottom: 8px;
-  font-weight: 500;
+  /* font-weight: 500; */
   color: rgba(78, 31, 0, 0.87);
 }
 
@@ -67,11 +67,19 @@
   border: 1px solid #D98324;
   border-radius: 4px;
   font-size: 14px;
+  font-weight: 400;
   transition: border-color 0.2s;
   box-sizing: border-box;
   background-color: white;
   color: #5e6c84;
+}
 
+/* Placeholder styling - no bold, consistent root font */
+.form-section input[type="text"]::placeholder,
+.form-section textarea::placeholder {
+  font-weight: 400;
+  color: #a5adba;
+  opacity: 1;
 }
 
 .form-section input[type="text"]:focus,
@@ -170,7 +178,12 @@
   border: 2px solid #dfe1e6;
   border-radius: 4px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
+}
+
+.list-title-input::placeholder {
+  font-weight: 400;
+  color: #a5adba;
 }
 
 .list-title-input:focus {
@@ -213,25 +226,33 @@
   border: 1px solid #dfe1e6;
   border-radius: 4px;
   font-size: 14px;
+  font-weight: 400;
   margin-bottom: 8px;
   box-sizing: border-box;
   transition: border-color 0.2s;
 }
 
-.card-title-input:focus {
-  border-color: #0079bf;
-  outline: none;
+.card-title-input::placeholder {
+  font-weight: 400;
+  color: #a5adba;
 }
+
 
 .card-description-input {
   width: 100%;
   padding: 8px;
   border: 1px solid #dfe1e6;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: 400;
   resize: none;
   box-sizing: border-box;
   transition: border-color 0.2s;
+}
+
+.card-description-input::placeholder {
+  font-weight: 400;
+  color: #a5adba;
 }
 
 .card-description-input:focus {
@@ -306,7 +327,7 @@
 }
 
 .submit-btn:hover {
-  background-color: #026aa7;
+  background-color: rgba(217, 131, 36, 0.8);
   transform: translateY(-1px);
 }
 

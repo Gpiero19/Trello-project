@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { getTemplates, useTemplate as createBoardFromTemplate, deleteTemplate } from "../api/templates";
 import { useAuth } from "../context/authContext";
 import { useToast } from "../context/ToastContext";
+import { TiDelete } from "react-icons/ti";
 import "./templates.css";
 
 function Templates() {
@@ -121,13 +122,11 @@ function Templates() {
               <div className="template-card-header">
                 <h3>{template.name}</h3>
                 {template.userId === user?.id && (
-                  <button
+                  <TiDelete
                     className="delete-template-btn"
                     onClick={() => handleDeleteTemplate(template.id)}
                     disabled={deletingId === template.id}
-                  >
-                    {deletingId === template.id ? "..." : "×"}
-                  </button>
+                  />
                 )}
               </div>
               <p className="template-description">

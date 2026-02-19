@@ -20,6 +20,78 @@
   color: rgba(78, 31, 0, 0.87);
 }
 
+.header-info .board-description {
+  margin: 0;
+  color: #5e6c84;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  min-height: 24px;
+}
+
+.header-info .board-description:hover {
+  background-color: rgba(9, 30, 66, 0.08);
+}
+
+.board-description-editor {
+  margin-top: 8px;
+}
+
+.board-description-editor textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d98324;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  background-color: white;
+  color: rgba(78, 31, 0, 0.87);
+}
+
+.board-description-editor textarea:focus {
+  outline: none;
+  border-color: #d98324;
+  box-shadow: 0 0 0 2px rgba(217, 131, 36, 0.2);
+}
+
+.board-description-editor .editor-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.board-description-editor .editor-actions button {
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  border: none;
+}
+
+.board-description-editor .editor-actions button:last-child {
+  background-color: #d98324;
+  color: white;
+  border-radius: 20px;
+}
+
+.board-description-editor .editor-actions button:last-child:hover {
+  background-color: rgba(217, 131, 36, 0.8);
+}
+
+.board-description-editor .editor-actions button:first-child {
+  background-color: white;
+  color: #D98324;
+  border: 1px solid #d98324;
+  border-radius: 20px;
+}
+
+.board-description-editor .editor-actions button:first-child:hover {
+  background-color: #dfe1e6;
+}
+
 .header-info .template-description {
   margin: 0;
   color: #5e6c84;

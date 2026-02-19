@@ -1,4 +1,4 @@
-const { Board, List, Card, Label, Comment, User } = require('../models');
+const { Board, List, Card, Label, Comment, User, sequelize } = require('../models');
 const { ok, created, notFound, badRequest, serverError } = require('../middleware/responseFormatter');
 
 exports.createBoard = async (req, res) => {
@@ -127,14 +127,18 @@ exports.reorderBoards = async (req, res) => {
     const { boards } = req.body;
     const userId = req.user?.id;
 
-    const updates = boards.map(({ id, position }) => {
-      return Board.update(
-        { position },
-        { where: { id, userId } }
-      );
+    // Use a transaction to ensure atomicity of position updates
+    await sequelize.transaction(async (transaction) => {
+      const updates = boards.map(({ id, position }) => {
+        return Board.update(
+          { position },
+          { where: { id, userId }, transaction }
+        );
+      });
+
+      await Promise.all(updates);
     });
 
-    await Promise.all(updates);
     return ok(res, null, 'Boards reordered successfully');
   } catch (err) {
     console.error('Error reordering boards', err);

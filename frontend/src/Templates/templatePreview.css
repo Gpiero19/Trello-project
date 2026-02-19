@@ -121,7 +121,7 @@
 .template-list .list-title {
   margin: 0 0 12px 0;
   font-size: 16px;
-  font-weight: 600;
+  /* font-weight: 600; */
   color: rgba(78, 31, 0, 0.87);
   padding: 0 4px;
 }

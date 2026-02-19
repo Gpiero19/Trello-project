@@ -6,6 +6,7 @@ import CreateListModal from '../createListModal'
 import { TiDelete } from "react-icons/ti";
 import { deleteList, updateList } from '../../api/lists';
 import { createCards, deleteCard, updateCardTitle } from '../../api/cards';
+import { updateBoard } from '../../api/boards';
 import InlineEdit from '../InlineEdit/InlineEdit'
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { useAuth } from '../../context/authContext';
@@ -26,6 +27,8 @@ function BoardsDetailView() {
   const [activeListId, setActiveListId] = useState(null);
   const [cardTitle, setCardTitle] = useState("");
   const [selectedCard, setSelectedCard] = useState(null);
+  const [isEditingBoardDescription, setIsEditingBoardDescription] = useState(false);
+  const [boardDescription, setBoardDescription] = useState("");
 
 
   const fetchBoard = async () => {
@@ -36,6 +39,7 @@ function BoardsDetailView() {
     try {
       const res = await axiosInstance.get(`/boards/${boardId}`);
       setBoard(res.data);
+      setBoardDescription(res.data.description || "");
     } catch (err) {
       console.error('Failed to load board details', err);
     }
@@ -44,6 +48,17 @@ function BoardsDetailView() {
   useEffect(() => {
     fetchBoard();
   }, [boardId, user])
+
+  const handleBoardDescriptionSave = async () => {
+    try {
+      await updateBoard(board.id, board.title, boardDescription);
+      setIsEditingBoardDescription(false);
+      setBoard(prev => ({ ...prev, description: boardDescription }));
+      refreshBoard();
+    } catch (err) {
+      console.error('Failed to update board description:', err);
+    }
+  };
 
   const refreshBoard = async () => fetchBoard();
 
@@ -164,7 +179,33 @@ function BoardsDetailView() {
       <div className='board-header'>
         <div className='header-info'> 
           <h1>Welcome to {board.title}'s Board!</h1>
-          <p className="board-description">{board.description || "No description"}</p>
+          {isEditingBoardDescription ? (
+            <div className="board-description-editor">
+              <textarea
+                value={boardDescription}
+                onChange={(e) => setBoardDescription(e.target.value)}
+                placeholder="Add a board description..."
+                rows={3}
+              />
+              <div className="editor-actions">
+                <button onClick={() => {
+                  setIsEditingBoardDescription(false);
+                  setBoardDescription(board.description || "");
+                }}>Cancel</button>
+                <button onClick={handleBoardDescriptionSave}>Save</button>
+              </div>
+            </div>
+          ) : (
+            <p 
+              className="board-description"
+              onClick={() => {
+                setIsEditingBoardDescription(true);
+                setBoardDescription(board.description || "");
+              }}
+            >
+              {board.description || "Click to add a description..."}
+            </p>
+          )}
         </div>
         <div className='header-buttons'>
           <Link to="/dashboard" className="back-btn">Back</Link>
@@ -310,11 +351,11 @@ function BoardsDetailView() {
                                   onChange={(e) => setCardTitle(e.target.value)}
                                 />
                                 <div className='card-input-actions'>
-                                  <button className='add-card-btn' onClick={() => handleAddCard(list.id)}>+</button>
                                   <button className='cancel-card-btn' onClick={() => {
                                     setActiveListId(null);
                                     setCardTitle("");
                                   }}>x</button>
+                                  <button className='add-card-btn' onClick={() => handleAddCard(list.id)}>+</button>
                                 </div>
                               </div>
                             ) : (

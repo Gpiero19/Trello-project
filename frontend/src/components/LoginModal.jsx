@@ -36,7 +36,9 @@ function LoginModal({ onClose }) {
             onChange={(e) => setEmail(e.target.value)} required />
           <input type="password" placeholder="Password" value={password}
             onChange={(e) => setPassword(e.target.value)} required />
-          <button type="button" onClick={onClose}>Cancel</button>
+          <button type="button" onClick={onClose}
+           style={{ backgroundColor: "white", color : "#D98324", border: "1px solid #D98324" }}
+          >Cancel</button>
           <button type="submit">Login</button>
         </form>
       </div>

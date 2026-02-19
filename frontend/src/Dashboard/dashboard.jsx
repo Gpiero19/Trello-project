@@ -86,27 +86,26 @@ function Dashboard () {
       )}
       
       <DragDropContext onDragEnd={handleDragEnd}>
-        <div className="board-container">
-          <Droppable droppableId="dashboard" direction="horizontal">
-            {(provided) => (
-              <div
-                className="boards-container"
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-              >
-                {boards.map((board, position) => (
-                  <Draggable 
-                    key={board.id} 
-                    draggableId={board.id.toString()}
-                    index={position}
-                  >
-                    {(provided) => (
-                      <div 
-                        className="board-card"
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                      >
+        <Droppable droppableId="dashboard" direction="horizontal">
+          {(provided) => (
+            <div
+              className="boards-container"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {boards.map((board, position) => (
+                <Draggable 
+                  key={board.id} 
+                  draggableId={board.id.toString()}
+                  index={position}
+                >
+                  {(provided, snapshot) => (
+                    <div 
+                      className={`board-card ${snapshot.isDragging ? 'dragging' : ''}`}
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
                         <div className="board-card-header">
                           <InlineEdit
                             initialValue={board.title}
@@ -143,7 +142,6 @@ function Dashboard () {
               </div>
             )}
           </Droppable>
-        </div>
       </DragDropContext>
     </div>
   );
