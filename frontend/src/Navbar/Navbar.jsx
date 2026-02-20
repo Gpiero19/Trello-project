@@ -1,6 +1,6 @@
 import './Navbar.css'
 import frelloLogo from './Frello.png';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useState } from "react";
 import RegisterUserModal from "../components/registerUserModal";
 import LoginModal from "../components/LoginModal";
@@ -10,12 +10,14 @@ import { useToast } from '../context/ToastContext';
 function Navbar() {
   const { user, logout } = useAuth();
   const { addToast } = useToast();
+  const navigate = useNavigate();
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
 
   const handleLogout = () => {
     logout();
     addToast("Logged out successfully", "success");
+    navigate("/");
   };
 
 return (
