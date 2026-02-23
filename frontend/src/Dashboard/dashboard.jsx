@@ -24,7 +24,9 @@ function Dashboard () {
       // Load full board data for each guest board
       const fullBoards = guestBoards.map(boardMeta => {
         const fullBoard = getGuestBoard(boardMeta.id);
-        return fullBoard || boardMeta;
+        // Combine metadata (which has isGuest flag) with full board data
+        const combined = { ...boardMeta, ...fullBoard };
+        return combined;
       }).filter(Boolean);
       // Filter out any boards without valid IDs
       const validBoards = fullBoards.filter(b => b && b.id);
@@ -78,8 +80,8 @@ function Dashboard () {
     const [movedBoard] = newBoards.splice(source.index, 1);
     newBoards.splice(destination.index, 0, movedBoard);
 
-    console.log('[DragDebug] Source index:', source.index, 'Destination index:', destination.index);
-    console.log('[DragDebug] Board IDs being sent:', newBoards.map((b, i) => ({ id: b.id, position: i, idType: typeof b.id })));
+    // console.log('[DragDebug] Source index:', source.index, 'Destination index:', destination.index);
+    // console.log('[DragDebug] Board IDs being sent:', newBoards.map((b, i) => ({ id: b.id, position: i, idType: typeof b.id })));
 
     setBoards(newBoards);
 

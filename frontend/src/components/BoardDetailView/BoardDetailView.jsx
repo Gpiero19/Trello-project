@@ -27,6 +27,7 @@ function BoardsDetailView() {
   const navigate = useNavigate();
   const { addToast } = useToast();
   const [board, setBoard] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [NewListModal, setNewListModal] = useState(false);
   const [activeListId, setActiveListId] = useState(null);
   const [cardTitle, setCardTitle] = useState("");
@@ -36,23 +37,25 @@ function BoardsDetailView() {
 
 
   const fetchBoard = async () => {
+    setLoading(true);
     // Check if it's a guest board - load from localStorage
     if (isGuestBoard(boardId)) {
       const guestBoard = getGuestBoard(boardId);
       if (guestBoard) {
         setBoard(guestBoard);
         setBoardDescription(guestBoard.description || "");
-        return;
       } else {
         // Guest board not found in localStorage
         navigate('/');
         addToast("Board not found. It may have been deleted.", "error");
-        return;
       }
+      setLoading(false);
+      return;
     }
     
     // Not a guest board - require login
     if (!user) {
+      setLoading(false);
       addToast("Please login to view this board.", "info");
       navigate('/login');
       return;
@@ -64,6 +67,8 @@ function BoardsDetailView() {
       setBoardDescription(res.data.description || "");
     } catch (err) {
       console.error('Failed to load board details', err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -242,6 +247,15 @@ function BoardsDetailView() {
       isToday
     };
   };
+
+  if (loading) {
+    return (
+      <div className="board-loading">
+        <div className="loading-spinner"></div>
+        <p>Loading board...</p>
+      </div>
+    );
+  }
 
   if (!board) return <p>No board was found ...</p>;
 

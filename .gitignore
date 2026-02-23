@@ -56,5 +56,3 @@ yarn-debug.log*
 
 # ‣ Optional lockfiles (if you want to ignore one)
 yarn.lock
-
-AI_RULES.md

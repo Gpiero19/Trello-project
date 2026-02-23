@@ -34,6 +34,8 @@
   color: #D98324;
   z-index: 10;
   border-radius: 9999px;
+  padding: 6px 16px;
+
 }
 
 .close-btn:hover {
