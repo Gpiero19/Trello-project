@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../api/axiosInstance";
 import { useToast } from "../context/ToastContext";
+import { isGuestBoard, generateGuestId, saveGuestList } from "../api/guestStorage";
 
 function CreateListModal({ onClose, refreshBoard }) {
   const {boardId} = useParams()
@@ -13,7 +14,18 @@ function CreateListModal({ onClose, refreshBoard }) {
     if (!title.trim()) return;
 
     try {
-      await axiosInstance.post("/lists", { title, boardId });
+      if (isGuestBoard(boardId)) {
+        // Guest mode - save to localStorage
+        const newList = {
+          id: generateGuestId(),
+          title: title,
+          Cards: []
+        };
+        await saveGuestList(boardId, newList);
+        addToast("List created successfully!", "success");
+      } else {
+        await axiosInstance.post("/lists", { title, boardId });
+      }
       await refreshBoard();
       onClose();
     } catch (err) {

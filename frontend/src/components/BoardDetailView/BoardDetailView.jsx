@@ -1,6 +1,6 @@
 import './BoardDetailView.css'
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance';
 import CreateListModal from '../createListModal'
 import { TiDelete } from "react-icons/ti";
@@ -12,6 +12,7 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { useAuth } from '../../context/authContext';
 import { useToast } from '../../context/ToastContext';
 import CardDetailModal from '../CardDetailModal/CardDetailModal';
+import { isGuestBoard, getGuestBoard, saveGuestBoard, generateGuestId, deleteGuestList, saveGuestCard, deleteGuestCard } from '../../api/guestStorage';
 
 const PRIORITY_COLORS = {
   low: '#22c55e',
@@ -23,6 +24,7 @@ const PRIORITY_COLORS = {
 function BoardsDetailView() {
   const { user } = useAuth();
   const { boardId } = useParams();
+  const navigate = useNavigate();
   const { addToast } = useToast();
   const [board, setBoard] = useState(null);
   const [NewListModal, setNewListModal] = useState(false);
@@ -34,10 +36,28 @@ function BoardsDetailView() {
 
 
   const fetchBoard = async () => {
+    // Check if it's a guest board - load from localStorage
+    if (isGuestBoard(boardId)) {
+      const guestBoard = getGuestBoard(boardId);
+      if (guestBoard) {
+        setBoard(guestBoard);
+        setBoardDescription(guestBoard.description || "");
+        return;
+      } else {
+        // Guest board not found in localStorage
+        navigate('/');
+        addToast("Board not found. It may have been deleted.", "error");
+        return;
+      }
+    }
+    
+    // Not a guest board - require login
     if (!user) {
-      setBoard({ Lists: [] });
+      addToast("Please login to view this board.", "info");
+      navigate('/login');
       return;
     }
+    
     try {
       const res = await axiosInstance.get(`/boards/${boardId}`);
       setBoard(res.data);
@@ -53,7 +73,16 @@ function BoardsDetailView() {
 
   const handleBoardDescriptionSave = async () => {
     try {
-      await updateBoard(board.id, board.title, boardDescription);
+      if (isGuestBoard(boardId)) {
+        // Guest mode - update in localStorage
+        const guestBoard = getGuestBoard(boardId);
+        if (guestBoard) {
+          guestBoard.description = boardDescription;
+          saveGuestBoard(guestBoard);
+        }
+      } else {
+        await updateBoard(board.id, board.title, boardDescription);
+      }
       setIsEditingBoardDescription(false);
       setBoard(prev => ({ ...prev, description: boardDescription }));
       refreshBoard();
@@ -67,8 +96,13 @@ function BoardsDetailView() {
   const handleDeleteList = async (listId) => {
     if (!window.confirm(`Are you sure you want to delete this list?`)) return;
     try {
-      await deleteList(listId);
-      addToast("List deleted successfully", "success");
+      if (isGuestBoard(boardId)) {
+        await deleteGuestList(boardId, listId);
+        addToast("List deleted successfully", "success");
+      } else {
+        await deleteList(listId);
+        addToast("List deleted successfully", "success");
+      }
       refreshBoard();
     } catch (err) {
       console.error("Failed to delete list:", err);
@@ -79,7 +113,17 @@ function BoardsDetailView() {
   const handleAddCard = async (targetListId) => {
     if (!cardTitle.trim()) return;
     try {
-      await createCards(cardTitle, targetListId, 'medium');
+      if (isGuestBoard(boardId)) {
+        // Guest mode - save card to localStorage
+        const newCard = {
+          id: generateGuestId(),
+          title: cardTitle,
+          priority: 'medium'
+        };
+        await saveGuestCard(boardId, targetListId, newCard);
+      } else {
+        await createCards(cardTitle, targetListId, 'medium');
+      }
       await refreshBoard();
       setCardTitle("");
       setActiveListId(null);
@@ -88,11 +132,16 @@ function BoardsDetailView() {
     }
   };
 
-  const handleDeleteCard = async (cardId) => {
+  const handleDeleteCard = async (cardId, listId) => {
     if (!window.confirm(`Are you sure you want to delete this card?`)) return;
     try {
-      await deleteCard(cardId);
-      addToast("Card deleted successfully", "success");
+      if (isGuestBoard(boardId)) {
+        await deleteGuestCard(boardId, listId, cardId);
+        addToast("Card deleted successfully", "success");
+      } else {
+        await deleteCard(cardId);
+        addToast("Card deleted successfully", "success");
+      }
       refreshBoard();
     } catch (err) {
       console.error("Failed to delete card", err);
@@ -112,10 +161,19 @@ function BoardsDetailView() {
 
       setBoard({ ...board, Lists: newLists });
 
-      await axiosInstance.put("/lists/reorder", {
-        boardId: board.id,
-        lists: newLists.map((l, i) => ({ id: l.id, position: i }))
-      });
+      if (isGuestBoard(boardId)) {
+        // Guest mode - save to localStorage
+        const guestBoard = getGuestBoard(boardId);
+        if (guestBoard) {
+          guestBoard.Lists = newLists;
+          saveGuestBoard(guestBoard);
+        }
+      } else {
+        await axiosInstance.put("/lists/reorder", {
+          boardId: board.id,
+          lists: newLists.map((l, i) => ({ id: l.id, position: i }))
+        });
+      }
       return;
     }
 
@@ -150,15 +208,22 @@ function BoardsDetailView() {
         setBoard({ ...board, Lists: newLists });
       }
 
-      // Update backend positions
-      const updatedCards = [];
-      board.Lists.forEach((list) => {
-        list.Cards.forEach((card, index) => {
-          updatedCards.push({ id: card.id, listId: list.id, position: index });
+      // Save to backend or localStorage
+      if (isGuestBoard(boardId)) {
+        const guestBoard = getGuestBoard(boardId);
+        if (guestBoard) {
+          saveGuestBoard(guestBoard);
+        }
+      } else {
+        const updatedCards = [];
+        board.Lists.forEach((list) => {
+          list.Cards.forEach((card, index) => {
+            updatedCards.push({ id: card.id, listId: list.id, position: index });
+          });
         });
-      });
 
-      await axiosInstance.put("/cards/reorder", { cards: updatedCards });
+        await axiosInstance.put("/cards/reorder", { cards: updatedCards });
+      }
     }
   };
 
@@ -338,7 +403,7 @@ function BoardsDetailView() {
                                         className='delete-card-icon'
                                         onClick={(e) => {
                                           e.stopPropagation();
-                                          handleDeleteCard(card.id);
+                                          handleDeleteCard(card.id, list.id);
                                         }}
                                       />
                                     </div>

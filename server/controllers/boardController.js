@@ -127,9 +127,13 @@ exports.reorderBoards = async (req, res) => {
     const { boards } = req.body;
     const userId = req.user?.id;
 
+    // console.log('[BoardReorder] Received boards:', JSON.stringify(boards));
+    // console.log('[BoardReorder] UserId:', userId);
+
     // Use a transaction to ensure atomicity of position updates
     await sequelize.transaction(async (transaction) => {
       const updates = boards.map(({ id, position }) => {
+        // console.log(`[BoardReorder] Updating board id=${id} (type: ${typeof id}) to position=${position}`);
         return Board.update(
           { position },
           { where: { id, userId }, transaction }

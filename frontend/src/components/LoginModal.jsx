@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useAuth } from "../context/authContext";
 import { useToast } from "../context/ToastContext";
 import axiosInstance from "../api/axiosInstance";
+import { hasGuestBoards, getAllGuestBoardsWithData, clearGuestData } from "../api/guestStorage";
+import { importGuestBoards } from "../api/boards";
 
 function LoginModal({ onClose }) {
   const [email, setEmail] = useState("");
@@ -22,6 +24,23 @@ function LoginModal({ onClose }) {
       }
       login(userData);  // Save user in context
       addToast("Login successful! Welcome " + (userData.name || userData.email), "success");
+      
+      // Check for guest boards and offer to migrate
+      if (hasGuestBoards()) {
+        const migrate = window.confirm("You have guest boards. Would you like to import them to your account?");
+        if (migrate) {
+          const guestBoards = getAllGuestBoardsWithData();
+          const result = await importGuestBoards(guestBoards);
+          if (result.success > 0) {
+            clearGuestData();
+            addToast("Imported " + result.success + " board(s) successfully!", "success");
+            // Refresh the page to show imported boards
+            window.location.reload();
+            return;
+          }
+        }
+      }
+      
       onClose();
     } catch (err) {
       console.error("Login error:", err);

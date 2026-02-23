@@ -1,18 +1,34 @@
 import { useState } from "react";
 import { createBoard } from "../api/boards";
 import { useToast } from "../context/ToastContext";
+import { useAuth } from "../context/authContext";
+import { saveGuestBoard, generateGuestId } from "../api/guestStorage";
 
 function CreateBoardModal({ setBoards: refreshBoards, onClose }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const { addToast } = useToast();
+  const { user } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim()) return;
 
     try {
-      await createBoard(title, description || null);
+      if (!user) {
+        // Guest mode - save to localStorage
+        const newBoard = {
+          id: generateGuestId(),
+          title: title,
+          description: description || null,
+          Lists: []
+        };
+        await saveGuestBoard(newBoard);
+        addToast("Board created successfully!", "success");
+      } else {
+        await createBoard(title, description || null);
+        addToast("Board created successfully!", "success");
+      }
       await refreshBoards();
       setTitle("");
       setDescription("");
@@ -36,6 +52,7 @@ function CreateBoardModal({ setBoards: refreshBoards, onClose }) {
             onChange={(e) => setTitle(e.target.value)}
           />
           <textarea
+            type="text"
             placeholder="Description (optional)"
             value={description}
             maxLength={500}

@@ -72,6 +72,7 @@
   box-sizing: border-box;
   background-color: white;
   color: #5e6c84;
+  font-family: inherit;
 }
 
 /* Placeholder styling - no bold, consistent root font */
@@ -80,6 +81,7 @@
   font-weight: 400;
   color: #a5adba;
   opacity: 1;
+  font-family: inherit;
 }
 
 .form-section input[type="text"]:focus,

@@ -85,6 +85,8 @@ button:focus-visible {
   border-radius: 4px;
   border: 1px solid rgba(78, 31, 0, 0.87);
   color: rgba(78, 31, 0, 0.87);
+  font-family: inherit;
+  font-size: 1rem;
 }
 
 textarea::placeholder,
@@ -92,6 +94,7 @@ input::placeholder {
   font-weight: 500;
   opacity: 0.6;
   color: #a5adba;
+  font-family: inherit;
 }
 
 .modal button {

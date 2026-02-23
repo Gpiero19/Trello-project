@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axiosInstance from "../api/axiosInstance";
 import { useToast } from "../context/ToastContext";
+import { hasGuestBoards } from "../api/guestStorage";
 
 function RegisterUserModal({ onClose }) {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
@@ -18,6 +19,12 @@ function RegisterUserModal({ onClose }) {
       
       // Response is already extracted by interceptor
       addToast(res.data?.message || "User registered successfully!", "success");
+      
+      // Check for guest boards and inform user
+      if (hasGuestBoards()) {
+        addToast("You can login to import your guest boards!", "info");
+      }
+      
       onClose();
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.response?.data?.error || "Registration failed";
