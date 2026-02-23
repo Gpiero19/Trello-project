@@ -103,13 +103,14 @@ function Dashboard () {
       <div className="homepage">
         <h2>Welcome to Frello!</h2>
         <p>
-          Try the app instantly in Guest Mode — no registration required. Use our ready-made templates or create your own boards, lists, and cards.
-        <br />
-          Want to keep your progress and unlock all features? Create an account or log in anytime.
+          Explore the app instantly in <strong>Guest Mode</strong> with limited features — no registration required.
+          <br />
+          Create an account or log in to unlock full functionality, including saving your progress, accessing and creating templates, and fully editing and managing your cards.
         </p>
+        <button className="new-board-button" onClick={() => setNewBoardModal(true)}>+ New Board</button>
+
       </div>
      )}
-      <button onClick={() => setNewBoardModal(true)}>+ New Board</button>
 
       {NewBoardModal && (
         <CreateBoardModal
