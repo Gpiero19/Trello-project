@@ -23,7 +23,7 @@ This project demonstrates a **full-stack web application** with drag-and-drop fu
 ## 🖥️ Live Demo
 
 Try the app online: [**LIVE DEMO LINK HERE**](#)  
-![Demo Screenshot](./screenshots/demo.png)
+![Demo Screenshot](./frontend/public/Screenshot-Frello.png)
 
 ---
 
