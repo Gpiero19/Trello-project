@@ -62,7 +62,14 @@ app.use('/api/templates', templateRoutes);
 app.use(errorHandler);
 
 db.sequelize.authenticate()
-  .then(() => console.log('Database connected.'))
+  .then(() => {
+    console.log('Database connected.');
+    // Run migrations automatically
+    return db.sequelize.migrate();
+  })
+  .then(() => {
+    console.log('Database migrations completed.');
+  })
   .catch(err => console.log('Error: ' + err))
 
   // Start the server
