@@ -22,7 +22,7 @@ This project demonstrates a **full-stack web application** with drag-and-drop fu
 
 ## 🖥️ Live Demo
 
-Try the app online: [https://trello-project-sandy.vercel.app/](#)  
+Try the app online: [LIVE DEMO](https://trello-project-sandy.vercel.app/)  
 ![Demo Screenshot](./frontend/public/Screenshot-Frello.png)
 
 ---
