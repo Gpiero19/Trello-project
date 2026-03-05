@@ -18,7 +18,24 @@ const PORT = process.env.PORT || 3000;
 
 // CORS - allow requests from frontend
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173', 
+  origin: function(origin, callback) {
+    // Allow requests with no origin (mobile apps, curl requests)
+    if (!origin) return callback(null, true);
+    
+    // Get allowed origins
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const allowedOrigins = [
+      'http://localhost:5173',
+      frontendUrl,
+      frontendUrl?.replace(/\/$/, '') // without trailing slash
+    ].filter(Boolean);
+    
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 };
 
