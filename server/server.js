@@ -2,8 +2,10 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const { exec } = require('child_process');
 const db = require('./models');   //sequelize initialize
 const { errorHandler } = require('./middleware/errorHandler');
+const { sequelize } = require('./models');
 
 const authRoutes = require('./routes/auth')
 const boardsRoutes = require('./routes/boardRoutes');
@@ -65,10 +67,13 @@ db.sequelize.authenticate()
   .then(() => {
     console.log('Database connected.');
     // Run migrations automatically
-    return db.sequelize.migrate();
-  })
-  .then(() => {
-    console.log('Database migrations completed.');
+    exec('npx sequelize-cli db:migrate', (error, stdout, stderr) => {
+      if (error) {
+        console.log('Migration error:', stderr);
+      } else {
+        console.log('Migrations completed:', stdout);
+      }
+    });
   })
   .catch(err => console.log('Error: ' + err))
 
