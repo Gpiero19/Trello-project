@@ -107,10 +107,10 @@ function Dashboard () {
           <br />
           Create an account or log in to unlock full functionality, including saving your progress, accessing and creating templates, and fully editing and managing your cards.
         </p>
-        <button className="new-board-button" onClick={() => setNewBoardModal(true)}>+ New Board</button>
-
       </div>
      )}
+
+      <button className="new-board-button" onClick={() => setNewBoardModal(true)}>+ New Board</button>
 
       {NewBoardModal && (
         <CreateBoardModal
