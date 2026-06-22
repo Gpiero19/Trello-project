@@ -233,9 +233,22 @@
   border-radius: 4px;
   min-height: 60px;
   cursor: pointer;
-  white-space: pre-wrap;
   border-left: 3px solid #D98324;
 }
+
+.description-display .description-placeholder {
+  color: #aaa;
+}
+
+.description-display p { margin: 0 0 8px; }
+.description-display p:last-child { margin-bottom: 0; }
+.description-display h1,
+.description-display h2,
+.description-display h3 { margin: 0 0 6px; font-size: 1em; font-weight: 600; }
+.description-display ul,
+.description-display ol { margin: 0 0 8px; padding-left: 20px; }
+.description-display code { background: #f3f3f3; padding: 1px 4px; border-radius: 3px; font-size: 0.85em; }
+.description-display pre { background: #f3f3f3; padding: 8px; border-radius: 4px; overflow-x: auto; }
 
 .description-editor textarea {
   color: #4E1F00;

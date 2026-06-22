@@ -1,5 +1,6 @@
 import './CardDetailModal.css';
 import { useState, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { 
   updateCard, 
   getCardById, 
@@ -296,11 +297,14 @@ function CardDetailModal({ card, onClose, refreshBoard }) {
                   </div>
                 </div>
               ) : (
-                <div 
+                <div
                   className="description-display"
                   onClick={() => setIsEditingDescription(true)}
                 >
-                  {cardData.description || 'Click to add a description...'}
+                  {cardData.description
+                    ? <ReactMarkdown>{cardData.description}</ReactMarkdown>
+                    : <span className="description-placeholder">Click to add a description... (Markdown supported)</span>
+                  }
                 </div>
               )}
             </div>
