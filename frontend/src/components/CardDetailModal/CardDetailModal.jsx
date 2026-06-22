@@ -139,7 +139,6 @@ function CardDetailModal({ card, onClose, refreshBoard }) {
   };
 
   const handleRemoveLabel = async (labelId) => {
-    console.log('Removing label:', labelId, 'from card:', card.id);
     try {
       await removeLabelFromCard(Number(card.id), Number(labelId));
       setLabels(labels.filter(l => l.id !== labelId && l.id !== Number(labelId)));

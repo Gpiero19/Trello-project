@@ -16,10 +16,6 @@ import TemplatePreview from "./Templates/TemplatePreview.jsx";
 import CreateTemplate from "./Templates/CreateTemplate.jsx";
 
 
-// npx vite
-// npm start
-
-
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>

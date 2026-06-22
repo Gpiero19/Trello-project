@@ -57,7 +57,7 @@ function BoardsDetailView() {
     if (!user) {
       setLoading(false);
       addToast("Please login to view this board.", "info");
-      navigate('/login');
+      navigate('/dashboard');
       return;
     }
     
@@ -197,31 +197,30 @@ function BoardsDetailView() {
       const sourceCards = Array.from(sourceList.Cards);
       const [movedCard] = sourceCards.splice(source.index, 1);
 
+      const newLists = [...board.Lists];
+
       if (source.droppableId === destination.droppableId) {
-        // Reorder within same list
         sourceCards.splice(destination.index, 0, movedCard);
-        const newLists = [...board.Lists];
-        newLists[sourceListIndex].Cards = sourceCards;
-        setBoard({ ...board, Lists: newLists });
+        newLists[sourceListIndex] = { ...newLists[sourceListIndex], Cards: sourceCards };
       } else {
-        // Move to another list
         const destCards = Array.from(destList.Cards);
         destCards.splice(destination.index, 0, movedCard);
-        const newLists = [...board.Lists];
-        newLists[sourceListIndex].Cards = sourceCards;
-        newLists[destListIndex].Cards = destCards;
-        setBoard({ ...board, Lists: newLists });
+        newLists[sourceListIndex] = { ...newLists[sourceListIndex], Cards: sourceCards };
+        newLists[destListIndex] = { ...newLists[destListIndex], Cards: destCards };
       }
+
+      setBoard({ ...board, Lists: newLists });
 
       // Save to backend or localStorage
       if (isGuestBoard(boardId)) {
         const guestBoard = getGuestBoard(boardId);
         if (guestBoard) {
+          guestBoard.Lists = newLists;
           saveGuestBoard(guestBoard);
         }
       } else {
         const updatedCards = [];
-        board.Lists.forEach((list) => {
+        newLists.forEach((list) => {
           list.Cards.forEach((card, index) => {
             updatedCards.push({ id: card.id, listId: list.id, position: index });
           });

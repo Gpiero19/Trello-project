@@ -1,125 +1,121 @@
-# Trello-Style Board Project 🗂️
+# Frello — Kanban Board App
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Frontend](https://img.shields.io/badge/frontend-React-blue)](#)
-[![Backend](https://img.shields.io/badge/backend-Node.js-green)](#)
+[![Frontend](https://img.shields.io/badge/frontend-React_19-blue)](#)
+[![Backend](https://img.shields.io/badge/backend-Node.js_+_Express-green)](#)
 
-A **Trello-inspired board & card management application** built with React and Node.js.  
-This project demonstrates a **full-stack web application** with drag-and-drop functionality, dynamic board/list/card management, and real-time ordering.
-
----
-
-## 🌟 Features
-
-- Create, update, and delete **boards**, **lists**, and **cards**  
-- Drag-and-drop to reorder **boards** and **lists** horizontally  
-- Drag-and-drop to reorder **cards** within the same list or move to another list  
-- Inline editing of list and card titles  
-- Responsive design for desktop and mobile  
-- Maintains order persistence in the backend database (PostgreSQL/SQLite)
+A **Trello-inspired kanban board application** built with React and Node.js. Supports full board/list/card management with drag-and-drop, user authentication, labels, comments, due dates, priorities, and reusable templates.
 
 ---
 
-## 🖥️ Live Demo
+## Live Demo
 
-Try the app online: [LIVE DEMO](https://trello-project-sandy.vercel.app/)  
+[https://trello-project-sandy.vercel.app/](https://trello-project-sandy.vercel.app/)
+
+> No account needed — use **Guest Mode** to try the app instantly.
+
 ![Demo Screenshot](./frontend/public/Screenshot-Frello.png)
 
 ---
 
-## 🛠️ Tech Stack
+## Features
 
-**Frontend:**  
-- React  
-- Tailwind CSS / Custom CSS  
-- React Icons  
-- @hello-pangea/dnd (Drag-and-drop library)
-
-**Backend:**  
-- Node.js  
-- Express  
-- Sequelize ORM  
-- PostgreSQL / SQLite  
-
-**Others:**  
-- Axios for API requests  
-- Git & GitHub for version control  
+- **Authentication** — register, login, JWT-based sessions
+- **Guest Mode** — fully functional boards stored in localStorage, no account required
+- **Boards** — create, rename, delete, and drag-and-drop to reorder
+- **Lists** — create, rename, delete, and drag-and-drop to reorder horizontally
+- **Cards** — create, rename, delete, and drag-and-drop within or between lists
+- **Card Details** — description, priority levels, due dates with overdue indicators, color labels, comments
+- **Templates** — save boards as reusable templates; browse and apply public templates
+- **Responsive design** — works on desktop and mobile
 
 ---
 
-## 🚀 Getting Started
+## Tech Stack
+
+**Frontend**
+- React 19, React Router 7
+- @hello-pangea/dnd (drag and drop)
+- Axios, React Icons
+- Vite 6, Custom CSS
+
+**Backend**
+- Node.js, Express 5
+- Sequelize 6 ORM, PostgreSQL
+- bcrypt, jsonwebtoken, Joi
+
+**Deployment**
+- Frontend: Vercel
+- Backend: Render
+
+---
+
+## Getting Started
 
 ### Prerequisites
 
-- Node.js >= 18  
-- npm >= 9  
-- PostgreSQL installed locally (or SQLite alternative)
+- Node.js >= 18
+- npm >= 9
+- PostgreSQL running locally
 
-### Installation
+### Backend setup
 
-1. **Clone the repository**
-
-bash
-git clone https://github.com/Gpiero19/Trello-project.git
-cd Trello-project
-
-Setup Backend
-
-bash
-Copy code
+```bash
 cd server
 npm install
 cp .env.example .env
-# Update .env with your database credentials
-npm run dev
+# Edit .env with your database credentials
+npm start
+```
 
-Setup Frontend
+### Frontend setup
 
-bash
-Copy code
-cd ../frontend
+```bash
+cd frontend
 npm install
-npx vite
-Open http://localhost:5173 in your browser.
+cp .env.example .env
+# Edit .env with your backend URL (default: http://localhost:3000/api)
+npm run dev
+```
 
-📦 API Endpoints
-Boards
+Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-GET /boards/:id → Fetch a board with its lists & cards
+---
 
-POST /boards → Create a new board
+## Project Structure
 
-Lists
+```
+/frontend        # React + Vite application
+/server          # Node.js + Express API
+  /controllers   # Route handlers (boards, lists, cards, templates, auth)
+  /models        # Sequelize models
+  /middleware    # Auth, validation, response formatting
+  /routes        # Express routers
+```
 
-PUT /lists/reorder → Update the order of lists
+---
 
-CRUD endpoints for lists
+## API Overview
 
-Cards
+| Resource | Endpoints |
+|---|---|
+| Auth | `POST /api/auth/register`, `POST /api/auth/login` |
+| Boards | `GET/POST /api/boards`, `GET/PUT/DELETE /api/boards/:id`, `PUT /api/boards/reorder` |
+| Lists | `GET/POST /api/lists`, `PUT/DELETE /api/lists/:id`, `PUT /api/lists/reorder` |
+| Cards | `GET/POST /api/cards`, `PUT/DELETE /api/cards/:id`, `PUT /api/cards/reorder` |
+| Labels | `GET/POST /api/labels`, `POST/DELETE /api/cards/:id/labels` |
+| Comments | `GET/POST /api/cards/:id/comments`, `DELETE /api/comments/:id` |
+| Templates | `GET/POST /api/templates`, `GET/PUT/DELETE /api/templates/:id`, `POST /api/templates/:id/use` |
 
-PUT /cards/reorder → Update order of cards across lists
+---
 
-CRUD endpoints for cards
+## Author
 
-🧩 Project Structure
-bash
-Copy code
-/frontend        # React application
-/backend         # Node.js + Express API
-/models          # Sequelize models
-/controllers     # Controllers for boards, lists, cards
-/api             # Axios requests from frontend
+**Gian Piero Canevari**
+- GitHub: [Gpiero19](https://github.com/Gpiero19)
 
-✅ Future Improvements
+---
 
-Unit and integration testing
+## License
 
-📌 Author
-Gian Piero Canevari
-
-GitHub: Gpiero19
-
-Portfolio: https://github.com/Gpiero19
-
-📄 License
 This project is licensed under the MIT License.

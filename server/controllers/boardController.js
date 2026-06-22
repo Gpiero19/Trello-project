@@ -86,7 +86,7 @@ exports.getBoardById = async (req, res) => {
 
 exports.updateBoard = async (req, res) => {
   const { id } = req.params;
-  const { title, description, userId } = req.body;
+  const { title, description } = req.body;
 
   try {
     const board = await Board.findByPk(id);
@@ -94,7 +94,6 @@ exports.updateBoard = async (req, res) => {
 
     if (title !== undefined) board.title = title;
     if (description !== undefined) board.description = description;
-    if (userId !== undefined) board.userId = userId;
 
     await board.save();
     return ok(res, board, 'Board updated successfully');
