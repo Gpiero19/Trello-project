@@ -127,6 +127,20 @@
   padding: 0px 60px 10px;
 }
 
+@media (max-width: 640px) {
+  .homepage {
+    padding: 0 16px 10px;
+  }
+
+  .homepage h2 {
+    font-size: 22px;
+  }
+
+  .view-container-wrapper {
+    padding: 12px;
+  }
+}
+
 .homepage h2 {
   font-size: 28px;
   color: #333;

@@ -72,3 +72,29 @@ button {
 button:hover {
   background-color: rgba(217, 131, 36, 0.8);
 }
+
+@media (max-width: 640px) {
+  .navbar {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 12px;
+  }
+
+  .user-name {
+    display: none;
+  }
+
+  .left-panel li {
+    padding: 0 0.4em;
+  }
+
+  .navbar li, .navbar a {
+    font-size: 14px;
+  }
+
+  button {
+    padding: 7px 14px;
+    font-size: 13px;
+    margin-left: 8px;
+  }
+}

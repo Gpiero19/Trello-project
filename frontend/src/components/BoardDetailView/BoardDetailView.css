@@ -410,15 +410,28 @@
     flex-direction: column;
     gap: 16px;
   }
-  
+
   .header-buttons {
     width: 100%;
   }
-  
+
   .header-buttons .back-btn,
   .header-buttons {
     flex: 1;
     text-align: center;
   }
-  
+
+  .list-container {
+    min-width: 240px;
+    max-width: 240px;
+  }
+
+  /* Always show delete icons on touch — no hover state on mobile */
+  .delete-card-icon {
+    opacity: 1;
+  }
+
+  .board-container-wrapper {
+    padding: 12px;
+  }
 }
