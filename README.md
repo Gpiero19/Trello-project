@@ -10,7 +10,7 @@ A **Trello-inspired kanban board application** built with React and Node.js. Sup
 
 ## Live Demo
 
-[https://trello-project-sandy.vercel.app/](https://trello-project-sandy.vercel.app/)
+[https://frello.canevarigian.dev/](https://frello.canevarigian.dev/)
 
 > No account needed — use **Guest Mode** to try the app instantly.
 
