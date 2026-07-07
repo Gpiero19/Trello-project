@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
 const { exec } = require('child_process');
 const db = require('./models');   //sequelize initialize
 const { errorHandler } = require('./middleware/errorHandler');
@@ -23,25 +24,18 @@ const corsOptions = {
   origin: function(origin, callback) {
     // Allow requests with no origin (mobile apps, curl requests)
     if (!origin) return callback(null, true);
-    
+
     // Get allowed origins
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
-    const allowedOrigins = [
-      'http://localhost:5173',
-      frontendUrl,
-      frontendUrl?.replace(/\/$/, '') // without trailing slash
-    ].filter(Boolean);
-    
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
+    const frontendUrl = process.env.FRONTEND_URL;
+    if (process.env.NODE_ENV !== 'production' && /^http:\/\/localhost:\d+$/.test(origin)) return callback(null, true);
+    if (frontendUrl && origin === frontendUrl.replace(/\/$/, '')) return callback(null, true);
+    callback(new Error('Not allowed by CORS'));
   },
   credentials: true
 };
 
 // Middleware
+app.use(helmet());
 app.use(cors(corsOptions));
 
 app.use(express.json());  // Parse JSON bodies

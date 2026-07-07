@@ -17,13 +17,13 @@ router.delete('/comments/:id', authenticateToken, commentController.deleteCommen
 
 // Nested routes for comments - MUST come after /comments/:id
 // GET /cards/:cardId/comments - Get comments for card
-router.get('/:cardId/comments', authenticateToken, cardController.getComments);
+router.get('/:cardId/comments', authenticateToken, authorizeBoardMember, cardController.getComments);
 
 // POST /cards/:cardId/comments - Create comment
-router.post('/:cardId/comments', authenticateToken, validateComment, cardController.createComment);
+router.post('/:cardId/comments', authenticateToken, authorizeBoardMember, validateComment, cardController.createComment);
 
 // GET /cards/:id - Get single card
-router.get('/:id', authenticateToken, cardController.getCardById);
+router.get('/:id', authenticateToken, authorizeCardEdit, cardController.getCardById);
 
 // PATCH /cards/:id - Partial update
 router.patch('/:id', authenticateToken, authorizeCardEdit, validateCardUpdate, cardController.updateCard);

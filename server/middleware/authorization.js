@@ -141,9 +141,43 @@ const authorizeSensitiveFields = async (req, res, next) => {
   next();
 };
 
+// Middleware: authorize board member for a list route keyed by :id
+const authorizeListMember = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const list = await List.findByPk(req.params.id, {
+      include: [{ model: Board, as: 'Board' }]
+    });
+    if (!list) {
+      return notFound(res, 'List not found', 'No list found with this ID');
+    }
+
+    const isMember = await checkBoardMembership(userId, list.boardId);
+    if (!isMember) {
+      return forbidden(res, 'Not authorized', 'You are not a member of this board');
+    }
+
+    req.list = list;
+    next();
+  } catch (err) {
+    console.error('Authorization error:', err);
+    return serverError(res, 'Authorization failed');
+  }
+};
+
+// Middleware: only the account owner can view/edit/delete their own user record
+const requireSelf = (req, res, next) => {
+  if (req.user.id !== parseInt(req.params.id)) {
+    return forbidden(res, 'Not authorized', 'You can only access your own account');
+  }
+  next();
+};
+
 module.exports = {
   checkBoardMembership,
   authorizeBoardMember,
+  authorizeListMember,
   authorizeCardEdit,
-  authorizeSensitiveFields
+  authorizeSensitiveFields,
+  requireSelf
 };

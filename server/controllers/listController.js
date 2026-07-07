@@ -1,9 +1,16 @@
-const { List, Card } = require('../models');
-const { ok, created, notFound, serverError } = require('../middleware/responseFormatter');
+const { List, Card, Board } = require('../models');
+const { ok, created, notFound, forbidden, serverError } = require('../middleware/responseFormatter');
 
 exports.createList = async (req, res) => {
   try {
     const { title, boardId } = req.body;
+
+    const board = await Board.findByPk(boardId);
+    if (!board) return notFound(res, 'Board not found', 'No board found with this ID');
+    if (board.userId !== req.user.id) {
+      return forbidden(res, 'Not authorized', 'You are not a member of this board');
+    }
+
     const maxPosition = await List.max('position', {where: { boardId }});
     const position = Number.isFinite(maxPosition) ? maxPosition + 1 : 0;
     const list = await List.create({ title, boardId, position });
@@ -16,36 +23,26 @@ exports.createList = async (req, res) => {
 
 exports.getAllLists = async (req, res) => {
     try {
-        const lists = await List.findAll();
+        const lists = await List.findAll({
+          include: [{ model: Board, as: 'Board', where: { userId: req.user.id }, attributes: [] }]
+        });
         return ok(res, lists);
     } catch (err) {
         console.error('Error fetching lists', err);
         return serverError(res, 'Failed to fetch lists');
-    } 
+    }
 };
 
+// req.list is populated by the authorizeListMember middleware
 exports.getListById = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const list = await List.findByPk(id);
-    if (!list) return notFound(res, 'List not found', 'No list found with this ID');
-    return ok(res, list);
-  } catch (err) {
-    console.error('Error fetching list:', err);
-    return serverError(res, 'Failed to fetch list');
-  }
+  return ok(res, req.list);
 };
 
 exports.updateList = async (req, res) => {
-  const { id } = req.params;
   const { title } = req.body;
 
   try {
-    const list = await List.findOne({
-      where: { id },
-    });
-    if (!list) return notFound(res, 'List not found', 'No list found with this ID');
+    const list = req.list;
     list.title = title;
     await list.save();
     return ok(res, list, 'List updated successfully');
@@ -56,15 +53,8 @@ exports.updateList = async (req, res) => {
 };
 
 exports.deleteList = async (req, res) => {
-  const { id } = req.params;
-
   try {
-    const list = await List.findOne({
-      where: { id },
-    });
-    if (!list) return notFound(res, 'List not found', 'No list found with this ID');
-
-    await list.destroy();
+    await req.list.destroy();
     return res.status(204).send();
   } catch (err) {
     console.error('Error deleting list:', err);
@@ -74,10 +64,21 @@ exports.deleteList = async (req, res) => {
 
 exports.reorderLists = async (req, res) => {
   try {
-    const { boardId, lists} = req.body;
+    const { boardId, lists } = req.body;
+
+    const board = await Board.findByPk(boardId);
+    if (!board || board.userId !== req.user.id) {
+      return forbidden(res, 'Not authorized', 'You are not a member of this board');
+    }
+
+    const listIds = lists.map(({ id }) => id);
+    const ownedCount = await List.count({ where: { id: listIds, boardId } });
+    if (ownedCount !== listIds.length) {
+      return forbidden(res, 'Not authorized', 'All lists must belong to the specified board');
+    }
 
     const updates = lists.map(({ id, position }) =>
-      List.update({ position }, { where: { id }}));
+      List.update({ position }, { where: { id, boardId }}));
     await Promise.all(updates);
     return ok(res, null, 'Lists reordered successfully');
   } catch (err) {

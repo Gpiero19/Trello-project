@@ -29,6 +29,7 @@ exports.getAllCards = asyncHandler(async (req, res) => {
   
   if (listId) where.listId = parseInt(listId);
   if (boardId) boardWhere.id = parseInt(boardId);
+  boardWhere.userId = req.user.id;
   if (priority) where.priority = priority;
   if (assignedUser) where.assignedUserId = parseInt(assignedUser);
   
@@ -462,14 +463,33 @@ exports.createComment = asyncHandler(async (req, res) => {
 // Reorder cards (bulk update)
 exports.reorderCards = asyncHandler(async (req, res) => {
   const { cards } = req.body;
-  
+  const userId = req.user.id;
+
+  const cardIds = cards.map(({ id }) => id);
+  const listIds = [...new Set(cards.map(({ listId }) => listId))];
+
+  const [ownedCardCount, ownedListCount] = await Promise.all([
+    Card.count({
+      where: { id: cardIds },
+      include: [{ model: List, as: 'list', required: true, include: [{ model: Board, as: 'Board', required: true, where: { userId } }] }]
+    }),
+    List.count({
+      where: { id: listIds },
+      include: [{ model: Board, as: 'Board', required: true, where: { userId } }]
+    })
+  ]);
+
+  if (ownedCardCount !== cardIds.length || ownedListCount !== listIds.length) {
+    return forbidden(res, 'Not authorized', 'You cannot reorder these cards');
+  }
+
   const updates = cards.map(({ id, listId, position }) =>
     Card.update(
       { listId, position },
       { where: { id } }
     )
   );
-  
+
   await Promise.all(updates);
   return ok(res, null, 'Cards reordered successfully');
 });

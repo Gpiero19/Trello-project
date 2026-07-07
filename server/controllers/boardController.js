@@ -87,9 +87,10 @@ exports.getBoardById = async (req, res) => {
 exports.updateBoard = async (req, res) => {
   const { id } = req.params;
   const { title, description } = req.body;
+  const userId = req.user?.id;
 
   try {
-    const board = await Board.findByPk(id);
+    const board = await Board.findOne({ where: { id, userId } });
     if (!board) return notFound(res, 'Board not found', 'No board found with this ID');
 
     if (title !== undefined) board.title = title;
