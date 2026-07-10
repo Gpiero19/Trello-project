@@ -29,7 +29,11 @@ const corsOptions = {
     const frontendUrl = process.env.FRONTEND_URL;
     if (process.env.NODE_ENV !== 'production' && /^http:\/\/localhost:\d+$/.test(origin)) return callback(null, true);
     if (frontendUrl && origin === frontendUrl.replace(/\/$/, '')) return callback(null, true);
-    callback(new Error('Not allowed by CORS'));
+    console.error(`CORS rejected origin "${origin}" (FRONTEND_URL="${frontendUrl}")`);
+    const err = new Error('Not allowed by CORS');
+    err.statusCode = 403;
+    err.isOperational = true;
+    callback(err);
   },
   credentials: true
 };
