@@ -4,6 +4,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance';
 import CreateListModal from '../createListModal'
 import { TiDelete } from "react-icons/ti";
+import { FaRegCalendarAlt, FaRegCommentDots } from "react-icons/fa";
 import { deleteList, updateList } from '../../api/lists';
 import { createCards, deleteCard, updateCardTitle } from '../../api/cards';
 import { updateBoard } from '../../api/boards';
@@ -13,6 +14,7 @@ import { useAuth } from '../../context/authContext';
 import { useToast } from '../../context/ToastContext';
 import CardDetailModal from '../CardDetailModal/CardDetailModal';
 import { isGuestBoard, getGuestBoard, saveGuestBoard, generateGuestId, deleteGuestList, saveGuestCard, deleteGuestCard } from '../../api/guestStorage';
+import Skeleton from '../ui/Skeleton';
 
 const PRIORITY_COLORS = {
   low: '#22c55e',
@@ -249,9 +251,23 @@ function BoardsDetailView() {
 
   if (loading) {
     return (
-      <div className="board-loading">
-        <div className="loading-spinner"></div>
-        <p>Loading board...</p>
+      <div className="board-container-wrapper">
+        <div className="board-header">
+          <div className="header-info">
+            <Skeleton style={{ width: '220px', height: '28px', marginBottom: '8px' }} />
+            <Skeleton style={{ width: '340px', height: '16px' }} />
+          </div>
+        </div>
+        <div className="board-container-view">
+          {[0, 1, 2, 3].map((listIdx) => (
+            <div className="list-container" key={listIdx}>
+              <Skeleton style={{ width: '60%', height: '16px', marginBottom: '12px' }} />
+              {[0, 1, 2].map((cardIdx) => (
+                <Skeleton key={cardIdx} style={{ width: '100%', height: '52px', marginBottom: '8px' }} />
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
@@ -269,6 +285,7 @@ function BoardsDetailView() {
                 value={boardDescription}
                 onChange={(e) => setBoardDescription(e.target.value)}
                 placeholder="Add a board description..."
+                aria-label="Board description"
                 rows={3}
               />
               <div className="editor-actions">
@@ -331,7 +348,16 @@ function BoardsDetailView() {
                         />
                         <TiDelete
                           className='list-delete-icon'
+                          role="button"
+                          tabIndex={0}
+                          aria-label={`Delete list "${list.title}"`}
                           onClick={() => handleDeleteList(list.id)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              handleDeleteList(list.id);
+                            }
+                          }}
                         />
                       </div>
 
@@ -401,18 +427,28 @@ function BoardsDetailView() {
                                       {/* Due Date */}
                                       {dueInfo && (
                                         <span className={`due-date-badge ${dueInfo.isOverdue ? 'overdue' : ''} ${dueInfo.isToday ? 'today' : ''}`}>
-                                          📅 {dueInfo.text}
+                                          <FaRegCalendarAlt aria-hidden="true" /> {dueInfo.text}
                                         </span>
                                       )}
                                       
                                       {/* Comments Count */}
                                       {card.comments && card.comments.length > 0 && (
                                         <span className="comments-count">
-                                          💬 {card.comments.length}
+                                          <FaRegCommentDots aria-hidden="true" /> {card.comments.length}
                                         </span>
                                       )}
                                       
                                       <TiDelete
+                                        role="button"
+                                        tabIndex={0}
+                                        aria-label={`Delete card "${card.title}"`}
+                                        onKeyDown={(e) => {
+                                          if (e.key === "Enter" || e.key === " ") {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            handleDeleteCard(card.id, list.id);
+                                          }
+                                        }}
                                         className='delete-card-icon'
                                         onClick={(e) => {
                                           e.stopPropagation();
@@ -432,6 +468,7 @@ function BoardsDetailView() {
                                   type='text'
                                   value={cardTitle}
                                   placeholder='Card name'
+                                  aria-label='Card name'
                                   onChange={(e) => setCardTitle(e.target.value)}
                                 />
                                 <div className='card-input-actions'>

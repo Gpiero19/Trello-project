@@ -27,6 +27,14 @@ const PRIORITY_LABELS = {
 };
 
 function CardDetailModal({ card, onClose, refreshBoard }) {
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [onClose]);
+
   const [cardData, setCardData] = useState(card);
   const [comments, setComments] = useState(card.comments || []);
   const [labels, setLabels] = useState(card.labels || []);
@@ -194,12 +202,13 @@ function CardDetailModal({ card, onClose, refreshBoard }) {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="card-detail-modal" onClick={e => e.stopPropagation()}>
-        <button className="close-btn" onClick={onClose}>×</button>
-        
+        <button className="close-btn" aria-label="Close" onClick={onClose}>×</button>
+
         <div className="modal-header">
           <input
             type="text"
             className="card-title-input"
+            aria-label="Card title"
             value={cardData.title}
             onChange={(e) => setCardData({ ...cardData, title: e.target.value })}
             onBlur={() => {
@@ -266,11 +275,13 @@ function CardDetailModal({ card, onClose, refreshBoard }) {
                     <input
                       type="text"
                       placeholder="New label name"
+                      aria-label="New label name"
                       value={newLabelName}
                       onChange={(e) => setNewLabelName(e.target.value)}
                     />
                     <input
                       type="color"
+                      aria-label="New label color"
                       value={newLabelColor}
                       onChange={(e) => setNewLabelColor(e.target.value)}
                     />
@@ -289,6 +300,7 @@ function CardDetailModal({ card, onClose, refreshBoard }) {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Add a description (Markdown supported)..."
+                    aria-label="Card description"
                     rows={5}
                   />
                   <div className="editor-actions">
@@ -317,6 +329,7 @@ function CardDetailModal({ card, onClose, refreshBoard }) {
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
                   placeholder="Write a comment..."
+                  aria-label="Write a comment"
                   rows={3}
                 />
                 <button type="submit" disabled={!newComment.trim()}>Add Comment</button>

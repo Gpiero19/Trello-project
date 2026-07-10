@@ -1,5 +1,6 @@
 import {useState, useEffect} from "react";
 import { FaEdit } from "react-icons/fa";
+import "./InlineEdit.css";
 
 export default function InlineEdit({ 
     initialValue, 
@@ -23,6 +24,7 @@ export default function InlineEdit({
     };
 
      const handleKeyDown = (e) => {
+        e.stopPropagation();
         if (e.key === "Enter") handleSave()
         if (e.key === "Escape") {
             setValue(initialValue);
@@ -36,7 +38,9 @@ export default function InlineEdit({
                 <input
                 type="text"
                 value={value}
+                aria-label="Edit title"
                 onChange={(e) => setValue(e.target.value)}
+                onClick={(e) => e.stopPropagation()}
                 onBlur={handleSave}
                 onKeyDown={handleKeyDown}
                 autoFocus
@@ -46,8 +50,20 @@ export default function InlineEdit({
                     {initialValue}
                     <FaEdit
                     className="edit-icon"
-                    onClick={() => setIsEditing(true)}
-                    style={{ marginLeft:"6px", cursor:"pointer" }}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Edit "${initialValue}"`}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setIsEditing(true);
+                    }}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setIsEditing(true);
+                        }
+                    }}
                     />
                 </span>
             )}

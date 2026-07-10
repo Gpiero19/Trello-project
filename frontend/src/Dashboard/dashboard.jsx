@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd"
 import { getBoards, deleteBoard, updateBoard } from "../api/boards";
 import CreateBoardModal from "../components/createBoardModal";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { TiDelete } from "react-icons/ti";
 import InlineEdit from '../components/InlineEdit/InlineEdit';
 import axiosInstance from '../api/axiosInstance';
@@ -14,6 +14,7 @@ import { getGuestBoards, deleteGuestBoard, updateGuestBoardTitle, isGuestBoard, 
 function Dashboard () {
   const { user } = useAuth();
   const { addToast } = useToast();
+  const navigate = useNavigate();
   const [boards, setBoards] = useState([]);
   const [NewBoardModal, setNewBoardModal] = useState(false);
 
@@ -135,11 +136,21 @@ function Dashboard () {
                   index={position}
                 >
                   {(provided, snapshot) => (
-                    <div 
+                    <div
                       className={`board-card ${snapshot.isDragging ? 'dragging' : ''}`}
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
+                      role="link"
+                      tabIndex={0}
+                      aria-label={`Open board "${board.title}"`}
+                      onClick={() => navigate(`/boards/${board.id}`)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          navigate(`/boards/${board.id}`);
+                        }
+                      }}
                     >
                         <div className="board-card-header">
                           <InlineEdit
@@ -158,14 +169,24 @@ function Dashboard () {
                             textClassName="board-title"
                           />
                           {board.isGuest && <span className="guest-badge">Guest</span>}
-                          <TiDelete className='delete-icon' 
+                          <TiDelete className='delete-icon'
+                            role="button"
+                            tabIndex={0}
+                            aria-label={`Delete board "${board.title}"`}
                             onClick={(e) => {
                               e.stopPropagation();
                               handleDeleteBoard(board.id);
-                            }} 
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                handleDeleteBoard(board.id);
+                              }
+                            }}
                           />
                         </div>
-                        <Link to={`/boards/${board.id}`} className='board-card-link'>
+                        <div className='board-card-link'>
                           {board.description && <p className='board-description'>{board.description}</p>}
                           <div className="board-stats">
                             <span>{board.Lists?.length || 0} lists</span>
@@ -173,7 +194,7 @@ function Dashboard () {
                               {board.Lists?.reduce((acc, list) => acc + (list.Cards?.length || 0), 0) || 0} cards
                             </span>
                           </div>
-                        </Link>
+                        </div>
                       </div>
                     )}
                   </Draggable>

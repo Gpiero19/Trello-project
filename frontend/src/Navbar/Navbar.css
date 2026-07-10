@@ -1,8 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;1,500&display=swap');
-
-/* colors for website
-https://colorhunt.co/palette/f8f4e1feba1774512d4e1f00 */
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -10,12 +5,12 @@ https://colorhunt.co/palette/f8f4e1feba1774512d4e1f00 */
 }
 
 .navbar {
-  background-color: #4E1F00;
+  background-color: var(--brand-brown-dark);
   min-height: 3.5em;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px;
+  padding: var(--space-2);
 }
 
 .logo {
@@ -31,14 +26,14 @@ https://colorhunt.co/palette/f8f4e1feba1774512d4e1f00 */
   height: 30px;
 }
 .user-name {
-  color: #edf0f1;
+  color: var(--text-on-dark);
   cursor: default;
 }
 .navbar li, .navbar a {
-  font-family: "Montserrat", sans-serif;
-  font-weight: 500;
-  font-size: 16px;
-  color: #edf0f1;
+  font-family: var(--font-display);
+  font-weight: var(--weight-medium);
+  font-size: var(--text-base);
+  color: var(--text-on-dark);
   text-decoration: none;
 }
 
@@ -51,26 +46,22 @@ https://colorhunt.co/palette/f8f4e1feba1774512d4e1f00 */
   padding: 0 1em;
 }
 
-.left-panel li a{
-  transition: all 0.3s ease 0s;
+.left-panel li a {
+  transition: color var(--dur-slow) var(--ease-out);
 }
 
-.left-panel li a:hover .logo:hover{
-  color: #D98324;
+.left-panel li a:hover {
+  color: var(--brand-gold);
 }
 
-button {
+.left-panel li a.active {
+  color: var(--brand-gold);
+  font-weight: var(--weight-semibold);
+}
+
+.right-panel button {
   padding: 9px 25px;
-  background-color: #D98324;
-  border-radius: 20px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease 0s;
-  margin-left: 20px;
-}
-
-button:hover {
-  background-color: rgba(217, 131, 36, 0.8);
+  margin-left: var(--space-5);
 }
 
 @media (max-width: 640px) {
@@ -89,12 +80,12 @@ button:hover {
   }
 
   .navbar li, .navbar a {
-    font-size: 14px;
+    font-size: var(--text-sm);
   }
 
-  button {
+  .right-panel button {
     padding: 7px 14px;
-    font-size: 13px;
-    margin-left: 8px;
+    font-size: var(--text-xs);
+    margin-left: var(--space-2);
   }
 }

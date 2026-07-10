@@ -10,25 +10,25 @@
 
 .toast {
   padding: 14px 20px;
-  border-radius: 8px;
-  color: white;
-  font-weight: 500;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  animation: slideIn 0.3s ease-out;
+  border-radius: var(--radius-md);
+  color: var(--text-on-brand);
+  font-weight: var(--weight-medium);
+  box-shadow: var(--shadow-2);
+  animation: slideIn var(--dur-slow) var(--ease-out);
   cursor: pointer;
   min-width: 250px;
 }
 
 .toast-success {
-  background-color: #22c55e;
+  background-color: var(--color-success);
 }
 
 .toast-error {
-  background-color: #ef4444;
+  background-color: var(--color-danger);
 }
 
 .toast-info {
-  background-color: #3b82f6;
+  background-color: var(--brand-brown);
 }
 
 @keyframes slideIn {

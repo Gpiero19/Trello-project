@@ -1,5 +1,5 @@
 .view-container-wrapper {
-  padding: 20px;
+  padding: var(--space-5);
   max-width: 1200px;
   margin: 0 auto;
   min-height: 100vh;
@@ -7,67 +7,73 @@
 }
 
 .new-board-button {
-  margin-top: 20px;
+  margin-top: var(--space-5);
 }
 
 .boards-container {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-6);
   width: 100%;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .board-card {
-  background: white;
-  border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  background: var(--bg-surface);
+  border-radius: var(--radius-md);
+  border-top: 4px solid var(--brand-gold);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-1);
   position: relative;
-  transition: box-shadow 0.2s, transform 0.2s;
+  cursor: pointer;
+  transition: box-shadow var(--dur) var(--ease-out), transform var(--dur) var(--ease-out);
   width: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 .board-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-2);
+  transform: translateY(-2px);
+}
+
+.board-card:hover .board-title {
+  color: var(--action-primary-text);
+}
+
+.board-card:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
 .board-card.dragging {
   opacity: 0.8;
   transform: rotate(2deg);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-3);
 }
 
 .board-card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 8px;
+  margin-bottom: var(--space-2);
 }
 
 .guest-badge {
-  background-color: #f39c12;
-  color: white;
+  background-color: var(--brand-gold);
+  color: var(--brand-brown-dark);
   padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 0.7rem;
-  margin-right: 20px;
-  font-weight: bold;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  margin-right: var(--space-5);
+  font-weight: var(--weight-bold);
 }
 
 .board-card-link {
-  text-decoration: none;
   display: block;
   flex: 1;
   color: inherit;
-}
-
-.board-card-link:hover .board-title {
-  color: #D98324;
 }
 
 .board-card-title {
@@ -75,17 +81,17 @@
 }
 
 .board-title {
-  font-size: 18px;
-  color: rgba(78, 31, 0, 0.87);;
+  font-size: var(--text-lg);
+  color: var(--text-primary);
   margin: 0;
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
 }
 
 
 .board-description {
-  font-size: 14px;
-  color: #5e6c84;
-  margin-bottom: 16px;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
   line-height: 1.4;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -96,9 +102,9 @@
 
 .board-stats {
   display: flex;
-  gap: 16px;
-  font-size: 12px;
-  color: #6b778c;
+  gap: var(--space-4);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
   margin-top: auto;
 }
 
@@ -107,9 +113,9 @@
   top: 8px;
   right: 8px;
   font-size: 1.4rem;
-  color: #6b778c;
+  color: var(--text-secondary);
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: color var(--dur) var(--ease-out);
   background: none;
   border: none;
   padding: 0;
@@ -117,15 +123,16 @@
 }
 
 .delete-icon:hover {
-  color: #D98324;
+  color: var(--action-primary-text);
 }
 
 .homepage {
   text-align: center;
-  margin-top: 1rem;
-  margin-bottom: 2rem;
-  padding: 0px 60px 10px;
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-5);
+  padding: 0 60px 10px;
 }
+
 
 @media (max-width: 640px) {
   .homepage {
@@ -133,21 +140,25 @@
   }
 
   .homepage h2 {
-    font-size: 22px;
+    font-size: var(--text-lg);
   }
 
   .view-container-wrapper {
     padding: 12px;
   }
+
+  .boards-container {
+    grid-template-columns: 1fr;
+  }
 }
 
 .homepage h2 {
-  font-size: 28px;
-  color: #333;
-  margin-bottom: 16px;
+  font-size: var(--text-2xl);
+  color: var(--text-primary);
+  margin-bottom: var(--space-4);
 }
 
 .homepage p {
-  color: #64748b;
-  font-size: 16px;
+  color: var(--text-secondary);
+  font-size: var(--text-base);
 }

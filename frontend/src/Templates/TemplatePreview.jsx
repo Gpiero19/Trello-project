@@ -3,6 +3,8 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { getTemplateById, useTemplate as createFromTemplate } from "../api/templates";
 import { useAuth } from "../context/authContext";
 import { useToast } from "../context/ToastContext";
+import { FaListUl } from "react-icons/fa";
+import Skeleton from "../components/ui/Skeleton";
 import "./templatePreview.css";
 
 function TemplatePreview() {
@@ -58,9 +60,23 @@ function TemplatePreview() {
   if (loading) {
     return (
       <div className="template-preview-page">
-        <div className="templates-loading">
-          <div className="loading-spinner"></div>
-          <p>Loading template...</p>
+        <div className="template-preview-header">
+          <div className="header-info">
+            <Skeleton style={{ width: '200px', height: '28px', marginBottom: '8px' }} />
+            <Skeleton style={{ width: '300px', height: '16px' }} />
+          </div>
+        </div>
+        <div className="template-preview-content">
+          <div className="template-lists-container">
+            {[0, 1, 2].map((listIdx) => (
+              <div className="template-list" key={listIdx}>
+                <Skeleton style={{ width: '60%', height: '16px', marginBottom: '12px' }} />
+                {[0, 1].map((cardIdx) => (
+                  <Skeleton key={cardIdx} style={{ width: '100%', height: '48px', marginBottom: '8px' }} />
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -129,7 +145,7 @@ function TemplatePreview() {
             ))
           ) : (
             <div className="no-lists">
-              <div className="empty-icon">📝</div>
+              <div className="empty-icon"><FaListUl aria-hidden="true" /></div>
               <p>This template has no lists yet.</p>
             </div>
           )}

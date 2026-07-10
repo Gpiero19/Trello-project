@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { createTemplate } from "../api/templates";
 import { useAuth } from "../context/authContext";
 import { useToast } from "../context/ToastContext";
+import { FaClipboardList } from "react-icons/fa";
 import "./createTemplate.css";
 
 function CreateTemplate() {
@@ -171,7 +172,7 @@ function CreateTemplate() {
 
           {lists.length === 0 ? (
             <div className="empty-lists-state">
-              <div className="empty-icon">📋</div>
+              <div className="empty-icon"><FaClipboardList aria-hidden="true" /></div>
               <p>No lists yet. Click "Add List" to start building your template.</p>
             </div>
           ) : (
@@ -188,12 +189,14 @@ function CreateTemplate() {
                       value={list.title}
                       onChange={(e) => updateListTitle(list.id, e.target.value)}
                       placeholder="List title"
+                      aria-label="List title"
                       className="list-title-input"
                     />
                     <button
                       type="button"
                       onClick={() => removeList(list.id)}
                       className="remove-list-btn"
+                      aria-label="Remove list"
                     >
                       ×
                     </button>
@@ -213,6 +216,7 @@ function CreateTemplate() {
                             updateCard(list.id, card.id, "title", e.target.value)
                           }
                           placeholder="Card title"
+                          aria-label="Card title"
                           className="card-title-input"
                         />
                         <textarea
@@ -221,6 +225,7 @@ function CreateTemplate() {
                             updateCard(list.id, card.id, "description", e.target.value)
                           }
                           placeholder="Description (optional)"
+                          aria-label="Card description (optional)"
                           className="card-description-input"
                           rows={2}
                         />
@@ -228,6 +233,7 @@ function CreateTemplate() {
                           type="button"
                           onClick={() => removeCard(list.id, card.id)}
                           className="remove-card-btn"
+                          aria-label="Remove card"
                         >
                           ×
                         </button>

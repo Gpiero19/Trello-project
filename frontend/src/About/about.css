@@ -1,21 +1,21 @@
-/* CSS Custom Properties */
+/* Page-local aliases onto the global design tokens (styles/tokens.css) */
 :root {
-  --about-primary: #4E1F00;
-  --about-secondary: #d98324;
-  --about-card-bg: #ffffff;
-  --about-text: #172b4d;
-  --about-text-muted: #5e6c84;
-  --about-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  --about-shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.12);
-  --about-border-radius: 12px;
-  --about-transition: 0.3s ease;
+  --about-primary: var(--brand-brown-dark);
+  --about-secondary: var(--brand-orange);
+  --about-card-bg: var(--bg-surface);
+  --about-text: var(--text-primary);
+  --about-text-muted: var(--text-secondary);
+  --about-shadow: var(--shadow-1);
+  --about-shadow-hover: var(--shadow-2);
+  --about-border-radius: var(--radius-lg);
+  --about-transition: var(--dur-slow) var(--ease-out);
 }
 
 .about-page {
   padding: 60px 20px;
   font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color: var(--about-text);
-  background: var(--about-bg);
+  background: var(--bg-canvas);
   min-height: calc(100vh - 80px);
 }
 
@@ -37,7 +37,7 @@
 }
 
 .about-title {
-  font-size: 2.5rem;
+  font-size: var(--text-3xl);
   font-weight: 700;
   color: var(--about-primary);
   position: relative;
@@ -49,7 +49,7 @@
   display: block;
   width: 60px;
   height: 4px;
-  background: linear-gradient(90deg, var(--about-secondary), #e8a94d);
+  background: linear-gradient(90deg, var(--about-secondary), var(--brand-gold));
   margin: 12px auto 0;
   border-radius: 2px;
 }
@@ -63,7 +63,7 @@
 
 /* Section titles */
 .section-title {
-  font-size: 1.6rem;
+  font-size: var(--text-xl);
   margin-bottom: 25px;
   color: var(--about-primary);
   font-weight: 600;
@@ -76,7 +76,7 @@
   content: '';
   width: 4px;
   height: 24px;
-  background: linear-gradient(180deg, var(--about-secondary), #e8a94d);
+  background: linear-gradient(180deg, var(--about-secondary), var(--brand-gold));
   border-radius: 2px;
 }
 
@@ -157,7 +157,7 @@
   color: var(--about-primary);
   font-weight: 600;
   padding-bottom: 8px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border-default);
 }
 
 .tech-list {

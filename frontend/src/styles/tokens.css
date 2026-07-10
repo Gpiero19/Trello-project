@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,700;1,500&display=swap');
+
+/*
+  Frello design tokens.
+  Palette source: https://colorhunt.co/palette/f8f4e1feba1774512d4e1f00
+  Rule: bright orange for fills, dark orange for text/links, gold for state (active/selected/focus).
+*/
+:root {
+  /* brand primitives */
+  --brand-cream: #f8f4e1;
+  --brand-gold: #feba17;
+  --brand-orange: #d98324;
+  --brand-brown: #74512d;
+  --brand-brown-dark: #4e1f00;
+
+  /* warm neutral ramp (replaces cool Trello grays: #5e6c84, #6b778c, #dfe1e6, #a5adba, #0079bf, #172b4d) */
+  --warm-50: #fbf9f0;
+  --warm-100: #f3ede0;
+  --warm-200: #e6dac2;
+  --warm-300: #d3bd97;
+  --warm-400: #b4966a;
+  --warm-500: #8f7150;
+  --warm-600: #6e5539;
+  --warm-700: #543f2a;
+  --warm-800: #3a2a1c;
+  --warm-900: #241a11;
+
+  /* functional */
+  --color-orange-text: #a5590f; /* AA-passing text/link version of brand orange */
+  --color-success: #4e7c4e;
+  --color-warning: var(--brand-gold);
+  --color-danger: #c4472b;
+
+  /* semantic */
+  --bg-canvas: var(--brand-cream);
+  --bg-surface: #ffffff;
+  --bg-surface-sunken: var(--warm-50);
+  --border-default: var(--warm-200);
+  --border-strong: var(--warm-300);
+
+  --text-primary: rgba(78, 31, 0, 0.87);
+  --text-secondary: var(--warm-600);
+  --text-muted: var(--warm-400);
+  --text-on-brand: var(--brand-cream);
+  --text-on-dark: #edf0f1;
+
+  --accent: var(--brand-gold);
+  --action-primary: var(--brand-orange);
+  --action-primary-hover: rgba(217, 131, 36, 0.85);
+  --action-primary-text: var(--color-orange-text);
+
+  --focus-ring: var(--brand-gold);
+
+  /* typography */
+  --font-display: "Montserrat", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --font-body: system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+  --text-xs: 0.75rem;   /* 12px */
+  --text-sm: 0.875rem;  /* 14px */
+  --text-base: 1rem;    /* 16px */
+  --text-lg: 1.25rem;   /* 20px */
+  --text-xl: 1.5625rem; /* 25px */
+  --text-2xl: 1.9375rem; /* 31px */
+  --text-3xl: 2.4375rem; /* 39px */
+
+  --leading-tight: 1.2;
+  --leading-normal: 1.5;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* spacing (8pt grid) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-pill: 9999px;
+
+  /* elevation (warm-tinted shadows) */
+  --shadow-1: 0 1px 3px rgba(62, 39, 21, 0.12);
+  --shadow-2: 0 4px 12px rgba(62, 39, 21, 0.15);
+  --shadow-3: 0 8px 24px rgba(62, 39, 21, 0.18);
+  --shadow-4: 0 10px 40px rgba(62, 39, 21, 0.25);
+
+  /* motion */
+  --dur-fast: 150ms;
+  --dur: 200ms;
+  --dur-slow: 300ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+
+  /* breakpoints (reference only — CSS can't consume vars in @media) */
+  /* 480 / 768 / 1024 / 1440 */
+
+  color-scheme: light;
+}

@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import axiosInstance from "../api/axiosInstance";
 import { useToast } from "../context/ToastContext";
 import { isGuestBoard, generateGuestId, saveGuestList } from "../api/guestStorage";
+import Modal from "./ui/Modal";
+import Button from "./ui/Button";
 
 function CreateListModal({ onClose, refreshBoard }) {
   const {boardId} = useParams()
@@ -35,21 +37,22 @@ function CreateListModal({ onClose, refreshBoard }) {
   };
 
   return (
-    <div className="modal-backdrop">
-      <div className="modal">
-        <h2>Create New List</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="List title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <button type="button" onClick={onClose}>Cancel</button>
-          <button type="submit">Create</button>
-        </form>
-      </div>
-    </div>
+    <Modal onClose={onClose}>
+      <h2>Create New List</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="List title"
+          aria-label="List title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <div className="modal-actions">
+          <Button type="button" variant="secondary" onClick={onClose}>Cancel</Button>
+          <Button type="submit">Create</Button>
+        </div>
+      </form>
+    </Modal>
   );
 }
 

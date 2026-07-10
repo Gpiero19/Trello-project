@@ -1,0 +1,11 @@
+.inline-edit .edit-icon {
+  margin-left: 6px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  vertical-align: middle;
+  transition: color var(--dur) var(--ease-out);
+}
+
+.inline-edit .edit-icon:hover {
+  color: var(--action-primary-text);
+}

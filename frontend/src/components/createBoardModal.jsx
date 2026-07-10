@@ -3,6 +3,8 @@ import { createBoard } from "../api/boards";
 import { useToast } from "../context/ToastContext";
 import { useAuth } from "../context/authContext";
 import { saveGuestBoard, generateGuestId } from "../api/guestStorage";
+import Modal from "./ui/Modal";
+import Button from "./ui/Button";
 
 function CreateBoardModal({ setBoards: refreshBoards, onClose }) {
   const [title, setTitle] = useState("");
@@ -41,30 +43,32 @@ function CreateBoardModal({ setBoards: refreshBoards, onClose }) {
   };
 
   return (
-    <div className="modal-backdrop">
-      <div className="modal">
-        <h2>Create New Board</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Board title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <textarea
-            type="text"
-            placeholder="Description (optional)"
-            value={description}
-            maxLength={500}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={3}
-          />
+    <Modal onClose={onClose}>
+      <h2>Create New Board</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Board title"
+          aria-label="Board title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <textarea
+          type="text"
+          placeholder="Description (optional)"
+          aria-label="Board description (optional)"
+          value={description}
+          maxLength={500}
+          onChange={(e) => setDescription(e.target.value)}
+          rows={3}
+        />
 
-          <button type="button" onClick={onClose}>Cancel</button>
-          <button type="submit">Create</button>
-        </form>
-      </div>
-    </div>
+        <div className="modal-actions">
+          <Button type="button" variant="secondary" onClick={onClose}>Cancel</Button>
+          <Button type="submit">Create</Button>
+        </div>
+      </form>
+    </Modal>
   );
 }
 

@@ -4,79 +4,66 @@
   align-items: center;
   justify-content: center;
   min-height: 60vh;
-  padding: 40px 20px;
-  animation: fadeIn 0.5s ease-out;
+  padding: var(--space-7) var(--space-5);
+  animation: fadeIn var(--dur-slow) var(--ease-out);
 }
 
 .mainboard-card {
-  background: linear-gradient(135deg, #fffbf0 0%, #fff8e7 100%);
-  border: 2px solid #d98324;
-  border-radius: 16px;
+  background: linear-gradient(135deg, var(--bg-surface) 0%, var(--warm-50) 100%);
+  border: 2px solid var(--brand-orange);
+  border-radius: var(--radius-lg);
   padding: 48px 40px;
   text-align: center;
   max-width: 500px;
-  box-shadow: 0 8px 32px rgba(217, 131, 36, 0.15);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: var(--shadow-3);
+  transition: transform var(--dur-slow) var(--ease-out), box-shadow var(--dur-slow) var(--ease-out);
 }
 
 .mainboard-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(217, 131, 36, 0.25);
+  box-shadow: var(--shadow-4);
 }
 
 .mainboard-icon {
-  font-size: 64px;
-  margin-bottom: 16px;
-  animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-10px);
-  }
-  60% {
-    transform: translateY(-5px);
-  }
+  font-size: 48px;
+  margin-bottom: var(--space-4);
+  color: var(--brand-gold);
 }
 
 .mainboard-card h2 {
-  color: rgba(78, 31, 0, 0.87);
+  color: var(--text-primary);
   font-size: 32px;
-  margin: 0 0 16px 0;
-  font-weight: 700;
+  margin: 0 0 var(--space-4) 0;
+  font-weight: var(--weight-bold);
 }
 
 .mainboard-card p {
-  color: #5e6c84;
-  font-size: 16px;
+  color: var(--text-secondary);
+  font-size: var(--text-base);
   line-height: 1.6;
-  margin: 0 0 32px 0;
+  margin: 0 0 var(--space-6) 0;
 }
 
 .mainboard-create-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  background-color: #d98324;
-  color: white;
+  gap: var(--space-2);
+  background-color: var(--brand-orange);
+  color: var(--text-on-brand);
   border: none;
-  border-radius: 12px;
+  border-radius: var(--radius-pill);
   padding: 16px 32px;
   font-size: 18px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(217, 131, 36, 0.3);
+  font-weight: var(--weight-semibold);
+  transition: all var(--dur-slow) var(--ease-out);
+  box-shadow: var(--shadow-2);
 }
 
 .mainboard-create-btn:hover {
-  background-color: rgba(217, 131, 36, 0.9);
+  background-color: var(--action-primary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(217, 131, 36, 0.4);
+  box-shadow: var(--shadow-3);
 }
 
 .mainboard-create-btn:active {
@@ -85,13 +72,13 @@
 
 .btn-icon {
   font-size: 24px;
-  font-weight: 700;
+  font-weight: var(--weight-bold);
 }
 
 .mainboard-features {
   display: flex;
-  gap: 32px;
-  margin-top: 48px;
+  gap: var(--space-6);
+  margin-top: var(--space-7);
   flex-wrap: wrap;
   justify-content: center;
 }
@@ -99,17 +86,18 @@
 .feature-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: #5e6c84;
-  font-size: 14px;
+  gap: var(--space-2);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
   padding: 12px 20px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-1);
 }
 
 .feature-icon {
   font-size: 20px;
+  color: var(--brand-gold);
 }
 
 @keyframes fadeIn {
@@ -134,16 +122,16 @@
   }
 
   .mainboard-card p {
-    font-size: 14px;
+    font-size: var(--text-sm);
   }
 
   .mainboard-create-btn {
     padding: 14px 24px;
-    font-size: 16px;
+    font-size: var(--text-base);
   }
 
   .mainboard-features {
     flex-direction: column;
-    gap: 16px;
+    gap: var(--space-4);
   }
 }

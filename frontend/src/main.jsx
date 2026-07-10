@@ -1,5 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import "./styles/tokens.css";
+import "./styles/base.css";
 import "./index.css";
 import "./components/Toast/Toast.css";
 import Navbar from "./Navbar/Navbar.jsx";

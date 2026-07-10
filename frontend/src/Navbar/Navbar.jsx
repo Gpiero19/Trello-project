@@ -59,7 +59,12 @@ return (
         
         {/* Register Modal */}
       {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
-      {showRegister && <RegisterUserModal onClose={() => setShowRegister(false)} />}
+      {showRegister && (
+        <RegisterUserModal
+          onClose={() => setShowRegister(false)}
+          onSwitchToLogin={() => { setShowRegister(false); setShowLogin(true); }}
+        />
+      )}
   </div>
 )}
 

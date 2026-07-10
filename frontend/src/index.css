@@ -1,55 +1,5 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 500;
-
-  color-scheme: light dark;
-  color: rgba(78, 31, 0, 0.87);
-  background-color: rgb(248 244 225);
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-/* a:hover {
-  color: #535bf2;
-} */
-
-body {
-  margin: 0;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #D98324;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
+/* Generic modal primitive. Used by simple form modals (login/register/create-list/create-board).
+   CardDetailModal has its own richer layout in components/CardDetailModal/CardDetailModal.css. */
 
 .modal-backdrop {
   position: fixed;
@@ -57,8 +7,8 @@ button:focus-visible {
   left: 0;
   width: 100%;
   height: 100%;
-  backdrop-filter: blur(4px); 
-  background-color: rgba(0, 0, 0, 0.4); /* Dark overlay */
+  backdrop-filter: blur(4px);
+  background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -66,59 +16,107 @@ button:focus-visible {
 }
 
 .modal {
-  background: rgb(248 244 225);
-  padding: 2rem;
-  border-radius: 8px;
+  background: var(--bg-canvas);
+  padding: var(--space-5);
+  border-radius: var(--radius-md);
   width: 300px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-4);
   position: relative;
   z-index: 1001;
+}
+
+.modal h2 {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  margin: 0 0 var(--space-4) 0;
+  color: var(--text-primary);
 }
 
 .modal input,
 .modal select,
 .modal textarea {
   width: 100%;
-  margin-bottom: 1rem;
-  padding: 0.5rem;
-  background-color: white;
-  border-radius: 4px;
-  border: 1px solid rgba(78, 31, 0, 0.87);
-  color: rgba(78, 31, 0, 0.87);
+  box-sizing: border-box;
+  margin-bottom: var(--space-4);
+  padding: var(--space-2);
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  color: var(--text-primary);
   font-family: inherit;
-  font-size: 1rem;
+  font-size: var(--text-base);
 }
 
-textarea::placeholder,
-input::placeholder {
-  font-weight: 500;
+.modal-actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.modal-actions button {
+  flex: 1;
+  padding: var(--space-2) var(--space-4);
+}
+
+.demo-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-4) 0 var(--space-3);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+.demo-divider::before,
+.demo-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border-default);
+}
+
+.modal .demo-login-btn {
+  display: block;
+  width: 100%;
+  margin: 0;
+  background: var(--bg-surface);
+  color: var(--action-primary-text);
+  border: 1px solid var(--brand-orange);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: background var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
+  box-sizing: border-box;
+}
+.modal .demo-login-btn:hover:not(:disabled) {
+  background: var(--brand-orange);
+  color: var(--text-on-brand);
+}
+.modal .demo-login-btn:disabled {
   opacity: 0.6;
-  color: #a5adba;
+  cursor: not-allowed;
+}
+
+.switch-to-demo {
+  margin: var(--space-4) 0 0;
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  text-align: center;
+}
+.link-btn {
+  background: none;
+  border: none;
+  color: var(--action-primary-text);
+  font-size: inherit;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  text-decoration: underline;
   font-family: inherit;
+  font-weight: inherit;
+  line-height: inherit;
 }
-
-.modal button {
-  margin-right: 0.5rem;
-  padding: 0.5rem 1rem;
-}
-
-/* .board div {
-  display: "flex";
-  grid-template-columns: repeat(5, auto);
-  gap: "2em";
-  margin-top: "2em";
-} */
-
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #D98324;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.link-btn:hover {
+  border-color: transparent;
+  color: var(--brand-orange);
 }

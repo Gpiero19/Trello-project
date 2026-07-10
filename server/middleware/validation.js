@@ -7,13 +7,13 @@ const Joi = require('joi');
 // Registration schema
 const registerSchema = Joi.object({
   name: Joi.string().min(1).max(100).required(),
-  email: Joi.string().email().required(),
+  email: Joi.string().email({ tlds: false }).required(),
   password: Joi.string().min(6).max(100).required()
 });
 
 // Login schema
 const loginSchema = Joi.object({
-  email: Joi.string().email().required(),
+  email: Joi.string().email({ tlds: false }).required(),
   password: Joi.string().required()
 });
 

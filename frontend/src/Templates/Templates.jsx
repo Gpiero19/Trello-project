@@ -4,6 +4,8 @@ import { getTemplates, useTemplate as createBoardFromTemplate, deleteTemplate } 
 import { useAuth } from "../context/authContext";
 import { useToast } from "../context/ToastContext";
 import { TiDelete } from "react-icons/ti";
+import { FaClipboardList } from "react-icons/fa";
+import Skeleton from "../components/ui/Skeleton";
 import "./templates.css";
 
 function Templates() {
@@ -78,9 +80,15 @@ function Templates() {
 
       {/* Loading State */}
       {loading && (
-        <div className="templates-loading">
-          <div className="loading-spinner"></div>
-          <p>Loading templates...</p>
+        <div className="templates-grid">
+          {[0, 1, 2].map((i) => (
+            <div className="template-card" key={i}>
+              <Skeleton style={{ width: '70%', height: '18px', marginBottom: '12px' }} />
+              <Skeleton style={{ width: '100%', height: '14px', marginBottom: '6px' }} />
+              <Skeleton style={{ width: '90%', height: '14px', marginBottom: '16px' }} />
+              <Skeleton style={{ width: '100%', height: '38px' }} />
+            </div>
+          ))}
         </div>
       )}
 
@@ -97,7 +105,7 @@ function Templates() {
       {/* Not Logged In */}
       {!loading && !error && !user && (
         <div className="templates-empty">
-          <div className="empty-icon">📋</div>
+          <div className="empty-icon"><FaClipboardList aria-hidden="true" /></div>
           <p>Please login to view and create templates.</p>
         </div>
       )}
@@ -105,7 +113,7 @@ function Templates() {
       {/* Empty State */}
       {!loading && !error && user && templates.length === 0 && (
         <div className="templates-empty">
-          <div className="empty-icon">📋</div>
+          <div className="empty-icon"><FaClipboardList aria-hidden="true" /></div>
           <p>No templates found.</p>
           <p className="empty-subtitle">Create your first template to get started!</p>
           <Link to="/templates/create" className="create-template-btn">
@@ -124,8 +132,19 @@ function Templates() {
                 {template.userId === user?.id && (
                   <TiDelete
                     className="delete-template-btn"
-                    onClick={() => handleDeleteTemplate(template.id)}
-                    disabled={deletingId === template.id}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Delete template "${template.name}"`}
+                    aria-disabled={deletingId === template.id}
+                    onClick={() => {
+                      if (deletingId !== template.id) handleDeleteTemplate(template.id);
+                    }}
+                    onKeyDown={(e) => {
+                      if ((e.key === "Enter" || e.key === " ") && deletingId !== template.id) {
+                        e.preventDefault();
+                        handleDeleteTemplate(template.id);
+                      }
+                    }}
                   />
                 )}
               </div>

@@ -1,0 +1,15 @@
+{
+  "name": "trello-project",
+  "version": "1.0.0",
+  "description": "[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![Frontend](https://img.shields.io/badge/frontend-React_19-blue)](#) [![Backend](https://img.shields.io/badge/backend-Node.js_+_Express-green)](#)",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently --names \"server,client\" --prefix-colors \"yellow,cyan\" \"npm run dev --prefix server\" \"npm run dev --prefix frontend\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.2.3"
+  }
+}

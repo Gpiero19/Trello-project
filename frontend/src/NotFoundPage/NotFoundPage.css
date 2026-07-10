@@ -1,10 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Nunito+Sans');
-:root {
-  --blue: #4E1F00;
-  --white: #fff;
-  --orange: #D98324;
-}
-
 .container {
   display: flex;
   max-width: 1140px;
@@ -21,17 +14,16 @@
     max-width: 50%;
     align-self: center !important;
 }
-button {
-  font-family:"Nunito Sans";
-}
 
 h1 {
   font-size: 7.5em;
   margin: 15px 0px;
-  font-weight:bold;
+  font-weight: var(--weight-bold);
+  color: var(--brand-brown-dark);
 }
 h2 {
-  font-weight:bold;
+  font-weight: var(--weight-bold);
+  color: var(--text-primary);
 }
 
 .btn {
@@ -40,16 +32,16 @@ h2 {
   background: transparent;
   position: relative;
   padding: 8px 50px;
-  border-radius: 30px;
+  border-radius: var(--radius-pill);
   cursor: pointer;
   font-size: 1em;
   letter-spacing: 2px;
   transition: 0.2s ease;
-  font-weight: bold;
+  font-weight: var(--weight-bold);
   margin: 5px 0px;
   &.orange {
-    border: 4px solid var(--orange);
-    color: var(--blue);
+    border: 4px solid var(--brand-orange);
+    color: var(--brand-brown-dark);
     &:before {
       content: "";
       position: absolute;
@@ -57,13 +49,13 @@ h2 {
       top: 0;
       width: 0%;
       height: 100%;
-      background: var(--orange);
+      background: var(--brand-orange);
       z-index: -1;
       transition: 0.2s ease;
     }
     &:hover {
-      color: var(--white);
-      background: var(--orange);
+      color: var(--text-on-brand);
+      background: var(--brand-orange);
       transition: 0.2s ease;
       &:before {
         width: 100%;
@@ -71,12 +63,3 @@ h2 {
     }
   }
 }
-/* @media screen and (max-width:768px) {
-  body {
-    display:block;
-  }
-  .NotFoundMessage {
-    margin-top:70px;
-    margin-bottom:70px;
-  }
-}  */
